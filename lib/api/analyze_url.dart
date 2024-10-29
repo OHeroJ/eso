@@ -8,19 +8,20 @@ import 'analyze_url_client.dart' as http;
 import 'api_js_engine.dart';
 
 class AnalyzeUrl {
-  static Future<originalHttp.Response> urlRuleParser(
+  static Future<originalHttp.Response?> urlRuleParser(
     String url,
     Rule rule, {
     String keyword = "",
     String result = "",
-    int page,
-    int pageSize,
+    int? page,
+    int? pageSize,
   }) async {
     url = url.trim();
     if (url == "null") return originalHttp.Response("", 200);
     if (url.startsWith("@js:")) {
       // js规则
-      await JSEngine.setEnvironment(page, rule, result, rule.host, keyword, result);
+      await JSEngine.setEnvironment(
+          page, rule, result, rule.host, keyword, result);
       final re = await JSEngine.evaluate(
           "${JSEngine.environment};1+1;${JSEngine.rule.loadJs};1+1;${url.substring(4)}");
       if ((re is String && re == "null") || re == null) {
@@ -45,7 +46,8 @@ class AnalyzeUrl {
       };
       final res = await parser(
         url.replaceAllMapped(
-          RegExp(r"\$keyword|\$page|\$host|\$result|\$pageSize|searchKey|searchPage"),
+          RegExp(
+              r"\$keyword|\$page|\$host|\$result|\$pageSize|searchKey|searchPage"),
           (m) => '${json[m.group(0)]}',
         ),
         rule,
@@ -85,12 +87,13 @@ class AnalyzeUrl {
     }
 
     if (url is Map) {
-      Map<String, dynamic> r = url.map((k, v) => MapEntry(k.toString().toLowerCase(), v));
+      Map<String, dynamic> r =
+          url.map((k, v) => MapEntry(k.toString().toLowerCase(), v));
 
       headers.addAll(Map<String, String>.from(r['headers'] ?? Map()));
 
       dynamic body = r['body'];
-      dynamic method = r['method']?.toString()?.toLowerCase();
+      dynamic method = r['method']?.toString().toLowerCase();
       final r_encoding = r['encoding'] == null ? null : "${r['encoding']}";
       var u = urlFix("${r['url']}", rule.host);
       if (r_encoding != null) {
@@ -105,19 +108,22 @@ class AnalyzeUrl {
           return sb.toString();
         }
 
-        final encoding = r_encoding.contains("gb") ? gbk : Encoding.getByName(r_encoding);
+        var encoding =
+            r_encoding.contains("gb") ? gbk : Encoding.getByName(r_encoding);
+
         u = u.replaceAllMapped(
             RegExp(r"[^\x00-\x7F]+"),
-            (match) => encoding
-                .encode(match.group(0))
+            (match) => encoding!
+                .encode(match.group(0) ?? '')
                 .map((code) => _urlEncode(code.toRadixString(16).toUpperCase()))
                 .join());
         if (body != null && body is String) {
           body = body.replaceAllMapped(
               RegExp(r"[^\x00-\x7F]+"),
-              (match) => encoding
-                  .encode(match.group(0))
-                  .map((code) => _urlEncode(code.toRadixString(16).toUpperCase()))
+              (match) => encoding!
+                  .encode(match.group(0) ?? '')
+                  .map((code) =>
+                      _urlEncode(code.toRadixString(16).toUpperCase()))
                   .join());
         }
       }
@@ -132,10 +138,10 @@ class AnalyzeUrl {
           u,
           headers: headers,
           body: body,
-          encoding: r_encoding != null && body is Map
-              ? r_encoding.contains("gb")
+          encoding: (r_encoding != null && body is Map)
+              ? (r_encoding.contains("gb")
                   ? gbk
-                  : Encoding.getByName("${r['encoding']}")
+                  : Encoding.getByName("${r['encoding']}"))!
               : null,
         );
       }

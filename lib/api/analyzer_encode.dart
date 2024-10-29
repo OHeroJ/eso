@@ -6,7 +6,7 @@ import 'package:html/dom.dart';
 import 'analyzer.dart';
 
 class AnalyzerEncode implements Analyzer {
-  String _content;
+  late String _content;
 
   @override
   AnalyzerEncode parse(content) {

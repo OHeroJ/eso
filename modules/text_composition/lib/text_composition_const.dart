@@ -9,8 +9,8 @@ const indentation = "　";
 
 T cast<T>(x, T defaultValue) => x is T ? x : defaultValue; // 安全转换
 
-void paintText(
-    ui.Canvas canvas, ui.Size size, TextPage page, TextCompositionConfig config) {
+void paintText(ui.Canvas canvas, ui.Size size, TextPage page,
+    TextCompositionConfig config) {
   print("paintText ${page.chIndex} ${page.number} / ${page.total}");
   final lineCount = page.lines.length;
   final tp = TextPainter(textDirection: TextDirection.ltr, maxLines: 1);
@@ -52,7 +52,8 @@ void paintText(
               ),
       );
     } else {
-      tp.text = TextSpan(text: line.text, style: line.isTitle ? titleStyle : style);
+      tp.text =
+          TextSpan(text: line.text, style: line.isTitle ? titleStyle : style);
     }
     final offset = Offset(line.dx, line.dy);
     tp.layout();
@@ -71,16 +72,18 @@ void paintText(
       color: config.fontColor,
     );
     tp.text = TextSpan(text: page.info, style: styleInfo);
-    tp.layout(maxWidth: size.width - config.leftPadding - config.rightPadding - 60);
+    tp.layout(
+        maxWidth: size.width - config.leftPadding - config.rightPadding - 60);
     tp.paint(canvas, Offset(config.leftPadding, size.height - 20));
 
     tp.text = TextSpan(
-      text: '${page.number}/${page.total} ${(100 * page.percent).toStringAsFixed(2)}%',
+      text:
+          '${page.number}/${page.total} ${(100 * page.percent).toStringAsFixed(2)}%',
       style: styleInfo,
     );
     tp.layout();
-    tp.paint(
-        canvas, Offset(size.width - config.rightPadding - tp.width, size.height - 20));
+    tp.paint(canvas,
+        Offset(size.width - config.rightPadding - tp.width, size.height - 20));
   }
   if (page.columns == 2) {
     drawMiddleShadow(canvas, size);
@@ -171,13 +174,14 @@ Widget configSettingBuilder(
                 .stringMatch(controller.text);
             if (s == null || s.isEmpty) {
               controller.text += isInt ? "只能输入整数" : "必须输入一个数";
-              controller.selection =
-                  TextSelection(baseOffset: 0, extentOffset: controller.text.length);
+              controller.selection = TextSelection(
+                  baseOffset: 0, extentOffset: controller.text.length);
               return;
             }
             onPress(controller.text);
             Navigator.of(context).pop();
-            Future.delayed(Duration(milliseconds: 200), () => controller.dispose());
+            Future.delayed(
+                Duration(milliseconds: 200), () => controller.dispose());
           },
         ),
       ],
@@ -224,9 +228,11 @@ Widget configSettingBuilder(
             value: config.showStatus,
             onChanged: (value) {
               if (value) {
-                SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                    overlays: SystemUiOverlay.values);
               } else {
-                SystemChrome.setEnabledSystemUIOverlays([]);
+                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                    overlays: []);
               }
               setState(() => config.showStatus = value);
             },
@@ -258,19 +264,22 @@ Widget configSettingBuilder(
           ),
           SwitchListTile(
             value: config.animationStatus,
-            onChanged: (value) => setState(() => config.animationStatus = value),
+            onChanged: (value) =>
+                setState(() => config.animationStatus = value),
             title: Text("状态栏动画"),
             subtitle: Text("翻页动画可以越过状态栏"),
           ),
           SwitchListTile(
             value: config.animationHighImage,
-            onChanged: (value) => setState(() => config.animationHighImage = value),
+            onChanged: (value) =>
+                setState(() => config.animationHighImage = value),
             title: Text("[仿真苹果] 高清模式"),
             subtitle: Text("打开后截图质量更高 关闭会更流畅"),
           ),
           SwitchListTile(
             value: config.animationWithImage,
-            onChanged: (value) => setState(() => config.animationWithImage = value),
+            onChanged: (value) =>
+                setState(() => config.animationWithImage = value),
             title: Text("背景图跟随"),
             subtitle: Text("开启随翻页动画移动，关闭则固定"),
           ),
@@ -296,10 +305,12 @@ Widget configSettingBuilder(
                     width: 80,
                     height: 30,
                     child: InkWell(
-                      onTap: () => setState(() => config.animation = pair.value),
+                      onTap: () =>
+                          setState(() => config.animation = pair.value),
                       child: Center(
                         child: Text(pair.key,
-                            style: config.animation == pair.value ? style : null),
+                            style:
+                                config.animation == pair.value ? style : null),
                       ),
                     ),
                   ),
@@ -326,9 +337,10 @@ Widget configSettingBuilder(
             decoration: BoxDecoration(border: Border.all()),
             margin: EdgeInsets.symmetric(horizontal: 18),
             child: Container(
-              decoration: getDecoration(config.background, config.backgroundColor),
-              padding: EdgeInsets.fromLTRB(config.leftPadding, config.topPadding,
-                  config.rightPadding, config.bottomPadding),
+              decoration:
+                  getDecoration(config.background, config.backgroundColor),
+              padding: EdgeInsets.fromLTRB(config.leftPadding,
+                  config.topPadding, config.rightPadding, config.bottomPadding),
               child: Text(
                 "${indentation * config.indentation}这是一段示例文字。This is an example sentence. This is another example sentence. 这是另一段示例文字。",
                 maxLines: null,
@@ -392,9 +404,10 @@ Widget configSettingBuilder(
           ),
           ListTile(
             title: Text("字色"),
-            subtitle: Text(config.fontColor.value.toRadixString(16).toUpperCase()),
-            onTap: () => onColor(
-                config.fontColor, (color) => setState(() => config.fontColor = color)),
+            subtitle:
+                Text(config.fontColor.value.toRadixString(16).toUpperCase()),
+            onTap: () => onColor(config.fontColor,
+                (color) => setState(() => config.fontColor = color)),
           ),
           ListTile(
             title: Text("字号"),
@@ -425,12 +438,13 @@ Widget configSettingBuilder(
           ListTile(
             title: Text("字体"),
             subtitle: Text(config.fontFamily.isEmpty ? "无" : config.fontFamily),
-            onTap: () => onFontFamily(
-                config.fontFamily, (font) => setState(() => config.fontFamily = font)),
+            onTap: () => onFontFamily(config.fontFamily,
+                (font) => setState(() => config.fontFamily = font)),
           ),
           ListTile(
             title: Text("背景 纯色"),
-            subtitle: Text(config.backgroundColor.value.toRadixString(16).toUpperCase()),
+            subtitle: Text(
+                config.backgroundColor.value.toRadixString(16).toUpperCase()),
             onTap: () => onColor(
                 config.backgroundColor,
                 (color) => setState(() {
@@ -521,7 +535,8 @@ Widget configSettingBuilder(
                 context,
                 '段间距',
                 config.paragraphPadding.toStringAsFixed(1),
-                (s) => setState(() => config.paragraphPadding = double.parse(s)),
+                (s) =>
+                    setState(() => config.paragraphPadding = double.parse(s)),
               ),
             ),
           ),

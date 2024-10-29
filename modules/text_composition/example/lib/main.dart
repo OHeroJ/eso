@@ -10,18 +10,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final bookName = "book name";
     // Global.prefs.containsKey(TextConfigKey) ? Global.prefs.getString(TextConfigKey) : {}
-    final config = TextCompositionConfig(animation: 'curl');
+    final config = TextCompositionConfig(animation: AnimationType.curl);
     // 用法1：一个widget
     // final widget = TextCompositionWidget(config: config, paragraphs: <String>["段落"]);
     // 用法2：一个page
     return TextCompositionPage(
       controller: TextComposition(
         config: config,
-        loadChapter: (index) => Future.delayed(Duration(seconds: 1)).then((value) =>
-            List.generate(
+        loadChapter: (index) => Future.delayed(Duration(seconds: 1)).then(
+            (value) => List.generate(
                 123 + math.Random().nextInt(34),
                 (i) =>
-                    "chapter $index, " + "paragraph $i. " * math.Random().nextInt(12))),
+                    "chapter $index, " +
+                    "paragraph $i. " * math.Random().nextInt(12))),
         chapters: List.generate(1234, (i) => "chapter $i, chapter name"),
         percent: 0.000001,
         onSave: (TextCompositionConfig config, double percent) {

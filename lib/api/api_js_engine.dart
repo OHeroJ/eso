@@ -67,8 +67,9 @@ class JSEngine {
           return await _engine.evaluate(res.body + ";0;");
         } else {
           try {
-            final js = await rootBundle.loadString(
-                "lib/assets/" + module.replaceFirst(new RegExp(r".js$"), "") + ".js");
+            final js = await rootBundle.loadString("lib/assets/" +
+                module.replaceFirst(new RegExp(r".js$"), "") +
+                ".js");
             return await _engine.evaluate(js + ";0;");
           } catch (e) {
             return null;
@@ -163,7 +164,7 @@ class JSEngine {
   static String environment;
 
   static Future<void> setEnvironment(
-    int page,
+    int? page,
     Rule rule,
     String result,
     String baseUrl,

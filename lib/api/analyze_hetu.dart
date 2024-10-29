@@ -8,7 +8,7 @@ import '../main.dart';
 import 'analyzer.dart';
 
 class AnalyzerHetu implements Analyzer {
-  String _content;
+  String? _content;
   static bool needSetEnvironmentFlag = true;
 
   @override
@@ -43,7 +43,8 @@ class AnalyzerHetu implements Analyzer {
 
   Future<dynamic> _eval(String rule) async {
     if (needSetEnvironmentFlag) {
-      final r = hetu.eval("${JSEngine.environment};var result = $_content; $rule;");
+      final r =
+          hetu.eval("${JSEngine.environment};var result = $_content; $rule;");
       needSetEnvironmentFlag = false;
       return r;
     } else {
