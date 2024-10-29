@@ -6,15 +6,15 @@ class CustomTabView extends StatefulWidget {
   final int itemCount;
   final IndexedWidgetBuilder tabBuilder;
   final IndexedWidgetBuilder pageBuilder;
-  final Widget stub;
-  final ValueChanged<int> onPositionChange;
-  final ValueChanged<double> onScroll;
-  final int initPosition;
+  final Widget? stub;
+  final ValueChanged<int>? onPositionChange;
+  final ValueChanged<double>? onScroll;
+  final int? initPosition;
 
   CustomTabView({
-    @required this.itemCount,
-    @required this.tabBuilder,
-    @required this.pageBuilder,
+    required this.itemCount,
+    required this.tabBuilder,
+    required this.pageBuilder,
     this.stub,
     this.onPositionChange,
     this.onScroll,
@@ -25,10 +25,11 @@ class CustomTabView extends StatefulWidget {
   _CustomTabsState createState() => _CustomTabsState();
 }
 
-class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixin {
-  TabController controller;
-  int _currentCount;
-  int _currentPosition;
+class _CustomTabsState extends State<CustomTabView>
+    with TickerProviderStateMixin {
+  late TabController controller;
+  late int _currentCount;
+  late int _currentPosition;
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
       initialIndex: _currentPosition,
     );
     controller.addListener(onPositionChange);
-    controller.animation.addListener(onScroll);
+    controller.animation?.addListener(onScroll);
     _currentCount = widget.itemCount;
     super.initState();
   }
@@ -47,7 +48,7 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
   @override
   void didUpdateWidget(CustomTabView oldWidget) {
     if (_currentCount != widget.itemCount) {
-      controller.animation.removeListener(onScroll);
+      controller.animation?.removeListener(onScroll);
       controller.removeListener(onPositionChange);
       controller.dispose();
 

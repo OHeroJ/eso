@@ -46,14 +46,14 @@ class Global with ChangeNotifier {
   static const favoriteListTagKey = "favoriteListTag";
   // static SharedPreferences _prefs;
   // static SharedPreferences get prefs => _prefs;
-  static bool _isDesktop;
+  static bool _isDesktop = false;
   static bool get isDesktop => _isDesktop;
   static const fullSpace = "　";
-  static int currentHomePage;
-  static Color primaryColor;
+  static int currentHomePage = 0;
+  static Color? primaryColor;
 
-  static RuleDao _ruleDao;
-  static RuleDao get ruleDao => _ruleDao;
+  static RuleDao? _ruleDao;
+  static RuleDao? get ruleDao => _ruleDao;
 
   static Future<void> initFont() async {
     final profile = ESOTheme();
@@ -158,7 +158,8 @@ class Global with ChangeNotifier {
     _isDesktop = Platform.isLinux || Platform.isMacOS || Platform.isWindows;
     if (isDesktop) {
       sqflite.databaseFactory = databaseFactoryFfi;
-      final factory = sqflite.databaseFactory as impl.SqfliteDatabaseFactoryMixin;
+      final factory =
+          sqflite.databaseFactory as impl.SqfliteDatabaseFactoryMixin;
       factory.setDatabasesPathOrNull(
           await CacheUtil(backup: true, basePath: "database").cacheDir());
     }

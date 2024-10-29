@@ -3,17 +3,17 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parser;
 
 class AnalyzerHtml implements Analyzer {
-  Element _element;
+  Element? _element;
 
   @override
   AnalyzerHtml parse(content) {
-  //   final d = parser.parse('''<div class="path test">
-  //   <div class="p"><a href="/">顶点小说</a> &gt; <a href="/ebook/33715.html">自律的我简直无敌了最新章节</a>
-  //   <span class="oninfo"><a rel="nofollow" href="javascript:addBookCase('33715');">加入书架</a></span></div></div>
-	// ''').documentElement;
-  //   for (var it in d.querySelectorAll(".path.test a")) {
-  //     print(it.outerHtml);
-  //   }
+    //   final d = parser.parse('''<div class="path test">
+    //   <div class="p"><a href="/">顶点小说</a> &gt; <a href="/ebook/33715.html">自律的我简直无敌了最新章节</a>
+    //   <span class="oninfo"><a rel="nofollow" href="javascript:addBookCase('33715');">加入书架</a></span></div></div>
+    // ''').documentElement;
+    //   for (var it in d.querySelectorAll(".path.test a")) {
+    //     print(it.outerHtml);
+    //   }
     if (content is Element) {
       _element = content;
     } else if (content is Document) {
@@ -26,8 +26,9 @@ class AnalyzerHtml implements Analyzer {
       if (content.length == 1) {
         _element = content.first;
       } else {
-        _element =
-            parser.parse(content.map((e) => e.outerHtml).join("\n")).documentElement;
+        _element = parser
+            .parse(content.map((e) => e.outerHtml).join("\n"))
+            .documentElement;
       }
     } else if (content is List) {
       _element = parser.parse(content.join("\n")).documentElement;
@@ -73,19 +74,21 @@ class AnalyzerHtml implements Analyzer {
          */
     final imgReg = RegExp(r"<img[^>]*>");
     final html = outerHtml
-        .replaceAllMapped(imgReg, (match) => "\n" + match.group(0) + "\n")
-        .replaceAll(RegExp(r"</?(?:div|p|br|hr|h\d|article|dd|dl)[^>]*>"), "\n");
+        .replaceAllMapped(
+            imgReg, (match) => "\n" + (match.group(0) ?? '') + "\n")
+        .replaceAll(
+            RegExp(r"</?(?:div|p|br|hr|h\d|article|dd|dl)[^>]*>"), "\n");
     //  .replaceAll(RegExp(r"^\s*|</?(?!img)\w+[^>]*>"), "");
     return html.splitMapJoin(
       imgReg,
-      onMatch: (match) => match.group(0) + "\n",
+      onMatch: (match) => (match.group(0) ?? '') + "\n",
       onNonMatch: (noMatch) => noMatch.trim().isEmpty
           ? ""
-          : parser.parse("$noMatch").documentElement.text + "\n",
+          : (parser.parse("$noMatch").documentElement?.text ?? '') + "\n",
     );
   }
 
-  String _getResult(Element e, String lastRule) {
+  String _getResult(Element? e, String lastRule) {
     switch (lastRule) {
       case 'text':
         return e.text.trim();
@@ -136,7 +139,9 @@ class AnalyzerHtml implements Analyzer {
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠓⠦⡄⠀⠀⡼⠁⠀⠀⠀⠀⠀⠀⠛⠻⠻⠛⠁⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⢀⡼⠁⠀⢹⡀⠀⠚⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠃⠀
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠀⢀⡠⠊⠀⠀⠀⠀⠳⠀⠀⠀⠀⠀⠀⠀⠀⠐⠊⠁⠀⠀⠀
          */
-        e.querySelectorAll("script,style").forEach((element) => element.remove());
+        e
+            .querySelectorAll("script,style")
+            .forEach((element) => element.remove());
         return getHtmlString(e.outerHtml);
       default:
         final r = e.attributes[lastRule];

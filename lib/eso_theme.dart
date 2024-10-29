@@ -125,7 +125,8 @@ class ESOTheme {
     }
   }
 
-  String get fontFamily => _box.get(fontFamilyBox, defaultValue: thDef[fontFamilyBox]);
+  String get fontFamily =>
+      _box.get(fontFamilyBox, defaultValue: thDef[fontFamilyBox]);
   set fontFamily(String value) {
     if (value != fontFamily) {
       _box.put(fontFamilyBox, cast(value, thDef[fontFamilyBox]));
@@ -140,27 +141,30 @@ class ESOTheme {
     }
   }
 
-  bool get showHistoryOnAbout =>
-      _box.get(showHistoryOnAboutBox, defaultValue: thDef[showHistoryOnAboutBox]);
+  bool get showHistoryOnAbout => _box.get(showHistoryOnAboutBox,
+      defaultValue: thDef[showHistoryOnAboutBox]);
   set showHistoryOnAbout(bool value) {
     if (value != showHistoryOnAbout) {
-      _box.put(showHistoryOnAboutBox, cast(value, thDef[showHistoryOnAboutBox]));
+      _box.put(
+          showHistoryOnAboutBox, cast(value, thDef[showHistoryOnAboutBox]));
     }
   }
 
-  bool get showHistoryOnFavorite =>
-      _box.get(showHistoryOnFavoriteBox, defaultValue: thDef[showHistoryOnFavoriteBox]);
+  bool get showHistoryOnFavorite => _box.get(showHistoryOnFavoriteBox,
+      defaultValue: thDef[showHistoryOnFavoriteBox]);
   set showHistoryOnFavorite(bool value) {
     if (value != showHistoryOnFavorite) {
-      _box.put(showHistoryOnFavoriteBox, cast(value, thDef[showHistoryOnFavoriteBox]));
+      _box.put(showHistoryOnFavoriteBox,
+          cast(value, thDef[showHistoryOnFavoriteBox]));
     }
   }
 
-  bool get switchFavoriteStyle =>
-      _box.get(switchFavoriteStyleBox, defaultValue: thDef[switchFavoriteStyleBox]);
+  bool get switchFavoriteStyle => _box.get(switchFavoriteStyleBox,
+      defaultValue: thDef[switchFavoriteStyleBox]);
   set switchFavoriteStyle(bool value) {
     if (value != switchFavoriteStyle) {
-      _box.put(switchFavoriteStyleBox, cast(value, thDef[switchFavoriteStyleBox]));
+      _box.put(
+          switchFavoriteStyleBox, cast(value, thDef[switchFavoriteStyleBox]));
     }
   }
 
@@ -188,21 +192,24 @@ class ESOTheme {
     }
   }
 
-  int get bottomCount => _box.get(bottomCountBox, defaultValue: thDef[bottomCountBox]);
+  int get bottomCount =>
+      _box.get(bottomCountBox, defaultValue: thDef[bottomCountBox]);
   set bottomCount(int value) {
     if (value != bottomCount) {
       _box.put(bottomCountBox, cast(value, thDef[bottomCountBox]));
     }
   }
 
-  bool get autoRefresh => _box.get(autoRefreshBox, defaultValue: thDef[autoRefreshBox]);
+  bool get autoRefresh =>
+      _box.get(autoRefreshBox, defaultValue: thDef[autoRefreshBox]);
   set autoRefresh(bool value) {
     if (value != autoRefresh) {
       _box.put(autoRefreshBox, cast(value, thDef[autoRefreshBox]));
     }
   }
 
-  bool get mangaKeepOn => _box.get(mangaKeepOnBox, defaultValue: thDef[mangaKeepOnBox]);
+  bool get mangaKeepOn =>
+      _box.get(mangaKeepOnBox, defaultValue: thDef[mangaKeepOnBox]);
   set mangaKeepOn(bool value) {
     if (value != mangaKeepOn) {
       _box.put(mangaKeepOnBox, cast(value, thDef[mangaKeepOnBox]));
@@ -257,14 +264,16 @@ class ESOTheme {
     }
   }
 
-  int get searchCount => _box.get(searchCountBox, defaultValue: thDef[searchCountBox]);
+  int get searchCount =>
+      _box.get(searchCountBox, defaultValue: thDef[searchCountBox]);
   set searchCount(int value) {
     if (value != searchCount) {
       _box.put(searchCountBox, cast(value, thDef[searchCountBox]));
     }
   }
 
-  int get searchOption => _box.get(searchOptionBox, defaultValue: thDef[searchOptionBox]);
+  int get searchOption =>
+      _box.get(searchOptionBox, defaultValue: thDef[searchOptionBox]);
   set searchOption(int value) {
     if (value != searchOption) {
       _box.put(searchOptionBox, cast(value, thDef[searchOptionBox]));
@@ -303,7 +312,8 @@ class ESOTheme {
     }
   }
 
-  int get autoBackRate => _box.get(autoBackRateBox, defaultValue: thDef[autoBackRateBox]);
+  int get autoBackRate =>
+      _box.get(autoBackRateBox, defaultValue: thDef[autoBackRateBox]);
   set autoBackRate(int value) {
     if (value != autoBackRate) {
       _box.put(autoBackRateBox, cast(value, thDef[autoBackRateBox]));
@@ -366,19 +376,21 @@ class ESOTheme {
     }
   }
 
-  String get webdavRuleCheckcode =>
-      _box.get(webdavRuleCheckcodeBox, defaultValue: thDef[webdavRuleCheckcodeBox]);
+  String get webdavRuleCheckcode => _box.get(webdavRuleCheckcodeBox,
+      defaultValue: thDef[webdavRuleCheckcodeBox]);
   set webdavRuleCheckcode(String value) {
     if (value != webdavRuleCheckcode) {
-      _box.put(webdavRuleCheckcodeBox, cast(value, thDef[webdavRuleCheckcodeBox]));
+      _box.put(
+          webdavRuleCheckcodeBox, cast(value, thDef[webdavRuleCheckcodeBox]));
     }
   }
 
-  String get autoRuleUploadLastDay =>
-      _box.get(autoRuleUploadLastDayBox, defaultValue: thDef[autoRuleUploadLastDayBox]);
+  String get autoRuleUploadLastDay => _box.get(autoRuleUploadLastDayBox,
+      defaultValue: thDef[autoRuleUploadLastDayBox]);
   set autoRuleUploadLastDay(String value) {
     if (value != autoRuleUploadLastDay) {
-      _box.put(autoRuleUploadLastDayBox, cast(value, thDef[autoRuleUploadLastDayBox]));
+      _box.put(autoRuleUploadLastDayBox,
+          cast(value, thDef[autoRuleUploadLastDayBox]));
     }
   }
 
@@ -388,13 +400,13 @@ class ESOTheme {
     version = lastestVersion;
   }
 
-  static String staticFontFamily;
+  static String? staticFontFamily;
 
   void fromJson(Map<String, dynamic> json, [bool notIgnoreVersion = true]) {
     _box.putAll(json);
   }
 
-  Map<String, dynamic> toJson() => _box.toMap();
+  Map<String, dynamic> toJson() => Map<String, dynamic>.from(_box.toMap());
 }
 
 T cast<T>(x, T defaultValue) => x is T ? x : defaultValue; // 安全转换

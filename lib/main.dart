@@ -38,8 +38,9 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
-Future<void> onLink(String linkPath) async {
-  PlatformFile platformFile;
+Future<void> onLink(String? linkPath) async {
+  if (linkPath == null) return;
+  PlatformFile? platformFile;
   var name = "本地文件";
   try {
     final _uri = Uri.parse(linkPath);
@@ -47,8 +48,10 @@ Future<void> onLink(String linkPath) async {
     final _file = File(_path);
     final _name = _path.substring(_path.lastIndexOf('/') + 1);
     name = _name;
-    platformFile = PlatformFile(path: _path, name: _name, size: _file.lengthSync());
+    platformFile =
+        PlatformFile(path: _path, name: _name, size: _file.lengthSync());
   } catch (e) {}
+
   if (platformFile == null) {
     return;
   }
@@ -58,28 +61,30 @@ Future<void> onLink(String linkPath) async {
       fileContent.startsWith(RuleCompress.tag) ||
       (fileContent.startsWith('[') && fileContent.endsWith(']')) ||
       (fileContent.startsWith('{') && fileContent.endsWith('}')) ||
-      (fileContent.startsWith('"' + RuleCompress.tag) && fileContent.endsWith('"'))) {
+      (fileContent.startsWith('"' + RuleCompress.tag) &&
+          fileContent.endsWith('"'))) {
     if (fileContent.startsWith(RuleCompress.tag)) {
       fileContent = RuleCompress.decompassString(fileContent);
     } else if (fileContent.startsWith('"' + RuleCompress.tag) &&
         fileContent.endsWith('"')) {
-      fileContent =
-          RuleCompress.decompassString(fileContent.substring(1, fileContent.length - 1));
+      fileContent = RuleCompress.decompassString(
+          fileContent.substring(1, fileContent.length - 1));
     }
     showDialog(
-      context: navigatorKey.currentState.context,
+      context: navigatorKey.currentState!.context,
       builder: (context) => UIAddRuleDialog(
           refresh: () {
-            editSourceProviderTemp?.refreshData();
+            editSourceProviderTemp.refreshData();
           },
           fileContent: fileContent,
           fileName: name),
     );
-  } else if (platformFile.name.contains(".txt") || platformFile.name.contains(".epub")) {
+  } else if (platformFile.name.contains(".txt") ||
+      platformFile.name.contains(".epub")) {
     Navigator.push(
-        navigatorKey.currentState.context,
+        navigatorKey.currentState!.context,
         MaterialPageRoute(
-          builder: (context) => AddLocalItemPage(platformFile: platformFile),
+          builder: (context) => AddLocalItemPage(platformFile: platformFile!),
         ));
   } else {
     Utils.toast("未知的文件类型");
@@ -108,7 +113,9 @@ void main() async {
     if (linkPath != null) {
       onLink(linkPath);
     }
-    linkStream.listen(onLink);
+    linkStream.listen((String? linkPath) {
+      onLink(linkPath);
+    });
   }
 
   await Hive.initFlutter("eso");
@@ -136,7 +143,7 @@ void main() async {
 class ErrorApp extends StatelessWidget {
   final error;
   final stackTrace;
-  const ErrorApp({Key key, this.error, this.stackTrace}) : super(key: key);
+  const ErrorApp({super.key, this.error, this.stackTrace});
 
   @override
   Widget build(BuildContext context) {
@@ -156,18 +163,18 @@ class ErrorApp extends StatelessWidget {
   }
 }
 
-BoxDecoration globalDecoration;
+late BoxDecoration globalDecoration;
 final hetu = Hetu();
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  StackTrace _stackTrace;
+  StackTrace? _stackTrace;
   dynamic _error;
   InitFlag initFlag = InitFlag.wait;
 
@@ -184,20 +191,20 @@ class _MyAppState extends State<MyApp> {
           await FlutterDisplayMode.setPreferredMode(displayMode);
         }
         await Global.init();
-        await hetu.init(externalFunctions: {
+        hetu.init(externalFunctions: {
           'hello': (entity, {positionalArgs, namedArgs, typeArgs}) {},
           'toast': (entity, {positionalArgs, namedArgs, typeArgs}) {
             Utils.toast("msg");
           },
         });
         globalDecoration = BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage(decorationImage), fit: BoxFit.fitWidth),
+          image: DecorationImage(
+              image: AssetImage(decorationImage), fit: BoxFit.fitWidth),
         );
         themeBox.listenable(keys: [decorationImageKey]).addListener(() {
           globalDecoration = BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(decorationImage), fit: BoxFit.fitWidth),
+            image: DecorationImage(
+                image: AssetImage(decorationImage), fit: BoxFit.fitWidth),
           );
         });
         initFlag = InitFlag.ok;
@@ -215,7 +222,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<int>>(
       valueListenable: themeModeBox.listenable(),
-      builder: (BuildContext context, Box<int> _, Widget child) {
+      builder: (BuildContext context, Box<int> _, Widget? child) {
         final _themeMode = ThemeMode.values[themeMode];
         switch (initFlag) {
           case InitFlag.ok:
@@ -229,7 +236,7 @@ class _MyAppState extends State<MyApp> {
               textPadding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
               child: ValueListenableBuilder<Box>(
                   valueListenable: themeBox.listenable(),
-                  builder: (BuildContext context, Box _, Widget child) {
+                  builder: (BuildContext context, Box _, Widget? child) {
                     return MaterialApp(
                       navigatorKey: navigatorKey,
                       themeMode: _themeMode,
@@ -239,7 +246,8 @@ class _MyAppState extends State<MyApp> {
                       title: Global.appName,
                       home: ValueListenableBuilder<Box<dynamic>>(
                           valueListenable: globalConfigBox.listenable(),
-                          builder: (BuildContext context, Box<dynamic> _, Widget child) {
+                          builder: (BuildContext context, Box<dynamic> _,
+                              Widget? child) {
                             return HomePage();
                           }),
                       localizationsDelegates: [

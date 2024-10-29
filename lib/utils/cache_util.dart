@@ -11,20 +11,20 @@ import '../global.dart';
 class CacheUtil {
   static const String _basePath = 'cache';
   static const String _backupPath = 'backup';
-  static String _cacheBasePath, _cacheStoragePath;
+  static String? _cacheBasePath, _cacheStoragePath;
 
   /// 缓存名称
-  final String cacheName;
+  final String? cacheName;
 
   /// 基路径
-  final String basePath;
+  final String? basePath;
 
   /// 是否是备份
   final bool backup;
 
   CacheUtil({this.cacheName, this.basePath, this.backup = false});
 
-  String _cacheDir;
+  String? _cacheDir;
 
   /// 请求权限
   static Future<bool> requestPermission() async {
@@ -37,45 +37,45 @@ class CacheUtil {
     return true;
   }
 
-  Future<String> cacheDir([bool allCache]) async {
+  Future<String?> cacheDir([bool? allCache]) async {
     try {
       await requestPermission();
     } catch (e) {}
-    if (_cacheDir != null && allCache != true) return _cacheDir;
+    if (_cacheDir != null && allCache != true) return _cacheDir!;
     var dir = await getCacheBasePath(backup);
     if (dir == null || dir.isEmpty) return null;
     dir = dir + _separator + 'eso';
-    if (this.basePath == null || this.basePath.isEmpty)
+    if (this.basePath == null || this.basePath!.isEmpty)
       dir = dir + _separator + (backup ? _backupPath : _basePath);
     else
-      dir = dir + _separator + this.basePath;
+      dir = dir + _separator + this.basePath!;
     if (allCache == true) {
       return dir + _separator;
     }
-    if (cacheName != null && cacheName.isNotEmpty)
+    if (cacheName != null && cacheName!.isNotEmpty)
       dir = dir + _separator + cacheName.hashCode.toString();
     _cacheDir = dir + _separator;
     print('cache dir: $_cacheDir');
     return _cacheDir;
   }
 
-  Future<String> getFileName(String key, bool hashCodeKey) async {
+  Future<String?> getFileName(String key, bool hashCodeKey) async {
     var dir = _cacheDir ?? await cacheDir();
     if (dir == null || dir.isEmpty) return null;
     return dir + (hashCodeKey ? key.hashCode.toString() + '.data' : key);
   }
 
-  String getFileNameSync(String key, bool hashCodeKey) {
+  String? getFileNameSync(String key, bool hashCodeKey) {
     var dir = _cacheDir;
     if (dir == null || dir.isEmpty) return null;
     return dir + (hashCodeKey ? key.hashCode.toString() + '.data' : key);
   }
 
   /// 写入文件, 返回新文件的路径
-  Future<String> putFile(String key, File file) async {
+  Future<String?> putFile(String key, File file) async {
     var _file = await getFileName(key, false);
     if (_file == null || _file.isEmpty) return null;
-    File _cacheFile = await createFile(_file, path: _cacheDir);
+    File? _cacheFile = await createFile(_file, path: _cacheDir);
     if (_cacheFile == null) return null;
     final bytes = file.readAsBytesSync();
     await _cacheFile.writeAsBytes(bytes);
@@ -83,18 +83,19 @@ class CacheUtil {
   }
 
   /// 写入 key
-  Future<bool> put(String key, String value, [bool hashCodeKey = true]) async {
+  Future<bool> put(String? key, String value, [bool hashCodeKey = true]) async {
     if (key == null || key.isEmpty) return false;
     var _file = await getFileName(key, hashCodeKey);
     if (_file == null || _file.isEmpty) return false;
-    File _cacheFile = await createFile(_file, path: _cacheDir);
+    File? _cacheFile = await createFile(_file, path: _cacheDir);
     if (_cacheFile == null) return false;
     await _cacheFile.writeAsString(value);
     return true;
   }
 
   /// 获取 key 对应的数据
-  Future<String> get(String key, [String defaultValue, bool hashCodeKey = true]) async {
+  Future<String?> get(String? key,
+      [String? defaultValue, bool hashCodeKey = true]) async {
     if (key == null || key.isEmpty) return defaultValue;
     var _file = await getFileName(key, hashCodeKey);
     if (_file == null || _file.isEmpty) return defaultValue;
@@ -109,12 +110,13 @@ class CacheUtil {
     bool hashCodeKey = true,
     bool shouldEncode = true,
   }) async {
-    return await put(key, shouldEncode ? jsonEncode(value) : value, hashCodeKey);
+    return await put(
+        key, shouldEncode ? jsonEncode(value) : value.toString(), hashCodeKey);
   }
 
   Future<dynamic> getData(
     String key, {
-    Object defaultValue,
+    Object? defaultValue,
     bool hashCodeKey = true,
     bool shouldDecode = true,
   }) async {
@@ -143,7 +145,8 @@ class CacheUtil {
     await put(key, value, false);
   }
 
-  String getSync(String key, [String defaultValue, bool hashCodeKey = true]) {
+  String? getSync(String? key,
+      [String? defaultValue, bool hashCodeKey = true]) {
     if (key == null || key.isEmpty) return defaultValue;
     var _file = getFileNameSync(key, hashCodeKey);
     if (_file == null || _file.isEmpty) return defaultValue;
@@ -152,13 +155,13 @@ class CacheUtil {
     return null;
   }
 
-  dynamic getDataSync(String key, [Object defaultValue]) {
+  dynamic getDataSync(String key, [Object? defaultValue]) {
     final value = getSync(key, null, false);
     if (value == null || value.isEmpty) return defaultValue;
     return jsonDecode(value);
   }
 
-  int getInt(String key) {
+  int? getInt(String key) {
     final value = getDataSync(key, null);
     if (value != null && value is Map && (value)['type'] == 'int') {
       return (value)['value'] as int;
@@ -166,7 +169,7 @@ class CacheUtil {
       return null;
   }
 
-  bool getBool(String key) {
+  bool? getBool(String key) {
     final value = getDataSync(key, null);
     if (value != null && value is Map && (value)['type'] == 'bool') {
       return (value)['value'] as bool;
@@ -174,20 +177,20 @@ class CacheUtil {
       return null;
   }
 
-  List<String> getStringList(String key) {
+  List<String?> getStringList(String key) {
     final value = getDataSync(key, null);
     if (value != null && value is Map && (value)['type'] == 'sl') {
       return ((value)['value'] as List<dynamic>).map((e) {
         return e.toString();
       }).toList();
     } else
-      return null;
+      return [];
     // await putData(key, {'value': value, 'type': 'sl'}, false);
   }
 
   /// 清理缓存
   /// [allCache] 清除所有缓存
-  Future<void> clear({bool allCache}) async {
+  Future<void> clear({bool? allCache}) async {
     try {
       await requestPermission();
       var dir = await cacheDir(allCache);
@@ -206,34 +209,36 @@ class CacheUtil {
   static String get _separator => Platform.pathSeparator;
 
   /// 获取缓存放置目录 (写了一堆，提升兼容性）
-  static Future<String> getCacheBasePath([bool storage]) async {
+  static Future<String?> getCacheBasePath([bool? storage]) async {
     if (_cacheStoragePath == null) {
       try {
         if (Global.isDesktop) {
-          _cacheStoragePath = (await path.getApplicationDocumentsDirectory()).path;
+          _cacheStoragePath =
+              (await path.getApplicationDocumentsDirectory()).path;
         } else if (Platform.isAndroid) {
-          _cacheStoragePath = (await path.getExternalStorageDirectory()).path;
-          if (_cacheStoragePath != null && _cacheStoragePath.isNotEmpty) {
+          _cacheStoragePath = (await path.getExternalStorageDirectory())?.path;
+          if (_cacheStoragePath != null && _cacheStoragePath!.isNotEmpty) {
             final _subStr = 'storage/emulated/0/';
-            var index = _cacheStoragePath.indexOf(_subStr);
+            var index = _cacheStoragePath!.indexOf(_subStr);
             if (index >= 0) {
               _cacheStoragePath =
-                  _cacheStoragePath.substring(0, index + _subStr.length - 1);
+                  _cacheStoragePath!.substring(0, index + _subStr.length - 1);
             }
           }
         } else
-          _cacheStoragePath = (await path.getApplicationDocumentsDirectory()).path;
+          _cacheStoragePath =
+              (await path.getApplicationDocumentsDirectory()).path;
       } catch (e) {}
     }
     if (_cacheBasePath == null) {
       _cacheBasePath = (await path.getApplicationDocumentsDirectory()).path;
-      if (_cacheBasePath == null || _cacheBasePath.isEmpty) {
+      if (_cacheBasePath == null || _cacheBasePath!.isEmpty) {
         _cacheBasePath = (await path.getApplicationSupportDirectory()).path;
-        if (_cacheBasePath == null || _cacheBasePath.isEmpty) {
+        if (_cacheBasePath == null || _cacheBasePath!.isEmpty) {
           _cacheBasePath = (await path.getTemporaryDirectory()).path;
         }
       }
-      if (_cacheStoragePath == null || _cacheStoragePath.isEmpty)
+      if (_cacheStoragePath == null || _cacheStoragePath!.isEmpty)
         _cacheStoragePath = _cacheBasePath;
     }
     return storage == true ? _cacheStoragePath : _cacheBasePath;
@@ -251,7 +256,7 @@ class CacheUtil {
     return (await new Directory(path).create(recursive: true)).exists();
   }
 
-  static Future<File> createFile(final String file, {String path}) async {
+  static Future<File?> createFile(final String file, {String? path}) async {
     try {
       String _path = path ?? getFilePath(file);
       if (!existPath(_path)) {

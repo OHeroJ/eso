@@ -57,16 +57,16 @@ import 'dart:typed_data';
 
 // 思路 探测bom -> 读取ascii -> 根据第一个非ascii确定编码 -> 解码
 String autoReadFile(
-  String path, {
-  Encoding encoding,
+  String? path, {
+  Encoding? encoding,
 }) {
-  final file = File(path);
+  final file = File(path!);
   if (encoding != null) return file.readAsStringSync(encoding: encoding);
   final bytes = file.readAsBytesSync();
   return autoReadBytes(bytes);
 }
 
-String autoReadBytes(Uint8List bytes){
+String autoReadBytes(Uint8List bytes) {
 // 探测 bom
   // FE FF UTF16BE
   // FF FE UTF16LE
@@ -133,7 +133,8 @@ String utf8(Uint8List bytes) =>
     Utf8Codec(allowMalformed: true).decode(bytes, allowMalformed: true);
 
 // 探测第一个字符编码
-String Function(Uint8List bytes) checkFirstEncoding(List<int> bytes, int index) {
+String Function(Uint8List bytes) checkFirstEncoding(
+    List<int> bytes, int index) {
   // 应该至少有2个字节 读取之
   if (bytes.length == index + 1) {
     return utf8;
@@ -163,7 +164,9 @@ String Function(Uint8List bytes) checkFirstEncoding(List<int> bytes, int index) 
           break;
         }
       }
-      if (flag && (bytes.length == index + count + 1 || !check10(bytes[index + count]))) {
+      if (flag &&
+          (bytes.length == index + count + 1 ||
+              !check10(bytes[index + count]))) {
         return utf8;
       }
     }
@@ -190,7 +193,8 @@ String Function(Uint8List bytes) checkFirstEncoding(List<int> bytes, int index) 
   if (gbkFromCode != null) {
     // a1 A1-FE && b2 A1-FE
     if (b1 > 0xA0 && b2 > 0xA0) return gbk;
-    if (b1 > 0x80 && b1 < 0xA1 && b2 > 0x40 && b2 < 0xFE && b2 != 0x7F) return gbk;
+    if (b1 > 0x80 && b1 < 0xA1 && b2 > 0x40 && b2 < 0xFE && b2 != 0x7F)
+      return gbk;
     if (b1 > 0xA1 && b2 > 0x40 && b2 < 0xA0 && b2 != 0x7F) return gbk;
   }
   return utf8;
@@ -204,17 +208,6 @@ class BomPair {
 
 extension on int {
   int getBit(int position) {
-    if (this == null) return null;
-    // print([
-    //   '1',
-    //   '10',
-    //   '100',
-    //   '1000',
-    //   '10000',
-    //   '100000',
-    //   '1000000',
-    //   '10000000',
-    // ].map((d) => "0x" + int.parse(d, radix: 2).toRadixString(16).toUpperCase()));
     final list = [0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80];
     return (this & list[position - 1]) >> (position - 1);
   }

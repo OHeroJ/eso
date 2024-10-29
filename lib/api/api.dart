@@ -4,8 +4,8 @@ import '../database/chapter_item.dart';
 import '../database/search_item.dart';
 
 abstract class API {
-  static String chapterUrl;
-  static String contentUrl;
+  static String? chapterUrl;
+  static String? contentUrl;
 
   static const MANGA = 0;
   static const NOVEL = 1;
@@ -71,11 +71,15 @@ abstract class API {
 }
 
 class BaseAPI implements API {
-  String _origin;
-  String _originTag;
-  int _ruleContentType;
+  late String _origin;
+  late String _originTag;
+  late int _ruleContentType;
 
-  BaseAPI({String origin, String originTag, int ruleContentType}) {
+  BaseAPI({
+    required String origin,
+    required String originTag,
+    required int ruleContentType,
+  }) {
     _origin = origin;
     _originTag = originTag;
     _ruleContentType = ruleContentType;
@@ -89,23 +93,23 @@ class BaseAPI implements API {
 
   Future<List<SearchItem>> discover(
       Map<String, DiscoverPair> params, int page, int pageSize) {
-    return null;
+    return Future.value([]);
   }
 
   Future<List<SearchItem>> search(String query, int page, int pageSize) {
-    return null;
+    return Future.value([]);
   }
 
   Future<List<ChapterItem>> chapter(String url) {
-    return null;
+    return Future.value([]);
   }
 
   Future<List<String>> content(String url) {
-    return null;
+    return Future.value([]);
   }
 
   Future<List<DiscoverMap>> discoverMap() {
-    return null;
+    return Future.value([]);
   }
 }
 

@@ -110,24 +110,24 @@ class ISapi extends IUnknown {
   ISapi(Pointer<COMObject> ptr) : super(ptr);
 
   int Pause() => Pointer<
-              NativeFunction<
-                  Int32 Function(
-        Pointer obj,
-      )>>.fromAddress(ptr.ref.vtable.elementAt(16).value)
-          .asFunction<
-              int Function(
-        Pointer obj,
-      )>()(ptr.ref.lpVtbl);
+          NativeFunction<
+              Int32 Function(
+                Pointer obj,
+              )>>.fromAddress(ptr.ref.vtable.elementAt(16).value)
+      .asFunction<
+          int Function(
+            Pointer obj,
+          )>()(ptr.ref.lpVtbl);
 
   int Resume() => Pointer<
-              NativeFunction<
-                  Int32 Function(
-        Pointer obj,
-      )>>.fromAddress(ptr.ref.vtable.elementAt(17).value)
-          .asFunction<
-              int Function(
-        Pointer obj,
-      )>()(ptr.ref.lpVtbl);
+          NativeFunction<
+              Int32 Function(
+                Pointer obj,
+              )>>.fromAddress(ptr.ref.vtable.elementAt(17).value)
+      .asFunction<
+          int Function(
+            Pointer obj,
+          )>()(ptr.ref.lpVtbl);
 
   int Speak(
     Pointer<Utf16> pwcs,
@@ -137,18 +137,18 @@ class ISapi extends IUnknown {
       Pointer<
               NativeFunction<
                   Int32 Function(
-        Pointer obj,
-        Pointer<Utf16> pwcs,
-        Uint32 dwFlags,
-        Uint32 pulStreamNumber,
-      )>>.fromAddress(ptr.ref.vtable.elementAt(20).value)
+                    Pointer obj,
+                    Pointer<Utf16> pwcs,
+                    Uint32 dwFlags,
+                    Uint32 pulStreamNumber,
+                  )>>.fromAddress(ptr.ref.vtable.elementAt(20).value)
           .asFunction<
               int Function(
-        Pointer obj,
-        Pointer<Utf16> pwcs,
-        int dwFlags,
-        int pulStreamNumber,
-      )>()(ptr.ref.lpVtbl, pwcs, dwFlags, pulStreamNumber);
+                Pointer obj,
+                Pointer<Utf16> pwcs,
+                int dwFlags,
+                int pulStreamNumber,
+              )>()(ptr.ref.lpVtbl, pwcs, dwFlags, pulStreamNumber);
 }
 
 const CLSID_SpVoice = '{96749377-3391-11D2-9EE3-00C04F797396}';
@@ -159,7 +159,7 @@ class Sapi {
   final ISapi iSapi;
   bool hasFree = false;
 
-  static Sapi _sapi;
+  static late Sapi _sapi;
 
   factory Sapi.createInstance() => _sapi ??= Sapi._();
 

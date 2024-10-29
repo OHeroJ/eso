@@ -11,10 +11,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 class Utils {
-  static Future<String> pickFolder(
+  static Future<String?> pickFolder(
     BuildContext context, {
-    String title,
-    String initialDirectory,
+    String? title,
+    String? initialDirectory,
   }) async {
     var p = initialDirectory != null
         ? Directory(initialDirectory).parent
@@ -41,7 +41,8 @@ class Utils {
             var onPressed = () async {
               final fileName = controller.text.trim();
               try {
-                final r = await Directory(Utils.join(path.path, fileName)).create();
+                final r =
+                    await Directory(Utils.join(path.path, fileName)).create();
                 if (r != null) {
                   Navigator.of(context).pop(true);
                   Future.delayed(Duration(seconds: 1), controller.dispose);
@@ -52,7 +53,7 @@ class Utils {
                 toast("新建文件夹失败 $e");
               }
             };
-            return showDialog<bool>(
+            final res = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
                 content: TextField(
@@ -68,6 +69,7 @@ class Utils {
                 ],
               ),
             );
+            return res ?? false;
           },
           text: "新建文件夹",
           icon: Icon(Icons.create_new_folder_outlined, color: iconColor),
@@ -100,11 +102,11 @@ class Utils {
     return x;
   }
 
-  static Future<String> pickFile(
+  static Future<String?> pickFile(
     BuildContext context,
     List<String> allowedExtensions,
     String defaultFile, {
-    String title,
+    String? title,
   }) async {
     // return FilesystemPicker.openDialog(
     //     title: '选择本地播放器',
@@ -147,7 +149,8 @@ class Utils {
             var onPressed = () async {
               final fileName = controller.text.trim();
               try {
-                final r = await Directory(Utils.join(path.path, fileName)).create();
+                final r =
+                    await Directory(Utils.join(path.path, fileName)).create();
                 if (r != null) {
                   Navigator.of(context).pop(true);
                   Future.delayed(Duration(seconds: 1), controller.dispose);
@@ -158,7 +161,7 @@ class Utils {
                 toast("新建文件夹失败 $e");
               }
             };
-            return showDialog<bool>(
+            final res = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
                 content: TextField(
@@ -174,6 +177,7 @@ class Utils {
                 ],
               ),
             );
+            return res ?? false;
           },
           text: "新建文件夹",
           icon: Icon(Icons.create_new_folder_outlined, color: iconColor),
@@ -246,23 +250,25 @@ class Utils {
 
   /// 显示 Toast 消息
   static toast(msg,
-      {Duration duration,
+      {Duration duration = Duration.zero,
       ToastPosition position = ToastPosition.bottom,
-      bool dismissOtherToast}) {
+      bool dismissOtherToast = false}) {
     if (msg == null) return;
     showToast('$msg',
-        position: position, duration: duration, dismissOtherToast: dismissOtherToast);
+        position: position,
+        duration: duration,
+        dismissOtherToast: dismissOtherToast);
   }
 
   /// 清除输入焦点
   static unFocus(BuildContext context) {
     var f = FocusScope.of(context);
-    if (f != null && f.hasFocus) f.unfocus(disposition: UnfocusDisposition.scope);
+    if (f.hasFocus) f.unfocus(disposition: UnfocusDisposition.scope);
   }
 
   /// 开始一个页面，并等待结束
-  static Future<Object> startPageWait(BuildContext context, Widget page,
-      {bool replace}) async {
+  static Future<dynamic> startPageWait(BuildContext context, Widget? page,
+      {bool replace = false}) async {
     if (page == null) return null;
     var rote = Platform.isIOS
         ? CupertinoPageRoute(builder: (context) => page)
@@ -271,7 +277,7 @@ class Utils {
     return await Navigator.push(context, rote);
   }
 
-  static String _downloadPath;
+  static String? _downloadPath;
 
   /// 提取文件名（不包含路径和扩展名）
   static String getFileName(final String file) {
@@ -293,13 +299,13 @@ class Utils {
   }
 
   /// 获取下载目录
-  static Future<String> getDownloadsPath() async {
+  static Future<String?> getDownloadsPath() async {
     if (Platform.isIOS)
       return (await getApplicationDocumentsDirectory()).path;
     else {
       if (_downloadPath == null) {
-        _downloadPath = (await getExternalStorageDirectory()).path;
-        if (!(existPath(_downloadPath)))
+        _downloadPath = (await getExternalStorageDirectory())?.path;
+        if (!(existPath(_downloadPath!)))
           _downloadPath = (await getTemporaryDirectory()).path;
       }
       print("downloadPath: $_downloadPath");
@@ -314,21 +320,23 @@ class Utils {
 }
 
 class _StrBuilder {
-  String value;
+  String? value;
   final String divider;
-  _StrBuilder(this.value, {this.divider: ' '});
+  _StrBuilder(this.value, {this.divider = ' '});
 
-  _StrBuilder link(String value, {String divider}) {
-    bool _a = this.value == null || this.value.isEmpty;
+  _StrBuilder link(String? value, {String? divider}) {
+    bool _a = this.value == null || this.value!.isEmpty;
     bool _b = value == null || value.isEmpty;
     this.value = _a || _b
         ? (_a ? value : this.value)
-        : (this.value + (divider == null ? (this.divider ?? ' ') : divider) + value);
+        : (this.value! +
+            (divider == null ? (this.divider ?? ' ') : divider) +
+            value);
     return this;
   }
 
   @override
   String toString() {
-    return value;
+    return value ?? '';
   }
 }
