@@ -51,10 +51,11 @@ class AnalyzerManager {
   AnalyzerManager(this._content);
 
   /// from https://github.com/dart-lang/sdk/issues/2336
-  String Function(Match) _replacement(String pattern) => (Match match) =>
-      pattern.replaceAllMapped(RegExp(r'\$(\d+)'), (m) => match[int.parse(m[1])]);
+  String Function(Match) _replacement(String pattern) =>
+      (Match match) => pattern.replaceAllMapped(
+          RegExp(r'\$(\d+)'), (m) => match[int.parse(m[1] ?? '')] ?? '');
 
-  String Function(String) replaceSmart(String replace) {
+  String Function(String) replaceSmart(String? replace) {
     if (null == replace || replace.isEmpty) return (String s) => s;
     final r = replace.split("##");
     final match = RegExp(r[0]);
@@ -66,7 +67,8 @@ class AnalyzerManager {
         if (r.length == 2) {
           return (String s) => s.replaceAllMapped(match, _replacement(pattern));
         } else {
-          return (String s) => s.replaceFirstMapped(match, _replacement(pattern));
+          return (String s) =>
+              s.replaceFirstMapped(match, _replacement(pattern));
         }
       } else {
         if (r.length == 2) {
@@ -78,7 +80,7 @@ class AnalyzerManager {
     }
   }
 
-  Future<dynamic> _getElements(SingleRule r, [String rule]) async {
+  Future<dynamic> _getElements(SingleRule r, [String? rule]) async {
     if (null == rule) {
       rule = r.rule;
     }
@@ -103,7 +105,7 @@ class AnalyzerManager {
     return null;
   }
 
-  Future<List<dynamic>> getElements(String rule) async {
+  Future<List<dynamic>> getElements(String? rule) async {
     var result = <dynamic>[];
     if (null == rule) return result;
     rule = rule.trimLeft();
@@ -121,7 +123,7 @@ class AnalyzerManager {
     return result;
   }
 
-  Future<dynamic> _getStringList(SingleRule r, [String rule]) async {
+  Future<dynamic> _getStringList(SingleRule r, [String? rule]) async {
     if (null == rule) {
       rule = r.rule;
     }
@@ -163,7 +165,7 @@ class AnalyzerManager {
     return null;
   }
 
-  Future<List<String>> getStringList(String rule) async {
+  Future<List<String>> getStringList(String? rule) async {
     var result = <String>[];
     if (null == rule) return result;
     rule = rule.trimLeft();
@@ -173,7 +175,7 @@ class AnalyzerManager {
     final pRight = rule.lastIndexOf("}}");
     if (-1 < pLeft && pLeft < pRight) {
       var position = 0;
-      int minCount;
+      int? minCount;
       final rs = <dynamic>[];
       for (final match in expressionPattern.allMatches(rule)) {
         rs.add(rule.substring(position, match.start));
@@ -228,7 +230,7 @@ class AnalyzerManager {
     return result;
   }
 
-  Future<String> _getString(SingleRule r, [String rule]) async {
+  Future<String> _getString(SingleRule r, [String? rule]) async {
     if (null == rule) {
       rule = r.rule;
     }
@@ -275,7 +277,7 @@ class AnalyzerManager {
     return result.isEmpty ? "" : replaceSmart(r.replace)(result);
   }
 
-  Future<String> getString(String rule) async {
+  Future<String> getString(String? rule) async {
     var result = "";
     if (null == rule) return result;
     rule = rule.trimLeft();
@@ -356,7 +358,7 @@ class AnalyzerManager {
         lastStart = m.start;
         continue;
       }
-      Analyzer analyzer;
+      late Analyzer analyzer;
       switch (r[0]) {
         case r"$":
           analyzer = AnalyzerJSonPath();
@@ -413,8 +415,8 @@ class AnalyzerManager {
 
       final position = r.indexOf("##");
       if (!(analyzer is AnalyzerJS) && position > -1) {
-        ruleList.add(
-            SingleRule(analyzer, r.substring(0, position), r.substring(position + 2)));
+        ruleList.add(SingleRule(
+            analyzer, r.substring(0, position), r.substring(position + 2)));
       } else {
         ruleList.add(SingleRule(analyzer, r, ""));
       }

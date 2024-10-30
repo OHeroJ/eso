@@ -9,20 +9,20 @@ void voidValueFunction(_) {}
 class Menu<T> extends StatelessWidget {
   final List<MenuItem<T>> items;
   final IconData icon;
-  final Color color;
+  final Color? color;
   final String tooltip;
-  final FutureOr Function(T value) onSelect;
-  final Widget child;
+  final FutureOr Function(T? value) onSelect;
+  final Widget? child;
 
   const Menu({
-    Key key,
+    super.key,
     this.icon = OMIcons.moreVert,
     this.color,
     this.tooltip = "更多",
     this.child,
-    this.items,
+    this.items = const [],
     this.onSelect = voidValueFunction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -53,7 +53,7 @@ class _CustomTabsState extends State<CustomTabView>
       controller.dispose();
 
       if (widget.initPosition != null) {
-        _currentPosition = widget.initPosition;
+        _currentPosition = widget.initPosition!;
       }
 
       if (_currentPosition > widget.itemCount - 1) {
@@ -62,7 +62,7 @@ class _CustomTabsState extends State<CustomTabView>
         if (widget.onPositionChange is ValueChanged<int>) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              widget.onPositionChange(_currentPosition);
+              widget.onPositionChange?.call(_currentPosition);
             }
           });
         }
@@ -76,10 +76,10 @@ class _CustomTabsState extends State<CustomTabView>
           initialIndex: _currentPosition,
         );
         controller.addListener(onPositionChange);
-        controller.animation.addListener(onScroll);
+        controller.animation?.addListener(onScroll);
       });
     } else if (widget.initPosition != null) {
-      controller.animateTo(widget.initPosition);
+      controller.animateTo(widget.initPosition!);
     }
 
     super.didUpdateWidget(oldWidget);
@@ -87,7 +87,7 @@ class _CustomTabsState extends State<CustomTabView>
 
   @override
   void dispose() {
-    controller.animation.removeListener(onScroll);
+    controller.animation?.removeListener(onScroll);
     controller.removeListener(onPositionChange);
     controller.dispose();
     super.dispose();
@@ -138,14 +138,14 @@ class _CustomTabsState extends State<CustomTabView>
     if (!controller.indexIsChanging) {
       _currentPosition = controller.index;
       if (widget.onPositionChange is ValueChanged<int>) {
-        widget.onPositionChange(_currentPosition);
+        widget.onPositionChange?.call(_currentPosition);
       }
     }
   }
 
   onScroll() {
     if (widget.onScroll is ValueChanged<double>) {
-      widget.onScroll(controller.animation.value);
+      widget.onScroll?.call(controller.animation?.value ?? 0);
     }
   }
 }

@@ -16,7 +16,7 @@ class Rule {
   String id = Uuid().v4();
   int createTime = DateTime.now().microsecondsSinceEpoch; //创建时间
   int modifiedTime = DateTime.now().microsecondsSinceEpoch; //修改时间
-  bool enableUpload;
+  bool enableUpload = false;
   String author = ''; //源作者
   String postScript = '';
   String name = ''; //站点名
@@ -283,12 +283,12 @@ class Rule {
     );
   }
 
-  static Future<String> backupRules([List<Rule> rules]) async {
+  static Future<String> backupRules([List<Rule>? rules]) async {
     await RuleDao.gaixieguizheng();
     if (rules == null) {
-      rules = await Global.ruleDao.findAllRules();
+      rules = await Global.ruleDao?.findAllRules();
     }
-    return json.encode(rules.map((e) => e.toJson()).toList());
+    return json.encode(rules!.map((e) => e.toJson()).toList());
   }
 
   static Future<bool> restore(List<dynamic> rules, bool reset) async {
@@ -296,7 +296,7 @@ class Rule {
     if (rules != null) {
       for (var item in rules) {
         var _rule = Rule.fromJson(item);
-        await Global.ruleDao.insertOrUpdateRule(_rule);
+        await Global.ruleDao?.insertOrUpdateRule(_rule);
       }
     }
     return true;
@@ -327,7 +327,8 @@ class Rule {
         "discoverTags": "//type/text()",
         "discoverName": "//name##.*\\[|\\].*",
         "discoverCover": "//pic/text()",
-        "discoverAuthor": "演员:{{//actor##.*\\[|\\].*}},导演:{{//director##.*\\[|\\].*}}",
+        "discoverAuthor":
+            "演员:{{//actor##.*\\[|\\].*}},导演:{{//director##.*\\[|\\].*}}",
         "discoverChapter": "//last/text()",
         "discoverDescription": "//des##.*\\[|\\].*",
         "discoverResult": "//id/text()",
@@ -339,7 +340,8 @@ class Rule {
         "searchTags": "//type/text()",
         "searchName": "//name##.*\\[|\\].*",
         "searchCover": "//pic/text()",
-        "searchAuthor": "演员:{{//actor##.*\\[|\\].*}},导演:{{//director##.*\\[|\\].*}}",
+        "searchAuthor":
+            "演员:{{//actor##.*\\[|\\].*}},导演:{{//director##.*\\[|\\].*}}",
         "searchChapter": "//last/text()",
         "searchDescription": "//des##.*\\[|\\].*",
         "searchResult": "//id/text()",
@@ -364,10 +366,10 @@ class Rule {
       };
 
   // Rule.fromJson(Map<String, dynamic> json, [Rule rule]) {
-  Rule.fromJson(dynamic jsonD, [Rule rule]) {
-    Map<String, dynamic> json;
+  Rule.fromJson(dynamic jsonD, [Rule? rule]) {
+    Map<String, dynamic>? json;
     if (jsonD is Map) {
-      json = jsonD;
+      json = Map<String, dynamic>.from(jsonD);
     } else if (jsonD is String) {
       if (jsonD.startsWith("eso")) {
         json = jsonDecode(RuleCompress.decompassString(jsonD));
@@ -436,7 +438,8 @@ r;
     viewStyle = json['viewStyle'] ?? 0;
     useCryptoJS = json['useCryptoJS'] ?? defaultRule.useCryptoJS;
     loadJs = json['loadJs'] ?? defaultRule.loadJs;
-    userAgent = json['userAgent'] ?? json['httpHeaders'] ?? defaultRule.userAgent;
+    userAgent =
+        json['userAgent'] ?? json['httpHeaders'] ?? defaultRule.userAgent;
     enableDiscover = json['enableDiscover'] ?? defaultRule.enableDiscover;
     discoverUrl = discoverUrl2;
     discoverNextUrl = json['discoverNextUrl'] ?? defaultRule.discoverNextUrl;
@@ -447,7 +450,8 @@ r;
     discoverCover = json['discoverCover'] ?? defaultRule.discoverCover;
     discoverAuthor = json['discoverAuthor'] ?? defaultRule.discoverAuthor;
     discoverChapter = json['discoverChapter'] ?? defaultRule.discoverChapter;
-    discoverDescription = json['discoverDescription'] ?? defaultRule.discoverDescription;
+    discoverDescription =
+        json['discoverDescription'] ?? defaultRule.discoverDescription;
     discoverResult = json['discoverResult'] ?? defaultRule.discoverResult;
     enableSearch = json['enableSearch'] ?? defaultRule.enableSearch;
     searchUrl = json['searchUrl'] ?? defaultRule.searchUrl;
@@ -459,7 +463,8 @@ r;
     searchCover = json['searchCover'] ?? defaultRule.searchCover;
     searchAuthor = json['searchAuthor'] ?? defaultRule.searchAuthor;
     searchChapter = json['searchChapter'] ?? defaultRule.searchChapter;
-    searchDescription = json['searchDescription'] ?? defaultRule.searchDescription;
+    searchDescription =
+        json['searchDescription'] ?? defaultRule.searchDescription;
     searchResult = json['searchResult'] ?? defaultRule.searchResult;
     enableMultiRoads = json['enableMultiRoads'] ?? defaultRule.enableMultiRoads;
     chapterRoads = json['chapterRoads'] ?? defaultRule.chapterRoads;
@@ -480,7 +485,7 @@ r;
     cookies = json['cookies'] ?? defaultRule.cookies;
   }
 
-  Rule.fromYiCiYuan(Map<String, dynamic> json, [Rule rule]) {
+  Rule.fromYiCiYuan(Map<String, dynamic> json, [Rule? rule]) {
     final defaultRule = rule ?? Rule.newRule();
     for (final key in json.keys) {
       var s = '${json[key]}';
@@ -535,17 +540,21 @@ r;
     discoverUrl = json['ruleFindUrl'] ?? defaultRule.discoverUrl;
     discoverNextUrl = json['discoverNextUrl'] ?? defaultRule.discoverNextUrl;
     discoverItems = json['discoverItems'] ?? defaultRule.discoverItems;
-    discoverList =
-        json["ruleFindList"] ?? json['ruleSearchList'] ?? defaultRule.discoverList;
-    discoverTags =
-        json['ruleFindKind'] ?? json['ruleSearchKind'] ?? defaultRule.discoverTags;
-    discoverName =
-        json['ruleFindName'] ?? json['ruleSearchName'] ?? defaultRule.discoverName;
+    discoverList = json["ruleFindList"] ??
+        json['ruleSearchList'] ??
+        defaultRule.discoverList;
+    discoverTags = json['ruleFindKind'] ??
+        json['ruleSearchKind'] ??
+        defaultRule.discoverTags;
+    discoverName = json['ruleFindName'] ??
+        json['ruleSearchName'] ??
+        defaultRule.discoverName;
     discoverCover = json['ruleFindCoverUrl'] ??
         json['ruleSearchCoverUrl'] ??
         defaultRule.discoverCover;
-    discoverAuthor =
-        json['ruleFindAuthor'] ?? json['ruleSearchAuthor'] ?? defaultRule.discoverAuthor;
+    discoverAuthor = json['ruleFindAuthor'] ??
+        json['ruleSearchAuthor'] ??
+        defaultRule.discoverAuthor;
     discoverChapter = json['ruleFindLastChapter'] ??
         json['ruleSearchLastChapter'] ??
         defaultRule.discoverChapter;
@@ -565,7 +574,8 @@ r;
     searchCover = json['ruleSearchCoverUrl'] ?? defaultRule.searchCover;
     searchAuthor = json['ruleSearchAuthor'] ?? defaultRule.searchAuthor;
     searchChapter = json['ruleSearchLastChapter'] ?? defaultRule.searchChapter;
-    searchDescription = json['ruleSearchIntroduce'] ?? defaultRule.searchDescription;
+    searchDescription =
+        json['ruleSearchIntroduce'] ?? defaultRule.searchDescription;
     searchResult = json['ruleSearchNoteUrl'] ?? defaultRule.searchResult;
     enableMultiRoads = json['enableMultiRoads'] ?? defaultRule.enableMultiRoads;
     chapterRoads = json['chapterRoads'] ?? defaultRule.chapterRoads;

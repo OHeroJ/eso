@@ -26,7 +26,7 @@ class MemoryCache<K, V> {
     }
   }
 
-  V getValue(K key) => _cache[key];
+  V getValue(K key) => _cache[key]!;
 
   Future<V> getValueOrSet(K key, FutureOr<V> Function() or) async {
     var value = _cache[key];
@@ -34,7 +34,7 @@ class MemoryCache<K, V> {
       value = await or();
       if (value != null) setValue(key, value);
     }
-    return value;
+    return value!;
   }
 
   bool containsKey(K key) => _cache.containsKey(key);

@@ -64,7 +64,7 @@ class Global with ChangeNotifier {
     try {
       if (fontFamily != null && fontFamily.contains('.')) {
         await loadFontFromList(
-          await File(dir + fontFamily).readAsBytes(),
+          await File(dir! + fontFamily).readAsBytes(),
           fontFamily: fontFamily,
         );
       }

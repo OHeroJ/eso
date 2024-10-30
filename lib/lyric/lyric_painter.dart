@@ -5,22 +5,22 @@ import 'lyric.dart';
 
 class LyricPainter extends CustomPainter with ChangeNotifier {
   //歌词列表
-  List<Lyric> lyrics;
+  List<Lyric> lyrics = [];
 
   //翻译/音译歌词列表
-  List<Lyric> subLyrics;
+  List<Lyric>? subLyrics;
 
   //画布大小
   Size canvasSize = Size.zero;
 
   //字体最大宽度
-  double lyricMaxWidth;
+  double? lyricMaxWidth;
 
   //歌词间距
-  double lyricGapValue;
+  double? lyricGapValue;
 
   //歌词间距
-  double subLyricGapValue;
+  double? subLyricGapValue;
 
   //通过偏移量控制歌词滑动
   double _offset = 0;
@@ -43,25 +43,25 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
   }
 
   //歌词样式
-  TextStyle lyricTextStyle;
+  TextStyle? lyricTextStyle;
 
   //滑动歌词样式
-  TextStyle draggingLyricTextStyle;
+  TextStyle? draggingLyricTextStyle;
 
   //滑动歌词样式
-  TextStyle draggingSubLyricTextStyle;
+  TextStyle? draggingSubLyricTextStyle;
 
   //翻译/音译歌词样式
-  TextStyle subLyricTextStyle;
+  TextStyle? subLyricTextStyle;
 
   //当前歌词样式
-  TextStyle currLyricTextStyle;
+  TextStyle? currLyricTextStyle;
 
   //当前翻译/音译歌词样式
-  TextStyle currSubLyricTextStyle;
+  TextStyle? currSubLyricTextStyle;
 
   //滑动到的行
-  int _draggingLine;
+  int? _draggingLine;
 
   get draggingLine => _draggingLine;
 
@@ -113,7 +113,9 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
             text: currentLyric.lyric,
             style: isCurrLine
                 ? currLyricTextStyle
-                : isDraggingLine ? draggingLyricTextStyle : lyricTextStyle);
+                : isDraggingLine
+                    ? draggingLyricTextStyle
+                    : lyricTextStyle);
       currentLyricTextPaint.layout(maxWidth: lyricMaxWidth);
       var currentLyricHeight = currentLyricTextPaint.height;
       //仅绘制在屏幕内的歌词

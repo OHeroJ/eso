@@ -9,9 +9,11 @@ class DecodeBody {
     if (bodyBytes == null || bodyBytes.isEmpty) return '';
     if (contentType != null) {
       if (contentType.contains(charsetPattern)) {
-        final charset =
-            charsetValuePattern.firstMatch(contentType).group(1).toLowerCase();
-        if (charset.contains("gb")) {
+        final charset = charsetValuePattern
+            .firstMatch(contentType)
+            ?.group(1)
+            ?.toLowerCase();
+        if (charset?.contains("gb") == true) {
           final sb = StringBuffer();
           _writeGBK(sb, bodyBytes);
           return sb.toString();
@@ -48,26 +50,25 @@ class DecodeBody {
     }
     final leftBytes = bodyBytes.sublist(srcIndex);
 
-    String charset;
+    String? charset;
     var temp = sb.toString();
     if (temp.trimLeft().startsWith("{") || temp.trimLeft().startsWith("[")) {
       return temp + utf8.decode(leftBytes, allowMalformed: true);
     }
     if (temp.contains(charsetPattern)) {
-      charset = charsetValuePattern.firstMatch(temp).group(1).toLowerCase();
+      charset = charsetValuePattern.firstMatch(temp)?.group(1)?.toLowerCase();
     } else {
       temp += utf8.decode(leftBytes, allowMalformed: true);
       if (temp.contains(charsetPattern)) {
-        charset = charsetValuePattern
-            .firstMatch(temp)
-            .group(1)
-            .toLowerCase();
+        charset = charsetValuePattern.firstMatch(temp)?.group(1)?.toLowerCase();
       }
-      if (charset == null || charset.contains("utf8") || charset.contains("utf-8")) {
+      if (charset == null ||
+          charset.contains("utf8") ||
+          charset.contains("utf-8")) {
         return temp;
       }
     }
-    if (charset.contains("gb")) {
+    if (charset?.contains("gb") == true) {
       _writeGBK(sb, leftBytes);
       return sb.toString();
     }

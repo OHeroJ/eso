@@ -1,14 +1,13 @@
-import 'package:dlna/dlna.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dlna_dart/dlna.dart';
 
 /// 视频投屏
 class DLNAUtil {
   DLNAUtil._();
 
-  static DLNAUtil _instance;
+  static DLNAUtil? _instance;
 
   /// 视频投屏
   static DLNAUtil get instance => _getInstance();
@@ -51,7 +50,7 @@ class DLNAUtil {
   }
 
   var _devices = <DLNADevice>[];
-  DLNAManager manager;
+  DLNAManager? manager;
 
   var isSearching = false;
 
@@ -59,9 +58,9 @@ class DLNAUtil {
     if (_state != null) _state(() => null);
   }
 
-  StateSetter _state;
+  StateSetter? _state;
 
-  DLNADevice curDevice;
+  DLNADevice? curDevice;
 
   Function(PositionInfo positionInfo) onPlayProgress;
 
@@ -76,8 +75,8 @@ class DLNAUtil {
 
   /// 开始投屏
   start(BuildContext context,
-      {String title,
-      @required String url,
+      {String? title,
+      required String url,
       String videoType = VideoObject.VIDEO_MP4,
       VoidCallback onPlay}) async {
     if (url == null || url.isEmpty) return null;
@@ -88,7 +87,8 @@ class DLNAUtil {
           String errMsg;
 
           return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)),
             child: Container(
               color: Colors.white,
               margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -106,14 +106,16 @@ class DLNAUtil {
                   if (!Utils.empty(errMsg))
                     children.add(Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                      child: Text(errMsg, style: TextStyle(color: Colors.redAccent)),
+                      child: Text(errMsg,
+                          style: TextStyle(color: Colors.redAccent)),
                     ));
 
                   _devices.forEach((e) {
                     children.add(Material(
                       color: Colors.transparent,
                       child: ListTile(
-                        title: Text(e.deviceName, style: TextStyle(fontSize: 15)),
+                        title:
+                            Text(e.deviceName, style: TextStyle(fontSize: 15)),
                         dense: true,
                         selected: curDevice == e,
                         // subtitle: Text(e.description.toString()),
@@ -135,7 +137,8 @@ class DLNAUtil {
                                 _type = VideoObject.VIDEO_H264;
                               else if (url.indexOf('.avi') > 1)
                                 _type = VideoObject.VIDEO_AVI;
-                              if (Utils.empty(_type)) _type = VideoObject.VIDEO_MP4;
+                              if (Utils.empty(_type))
+                                _type = VideoObject.VIDEO_MP4;
                             }
 
                             var video = VideoObject("ESO", url, _type);
@@ -167,8 +170,9 @@ class DLNAUtil {
 //              return item;
 //            };
 
-                final _btnColor =
-                    curDevice == null ? Colors.grey : Theme.of(context).accentColor;
+                final _btnColor = curDevice == null
+                    ? Colors.grey
+                    : Theme.of(context).accentColor;
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,

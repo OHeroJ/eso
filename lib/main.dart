@@ -251,7 +251,6 @@ class _MyAppState extends State<MyApp> {
                             return HomePage();
                           }),
                       localizationsDelegates: [
-                        LocalizationsCupertinoDelegate.delegate,
                         GlobalMaterialLocalizations.delegate,
                         GlobalWidgetsLocalizations.delegate,
                       ],

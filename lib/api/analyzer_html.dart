@@ -89,6 +89,9 @@ class AnalyzerHtml implements Analyzer {
   }
 
   String _getResult(Element? e, String lastRule) {
+    if (e == null) {
+      return '';
+    }
     switch (lastRule) {
       case 'text':
         return e.text.trim();
@@ -162,7 +165,8 @@ class AnalyzerHtml implements Analyzer {
     final result = <String>[];
     final split = rule.lastIndexOf("@");
     final lastRule = rule.substring(split + 1);
-    final elementList = _element.querySelectorAll(rule.substring(0, split));
+    final elementList =
+        _element?.querySelectorAll(rule.substring(0, split)) ?? [];
     for (var e in elementList) {
       final r = _getResult(e, lastRule);
       if (r.isNotEmpty) result.add(r);
@@ -172,6 +176,6 @@ class AnalyzerHtml implements Analyzer {
 
   @override
   List<Element> getElements(String rule) {
-    return _element.querySelectorAll(rule);
+    return _element?.querySelectorAll(rule) ?? [];
   }
 }
