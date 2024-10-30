@@ -12,15 +12,15 @@ import '../page/audio_page_refactor.dart';
 class AudioView extends StatefulWidget {
   final BuildContext context;
 
-  const AudioView({this.context, Key key});
+  const AudioView({required this.context, super.key});
 
   @override
   State<AudioView> createState() => _AudioViewState();
 }
 
 class _AudioViewState extends State<AudioView> {
-  double _offsetX = null;
-  double _offsetY = null;
+  double? _offsetX = null;
+  double? _offsetY = null;
 
   @override
   Widget build(BuildContext context) {

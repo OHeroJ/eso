@@ -1,7 +1,7 @@
 import 'package:eso/eso_theme.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:dlna_dart/dlna.dart';
+import 'package:dlna/dlna.dart';
 
 /// 视频投屏
 class DLNAUtil {
@@ -15,29 +15,29 @@ class DLNAUtil {
   static _getInstance() {
     if (_instance == null) {
       _instance = DLNAUtil._();
-      _instance.manager = DLNAManager();
+      _instance?.manager = DLNAManager();
       try {
-        _instance.manager.enableCache();
+        _instance?.manager?.enableCache();
       } catch (e) {}
-      _instance.manager.setRefresher(DeviceRefresher(onDeviceAdd: (dev) {
-        if (!_instance._devices.contains(dev)) {
-          _instance._devices.add(dev);
+      _instance?.manager?.setRefresher(DeviceRefresher(onDeviceAdd: (dev) {
+        if (!_instance!._devices.contains(dev)) {
+          _instance!._devices.add(dev);
           print('add ' + dev.toString());
-          _instance._update();
+          _instance!._update();
         }
       }, onDeviceRemove: (dev) {
-        _instance._devices.remove(dev);
+        _instance!._devices.remove(dev);
         print("remove $dev");
-        _instance._update();
+        _instance!._update();
       }, onDeviceUpdate: (dev) {
         print('update $dev');
       }, onSearchError: (err) {
         print('error $err');
-        _instance.isSearching = false;
-        _instance._update();
+        _instance!.isSearching = false;
+        _instance!._update();
       }, onPlayProgress: (position) {
-        if (_instance.onPlayProgress != null) {
-          _instance.onPlayProgress(position);
+        if (_instance!.onPlayProgress != null) {
+          _instance!.onPlayProgress!(position);
           return;
         }
         print('播放进度: ' +
@@ -55,21 +55,21 @@ class DLNAUtil {
   var isSearching = false;
 
   _update() {
-    if (_state != null) _state(() => null);
+    if (_state != null) _state!(() => null);
   }
 
   StateSetter? _state;
 
   DLNADevice? curDevice;
 
-  Function(PositionInfo positionInfo) onPlayProgress;
+  Function(PositionInfo positionInfo)? onPlayProgress;
 
   /// 释放
   static release() {
     if (_instance == null) return;
-    _instance.manager.release();
-    _instance.manager = null;
-    _instance.onPlayProgress = null;
+    _instance!.manager?.release();
+    _instance?.manager = null;
+    _instance?.onPlayProgress = null;
     _instance = null;
   }
 
@@ -84,7 +84,7 @@ class DLNAUtil {
     showDialog(
         context: context,
         builder: (context) {
-          String errMsg;
+          String? errMsg;
 
           return Dialog(
             shape: RoundedRectangleBorder(
@@ -106,7 +106,7 @@ class DLNAUtil {
                   if (!Utils.empty(errMsg))
                     children.add(Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                      child: Text(errMsg,
+                      child: Text(errMsg!,
                           style: TextStyle(color: Colors.redAccent)),
                     ));
 
@@ -115,18 +115,18 @@ class DLNAUtil {
                       color: Colors.transparent,
                       child: ListTile(
                         title:
-                            Text(e.deviceName, style: TextStyle(fontSize: 15)),
+                            Text(e.deviceName!, style: TextStyle(fontSize: 15)),
                         dense: true,
                         selected: curDevice == e,
                         // subtitle: Text(e.description.toString()),
                         onTap: () async {
                           try {
-                            if (curDevice != null) await manager.actStop();
+                            if (curDevice != null) await manager?.actStop();
                           } catch (e) {}
                           try {
                             PlayMode playMode = PlayMode.NORMAL;
-                            await manager.actSetPlayMode(playMode);
-                            manager.setDevice(e);
+                            await manager?.actSetPlayMode(playMode);
+                            manager?.setDevice(e);
                             await Utils.sleep(200);
 
                             var _type = videoType;
@@ -144,12 +144,12 @@ class DLNAUtil {
                             var video = VideoObject("ESO", url, _type);
                             video.refreshPosition = true;
 
-                            var result = await manager.actSetVideoUrl(video);
-                            if (result.success) {
+                            var result = await manager?.actSetVideoUrl(video);
+                            if (result!.success) {
                               curDevice = e;
                               _update();
                             } else {
-                              errMsg = '投屏失败：' + result.errorMessage;
+                              errMsg = '投屏失败：' + result.errorMessage!;
                               _update();
                             }
                           } catch (e) {
@@ -209,20 +209,20 @@ class DLNAUtil {
                                 onPressed: () async {
                                   if (!isSearching) {
                                     if (_devices.isEmpty) {
-                                      manager.startSearch();
+                                      manager?.startSearch();
                                       Future.delayed(Duration(seconds: 30), () {
-                                        manager.stopSearch();
+                                        manager?.stopSearch();
                                         isSearching = false;
                                         _update();
                                       });
                                     } else {
                                       _devices.clear();
-                                      manager.forceSearch();
+                                      manager?.forceSearch();
                                     }
                                     isSearching = true;
                                     _update();
                                   } else {
-                                    manager.stopSearch();
+                                    manager?.stopSearch();
                                     isSearching = false;
                                     _update();
                                   }
@@ -233,21 +233,21 @@ class DLNAUtil {
                                 onPressed: curDevice == null
                                     ? null
                                     : () {
-                                        manager.actPlay();
+                                        manager?.actPlay();
                                       }),
                             IconButton(
                                 icon: Icon(Icons.pause, color: _btnColor),
                                 onPressed: curDevice == null
                                     ? null
                                     : () {
-                                        manager.actPause();
+                                        manager?.actPause();
                                       }),
                             IconButton(
                                 icon: Icon(Icons.stop, color: _btnColor),
                                 onPressed: curDevice == null
                                     ? null
                                     : () {
-                                        manager.actStop();
+                                        manager?.actStop();
                                       })
                           ],
                         ),

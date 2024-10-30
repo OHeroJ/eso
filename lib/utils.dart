@@ -239,7 +239,7 @@ class Utils {
     }
   }
 
-  static bool empty(String value) {
+  static bool empty(String? value) {
     return value == null || value.isEmpty;
   }
 

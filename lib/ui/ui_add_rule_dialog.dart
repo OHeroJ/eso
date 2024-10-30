@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:eso/database/rule.dart';
 import 'package:eso/utils.dart';
@@ -15,8 +16,8 @@ import '../global.dart';
 import '../utils/auto_decode_cli.dart';
 
 class UIAddRuleDialog extends StatelessWidget {
-  final VoidCallback refresh;
-  final String fileContent;
+  final VoidCallback? refresh;
+  final String? fileContent;
   final String fileName;
   const UIAddRuleDialog({
     super.key,
@@ -124,8 +125,8 @@ class AddRuleProvider extends ChangeNotifier {
   }
 
   final TextEditingController ruleController = TextEditingController();
-  final VoidCallback refresh;
-  final VoidCallback close;
+  final VoidCallback? refresh;
+  final VoidCallback? close;
 
   String _fileName = '[未选择文件]';
   List _fileContent = [];
@@ -189,7 +190,7 @@ class AddRuleProvider extends ChangeNotifier {
   }
 
   AddRuleProvider(
-      this.refresh, this.close, String fileContent, String fileName) {
+      this.refresh, this.close, String? fileContent, String fileName) {
     ruleController.addListener(ruleListener);
     if (fileContent != null) {
       _fileName = fileName;
@@ -275,7 +276,7 @@ class AddRuleProvider extends ChangeNotifier {
     //   Utils.toast('未选取文件');
     //   return;
     // }
-    FilePickerResult result = await FilePicker.platform
+    FilePickerResult? result = await FilePicker.platform
         .pickFiles(withData: false, dialogTitle: "选择txt或者epub导入亦搜");
     if (result == null) {
       Utils.toast("未选择文件");
@@ -341,7 +342,7 @@ class AddRuleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  VoidCallback get import {
+  VoidCallback? get import {
     final importType = _importType;
     if (importType == ImportType.error) return null;
     return () {
@@ -369,7 +370,7 @@ class AddRuleProvider extends ChangeNotifier {
     };
   }
 
-  void insertOrUpdateRule(String s, [List l]) async {
+  void insertOrUpdateRule(String s, [List? l]) async {
     try {
       dynamic json;
       if (l != null) {
@@ -394,8 +395,8 @@ class AddRuleProvider extends ChangeNotifier {
           Utils.toast("失败，未导入规则！");
         }
       }
-      close();
-      refresh();
+      close?.call();
+      refresh?.call();
     } catch (e) {
       Utils.toast("格式不对$e");
     }

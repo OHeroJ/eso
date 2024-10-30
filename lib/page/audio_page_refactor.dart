@@ -27,8 +27,8 @@ import 'hidden/linyuan_page.dart';
 import 'langding_page.dart';
 import 'package:rxdart/rxdart.dart';
 
-AudioHandler _audioHandler;
-AudioHandler get audioHandler => _audioHandler;
+AudioHandler? _audioHandler;
+AudioHandler? get audioHandler => _audioHandler;
 
 Future<bool> ensureInitAudioHandler(SearchItem searchItem) async {
   if (_audioHandler == null) {
@@ -48,8 +48,8 @@ Future<bool> ensureInitAudioHandler(SearchItem searchItem) async {
 checkAudioInList(List<SearchItem> searchList) {
   if (_audioHandler?.searchItem != null &&
       !SearchItemManager.isFavorite(
-          _audioHandler.searchItem.originTag, _audioHandler.searchItem.url)) {
-    searchList.add(_audioHandler.searchItem);
+          _audioHandler!.searchItem.originTag, _audioHandler!.searchItem.url)) {
+    searchList.add(_audioHandler!.searchItem);
   }
 }
 
@@ -57,18 +57,18 @@ class AudioHandler extends BaseAudioHandler with SeekHandler {
   SearchItem _searchItem;
   SearchItem get searchItem => _searchItem;
   int _currentIndex = 0;
-  ChapterItem get chapter {
-    if (searchItem.chapters == null || searchItem.chapters.isEmpty) {
+  ChapterItem? get chapter {
+    if (searchItem.chapters == null || searchItem.chapters!.isEmpty) {
       Utils.toast("无曲目");
       return null;
     }
-    final len = searchItem.chapters.length;
+    final len = searchItem.chapters!.length;
     if (_currentIndex < 0) {
       _currentIndex = len - 1;
     } else if (_currentIndex >= len) {
       _currentIndex = 0;
     }
-    return searchItem.chapters[_currentIndex];
+    return searchItem.chapters![_currentIndex];
   }
 
   var close = false;
@@ -80,7 +80,7 @@ class AudioHandler extends BaseAudioHandler with SeekHandler {
   bool get playing => _player.playing;
   Stream<Duration> get positionStream => _player.positionStream;
   Duration get position => _player.position;
-  Duration get duration => _player.duration;
+  Duration? get duration => _player.duration;
   Duration get bufferedPosition => _player.bufferedPosition;
 
   final _repeatMode = BehaviorSubject.seeded(AudioServiceRepeatMode.all);
