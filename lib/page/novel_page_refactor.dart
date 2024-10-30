@@ -901,7 +901,7 @@ class NovelMenu extends StatelessWidget {
 }
 
 class BrightnessSettings extends StatefulWidget {
-  const BrightnessSettings({Key key});
+  const BrightnessSettings({super.key});
 
   @override
   State<BrightnessSettings> createState() => _BrightnessSettingsState();

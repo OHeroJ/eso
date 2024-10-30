@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UIChapterLoding extends StatelessWidget {
-  const UIChapterLoding({Key key});
+  const UIChapterLoding({super.key});
 
   @override
   Widget build(BuildContext context) {

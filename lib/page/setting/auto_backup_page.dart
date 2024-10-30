@@ -15,14 +15,14 @@ import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webdav/webdav.dart';
+import 'package:webdav_client/webdav_client.dart' as wc;
 import 'package:intl/intl.dart' as intl;
 import 'package:path/path.dart';
 
 import '../../global.dart';
 
 class AutoBackupPage extends StatelessWidget {
-  const AutoBackupPage({Key key});
+  const AutoBackupPage({super.key});
 
   AlertDialog showTextDialog(BuildContext context, String title, String s,
       void Function(String s) press,
@@ -81,15 +81,15 @@ class AutoBackupPage extends StatelessWidget {
                           title: Text('从不'),
                           value: ESOTheme.autoBackupNone,
                           groupValue: profile.autoBackRate,
-                          onChanged: (int value) =>
-                              setState(() => profile.autoBackRate = value),
+                          onChanged: (int? value) =>
+                              setState(() => profile.autoBackRate = value ?? 0),
                         ),
                         RadioListTile<int>(
                           title: Text('每日'),
                           value: ESOTheme.autoBackupDay,
                           groupValue: profile.autoBackRate,
-                          onChanged: (int value) =>
-                              setState(() => profile.autoBackRate = value),
+                          onChanged: (int? value) =>
+                              setState(() => profile.autoBackRate = value ?? 0),
                         ),
                       ],
                     ),
@@ -310,7 +310,7 @@ class AutoBackupPage extends StatelessWidget {
       final bytes = ZipEncoder().encode(archive);
 
       try {
-        Client client = Client(
+        wc.Client client = wc.Client(
             myWebdavServer, myWebdavAccount, myWebdavPassword,
             path: "ESO");
         await client.upload(bytes, "$fileName");
@@ -333,7 +333,7 @@ class AutoBackupPage extends StatelessWidget {
       return;
     }
     final today = intl.DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final dir = join(await CacheUtil(backup: true).cacheDir(),
+    final dir = join((await CacheUtil(backup: true).cacheDir())!,
         "$today.${Platform.operatingSystem}.zip");
     // FlutterShare.shareFile(title: "$today.zip", filePath: dir, text: "$today.zip");
     Share.shareFiles(<String>[dir], text: "$today.zip");

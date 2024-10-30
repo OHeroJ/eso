@@ -10,7 +10,7 @@ class AnalyzerXPath implements Analyzer {
     if (content is Element) {
       _xpath = XPath.htmlElement(content);
     } else if (content is Document) {
-      _xpath = XPath.htmlElement(content.documentElement);
+      _xpath = XPath.htmlElement(content.documentElement!);
     } else if (content is String) {
       _xpath = XPath.html(content);
     } else {
@@ -53,12 +53,19 @@ class AnalyzerXPath implements Analyzer {
     if (attrs.isEmpty && !rule.contains("@") && !rule.contains("()")) {
       return nodes.nodes.map((e) => (e.node as Element).outerHtml).toList();
     }
-    return attrs;
+
+    List<String> ret = [];
+    for (final e in attrs) {
+      if (e != null) {
+        ret.add(e);
+      }
+    }
+    return ret;
   }
 
   @override
   List<String> getString(String rule) => getR(rule);
 
   @override
-  List<String> getStringList(String rule) => getR(rule);
+  List<String> getStringList(String? rule) => getR(rule ?? '');
 }

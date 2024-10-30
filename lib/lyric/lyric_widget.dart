@@ -14,6 +14,10 @@ class LyricWidget extends StatefulWidget {
   final TextStyle remarkStyle;
   final TextStyle currLyricStyle;
 
+  final TextStyle _currRemarkLyricStyle;
+  final TextStyle _draggingLyricStyle;
+  final TextStyle _draggingRemarkLyricStyle;
+
   final double lyricGap;
   final double remarkLyricGap;
   final bool enableDrag;
@@ -42,7 +46,12 @@ class LyricWidget extends StatefulWidget {
       TextStyle? draggingRemarkLyricStyle,
       this.enableDrag = true,
       this.lyricMaxWidth = 0,
-      TextStyle? currRemarkLyricStyle}) {
+      TextStyle? currRemarkLyricStyle})
+      : this._currRemarkLyricStyle = currRemarkLyricStyle ?? currLyricStyle,
+        this._draggingLyricStyle = draggingLyricStyle ??
+            lyricStyle.copyWith(color: Colors.greenAccent),
+        this._draggingRemarkLyricStyle = draggingRemarkLyricStyle ??
+            remarkStyle.copyWith(color: Colors.greenAccent) {
     //歌词转画笔
     lyricTextPaints.addAll(lyrics
         .map(

@@ -74,10 +74,10 @@ class _AboutPageState extends State<AboutPage> {
 }
 
 class AboutPage2 extends StatelessWidget {
-  final void Function(Widget) invokeTap;
+  final void Function(Widget)? invokeTap;
   const AboutPage2({super.key, this.invokeTap});
 
-  joinGroup([String group]) {
+  joinGroup([String? group]) {
     final key =
         "7588a53508787a254b910d39476959823e3f36a7c894a6fc72504ac92e782ec2"; //1群key
     if (Global.isDesktop) {
@@ -128,7 +128,7 @@ class AboutPage2 extends StatelessWidget {
                       //         setSpBool("highRefreshRate", value, highRefreshRate),
                       //   ),
                       // ),
-                      onTap: () => invokeTap(DisplayHighRate()),
+                      onTap: () => invokeTap?.call(DisplayHighRate()),
                     ),
                     ListTile(
                       title: Text('本地导入'),
@@ -143,14 +143,14 @@ class AboutPage2 extends StatelessWidget {
                       ListTile(
                         title: Text('历史记录'),
                         subtitle: Text('浏览历史，界面设置可关闭'),
-                        onTap: () => invokeTap(HistoryPage(
+                        onTap: () => invokeTap?.call(HistoryPage(
                             // invokeTap: invokeTap,
                             )),
                       ),
                     ListTile(
                       title: Text('规则管理'),
                       subtitle: Text('添加、删除、修改您的数据源'),
-                      onTap: () => invokeTap(EditSourcePage()),
+                      onTap: () => invokeTap?.call(EditSourcePage()),
                     ),
                     ListTile(
                       title: Text('QING'),
@@ -164,7 +164,7 @@ class AboutPage2 extends StatelessWidget {
                     ListTile(
                       title: Text('备份恢复和webdav'),
                       subtitle: Text('自动备份与恢复，webdav与规则分享'),
-                      onTap: () => invokeTap(AutoBackupPage()),
+                      onTap: () => invokeTap?.call(AutoBackupPage()),
                     ),
                     ListTile(
                       title: Text('清理缓存'),
@@ -211,22 +211,22 @@ class AboutPage2 extends StatelessWidget {
                     ListTile(
                       title: Text('阅读设置'),
                       subtitle: Text('翻页动画和文字排版'),
-                      onTap: () => invokeTap(ConfigSettingPage()),
+                      onTap: () => invokeTap?.call(ConfigSettingPage()),
                     ),
                     ListTile(
                       title: Text('界面与布局'),
                       subtitle: Text('正文状态栏信息栏和按钮布局'),
-                      onTap: () => invokeTap(UISetting()),
+                      onTap: () => invokeTap?.call(UISetting()),
                     ),
                     ListTile(
                       title: Text('主题装扮'),
                       subtitle: Text('调色板和背景'),
-                      onTap: () => invokeTap(ThemePage()),
+                      onTap: () => invokeTap?.call(ThemePage()),
                     ),
                     ListTile(
                       title: Text('字体管理'),
                       subtitle: Text('全局界面、正文字体设置'),
-                      onTap: () => invokeTap(FontFamilyPage()),
+                      onTap: () => invokeTap?.call(FontFamilyPage()),
                     ),
                   ],
                 ),
@@ -457,14 +457,14 @@ class AboutPage2 extends StatelessWidget {
 }
 
 class ConfigSettingPage extends StatefulWidget {
-  const ConfigSettingPage({Key key});
+  const ConfigSettingPage({super.key});
 
   @override
   _ConfigSettingPageState createState() => _ConfigSettingPageState();
 }
 
 class _ConfigSettingPageState extends State<ConfigSettingPage> {
-  TextCompositionConfig config;
+  late TextCompositionConfig config;
   @override
   void initState() {
     config = TextConfigManager.config;
@@ -524,8 +524,8 @@ Widget myConfigSettingBuilder(
       //   fileTileSelectMode: FileTileSelectMode.wholeTile,
       //   requestPermission: CacheUtil.requestPermission,
       // );
-      String path = await Utils.pickFile(
-          context, ['.jpg', '.png', '.webp'], dir,
+      String? path = await Utils.pickFile(
+          context, ['.jpg', '.png', '.webp'], dir!,
           title: "选择背景");
       if (path == null) {
         Utils.toast("未选择文件");
@@ -553,7 +553,7 @@ Widget myConfigSettingBuilder(
       //   fileTileSelectMode: FileTileSelectMode.wholeTile,
       //   requestPermission: CacheUtil.requestPermission,
       // );
-      final ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], dir,
+      final ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], dir!,
           title: "选择字体");
       if (ttf == null) {
         Utils.toast('未选取字体文件');

@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'battery_view.dart';
 
 class UISystemInfo extends StatefulWidget {
-  final String mangaInfo;
-  final int mangaCount;
-  final int mangeCurrent;
+  final String? mangaInfo;
+  final int? mangaCount;
+  final int? mangeCurrent;
   const UISystemInfo({
     this.mangaInfo,
     this.mangaCount,
@@ -21,15 +21,15 @@ class UISystemInfo extends StatefulWidget {
 }
 
 class _UISystemInfoState extends State<UISystemInfo> {
-  Widget page;
-  SystemInfoProvider __provider;
+  Widget? page;
+  SystemInfoProvider? __provider;
 
   @override
   Widget build(BuildContext context) {
     if (page == null) {
       page = buildPage();
     }
-    return page;
+    return page!;
   }
 
   @override

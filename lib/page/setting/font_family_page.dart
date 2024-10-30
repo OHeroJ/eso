@@ -65,7 +65,7 @@ class FontFamilyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFontListTile(String name, String fontFamily, ESOTheme profile) {
+  Widget _buildFontListTile(String name, String? fontFamily, ESOTheme profile) {
     return ListTile(
       title: Text(
         name,
@@ -88,7 +88,7 @@ class FontFamilyPage extends StatelessWidget {
         ],
       ),
       onTap: () {
-        profile.fontFamily = fontFamily;
+        profile.fontFamily = fontFamily!;
       },
       // onLongPress: () => profile.novelFontFamily = fontFamily,
     );
@@ -96,11 +96,11 @@ class FontFamilyPage extends StatelessWidget {
 }
 
 class _FontFamilyProvider with ChangeNotifier {
-  CacheUtil _cacheUtil;
-  String _dir;
+  late CacheUtil _cacheUtil;
+  late String _dir;
   String get dir => _dir;
 
-  List<String> _ttfList;
+  late List<String> _ttfList;
   List<String> get ttfList => _ttfList;
 
   _FontFamilyProvider() {
@@ -121,7 +121,7 @@ class _FontFamilyProvider with ChangeNotifier {
       _ttfList = <String>[];
       return;
     }
-    _dir = await _cacheUtil.cacheDir();
+    _dir = (await _cacheUtil.cacheDir())!;
     await refreshList();
   }
 
@@ -151,7 +151,7 @@ class _FontFamilyProvider with ChangeNotifier {
     //   fileTileSelectMode: FileTileSelectMode.wholeTile,
     //   requestPermission: CacheUtil.requestPermission,
     // );
-    String ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], _dir,
+    String? ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], _dir,
         title: "选择字体");
     if (ttf == null) {
       Utils.toast('未选取字体文件');

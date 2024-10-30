@@ -31,7 +31,7 @@ import '../../utils/rule_comparess.dart';
 import '../discover_search_page.dart';
 
 class EditSourcePage extends StatefulWidget {
-  const EditSourcePage({Key key});
+  const EditSourcePage({super.key});
 
   @override
   _EditSourcePageState createState() => _EditSourcePageState();

@@ -19,7 +19,7 @@ import '../main.dart';
 import 'chapter_page.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key key});
+  SearchPage({super.key});
 
   @override
   _SearchPageState createState() => _SearchPageState();

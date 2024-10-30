@@ -22,7 +22,8 @@ dependencies:
   filesystem_picker: ^4.1.0
   floor: ^1.0.1
   webview_windows: ^0.4.0
-  xpath_selector: 3.0.2
+  xpath_selector:
+    path: modules/xpath_selector
   flutter:
     sdk: flutter
   flutter_colorpicker: ^1.0.3
@@ -76,6 +77,8 @@ dependencies:
   just_audio_mpv: ^0.1.7
   audio_service: ^0.18.12
   auto_orientation: ^2.3.1
+  flutter_webview:
+    path: modules/flutter_webview
   
 dependency_overrides:
   intl: ^0.19.0

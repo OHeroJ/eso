@@ -11,9 +11,10 @@ class LeshiPage extends StatelessWidget {
   List<ArticleTitle> getArticleTitle(String html) {
     return AnalyzerHtml().parse(html).getElements("article").map((el) {
       final a = el.querySelector("a.daily-quote");
-      final number = a.attributes["href"].split("/").last;
+      final item = a?.attributes["href"];
+      final number = (item ?? '').split("/").last;
       return ArticleTitle(
-          number, a.text.trim(), el.querySelector(".text-right").text.trim());
+          number, a?.text.trim(), el.querySelector(".text-right")?.text.trim());
     }).toList();
   }
 
@@ -99,9 +100,9 @@ class LeshiPage extends StatelessWidget {
 }
 
 class ArticleTitle {
-  final String content;
-  final String number;
-  final String author;
+  final String? content;
+  final String? number;
+  final String? author;
   const ArticleTitle(this.number, this.content, this.author);
 }
 

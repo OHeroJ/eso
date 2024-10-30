@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_inappwebview_windows
   flutter_qjs
   flutter_tts
+  flutter_webview
   just_audio_windows
   permission_handler_windows
   screen_retriever_windows

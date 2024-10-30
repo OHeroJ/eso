@@ -28,7 +28,7 @@ class VideoPageDesktop extends StatefulWidget {
 class _VideoPageDesktopState extends State<VideoPageDesktop> {
   WebviewController? webviewController;
   late ESOTheme profile;
-  Color primaryColor;
+  Color? primaryColor;
 
   @override
   void initState() {

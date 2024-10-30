@@ -13,15 +13,15 @@ import '../../utils.dart';
 
 class ColorPick extends StatefulWidget {
   final int color;
-  final void Function(Color) onColorChanged;
-  ColorPick({super.key, this.color, this.onColorChanged});
+  final void Function(Color)? onColorChanged;
+  ColorPick({super.key, required this.color, this.onColorChanged});
 
   @override
   State<ColorPick> createState() => _ColorPickState();
 }
 
 class _ColorPickState extends State<ColorPick> {
-  Color pickerColor;
+  late Color pickerColor;
   @override
   void initState() {
     super.initState();
@@ -38,7 +38,7 @@ class _ColorPickState extends State<ColorPick> {
             setState(() {
               pickerColor = color;
             });
-            widget.onColorChanged(color);
+            widget.onColorChanged?.call(color);
           },
           labelTypes: [],
           hexInputBar: true,
@@ -50,7 +50,7 @@ class _ColorPickState extends State<ColorPick> {
 }
 
 class ThemePage extends StatelessWidget {
-  const ThemePage({Key key});
+  const ThemePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class ThemePage extends StatelessWidget {
           title: Text(title),
           trailing: ValueListenableBuilder<Box>(
             valueListenable: themeBox.listenable(keys: <String>[key]),
-            builder: (BuildContext context, Box _, Widget child) {
+            builder: (BuildContext context, Box _, Widget? child) {
               return Container(
                 color: Color(themeBox.get(key, defaultValue: dColor)),
                 width: 20,
@@ -80,7 +80,7 @@ class ThemePage extends StatelessWidget {
     return ValueListenableBuilder<Box>(
         valueListenable:
             themeBox.listenable(keys: <String>[decorationImageKey]),
-        builder: (BuildContext context, Box _, Widget child) {
+        builder: (BuildContext context, Box _, Widget? child) {
           return Container(
             decoration: globalDecoration,
             child: Scaffold(
@@ -158,8 +158,8 @@ class ThemePage extends StatelessWidget {
                                       onPressed: () async {
                                         final text = (await Clipboard.getData(
                                                 Clipboard.kTextPlain))
-                                            .text;
-                                        controller.text = text;
+                                            ?.text;
+                                        controller.text = text ?? '';
                                         Utils.toast("已从剪贴板更新");
                                       },
                                       child: Text("粘贴")),
@@ -251,8 +251,8 @@ class ThemePage extends StatelessWidget {
                     Card(
                       child: ValueListenableBuilder<Box<int>>(
                         valueListenable: themeModeBox.listenable(),
-                        builder:
-                            (BuildContext context, Box<int> box, Widget child) {
+                        builder: (BuildContext context, Box<int> box,
+                            Widget? child) {
                           const done = const Icon(Icons.done, size: 32);
                           return Column(
                             children: [

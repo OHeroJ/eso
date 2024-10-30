@@ -17,14 +17,14 @@ import 'dart:ui' as ui;
 
 class NovelMorePage extends StatelessWidget {
   final SearchItem searchItem;
-  NovelMorePage({super.key, this.searchItem});
+  NovelMorePage({super.key, required this.searchItem});
 
   @override
   Widget build(BuildContext context) {
     final contentProvider = Provider.of<ContentProvider>(context);
     return Scaffold(
       body: FutureBuilder<List<String>>(
-        future: contentProvider.loadChapter(searchItem.durChapterIndex),
+        future: contentProvider.loadChapter(searchItem.durChapterIndex ?? 0),
         initialData: null,
         builder: (BuildContext _, AsyncSnapshot<List<String>> snapshot) {
           if (!snapshot.hasData) {
@@ -43,7 +43,7 @@ class NovelMorePage extends StatelessWidget {
                                   color: Theme.of(context)
                                       .textTheme
                                       .titleSmall
-                                      .color),
+                                      ?.color),
                               children: buildSpansFlatter(
                                   snapshot.data, searchItem.chapter))),
                     ),
@@ -110,12 +110,12 @@ class NovelProfile {
   final novelIndentation = 2;
 }
 
-List<TextSpan> buildSpansFlatter(List<String> content, String chapter) {
+List<TextSpan> buildSpansFlatter(List<String>? content, String? chapter) {
   return buildSpans(content, chapter).expand((s) => s).toList();
 }
 
 /// 文字排版部分
-List<List<TextSpan>> buildSpans(List<String> content, String chapter) {
+List<List<TextSpan>> buildSpans(List<String>? content, String? chapter) {
   final __profile = NovelProfile();
   MediaQueryData mediaQueryData = MediaQueryData.fromWindow(ui.window);
   final width = mediaQueryData.size.width - __profile.novelLeftPadding * 2;

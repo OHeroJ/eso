@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:eso/api/api_js_engine.dart';
+import 'package:flutter_webview/flutter_webview.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'analyzer.dart';
 
-Future<dynamic> webview({
+Future<dynamic> webviewIOS({
   String? url,
   int duration = 0,
   bool Function(dynamic args)? callback,
@@ -50,8 +51,8 @@ Future<dynamic> webview({
     }
   }
 
-  onLoadStop(InAppWebViewController controller, WebUri? url) {
-    if (url != null) {
+  onLoadStop(InAppWebViewController controller, WebUri? uri) {
+    if ((uri as String).isNotEmpty) {
       Future.delayed(Duration(seconds: duration), () {
         c.completeError("网络错误;嗅探失败!");
       });
@@ -86,6 +87,42 @@ Future<dynamic> webview({
   } finally {
     await webViewController?.stopLoading();
     await hlswebview.dispose();
+  }
+}
+
+Future<dynamic> webview({
+  String? url,
+  int duration = 0,
+  bool Function(dynamic args)? callback,
+  String? ua,
+  String? cookies,
+}) async {
+  Completer c = new Completer();
+  var webview = FlutterWebview();
+  await webview.setMethodHandler((String method, dynamic args) async {
+    if (method == "onNavigationCompleted") {
+      await Future.delayed(Duration(seconds: duration));
+      if (!c.isCompleted)
+        c.completeError(
+            "Webview Call timeout $duration seconds after page completed.");
+    }
+    if (callback?.call(args) == true && !c.isCompleted) {
+      c.complete(args);
+    }
+    return;
+  });
+  if (ua != null && ua.isNotEmpty) await webview.setUserAgent(ua);
+  if (cookies != null && cookies.isNotEmpty)
+    await webview.setCookies(url!, cookies);
+  await webview.navigate(url!);
+  Future.delayed(Duration(seconds: duration * 5)).then((value) {
+    if (!c.isCompleted)
+      c.completeError("Webview Call timeout ${duration * 5} seconds.");
+  });
+  try {
+    return await c.future;
+  } finally {
+    await webview.destroy();
   }
 }
 
@@ -140,30 +177,55 @@ class AnalyzerFilter implements Analyzer {
 
   @override
   Future<List<Map>> getStringList(String? rule) async {
+    if (rule == null) {
+      return [];
+    }
     List<Map> result = <Map>[];
-    final r = (rule ?? '').split("@@");
+    final r = rule.split("@@");
     if (url.contains(RegExp(r[0]))) {
       return [
         {"url": url},
       ];
     }
     final duration = r.length > 1 ? int.parse(r[1]) : 10;
-    await webview(
-      url: url,
-      duration: duration,
-      callback: (args) {
-        print("args.url:${args}");
-        if ((args["url"] as String).contains(RegExp(r[0]))) {
-          result.add(covertHeaders(args));
-          return true;
-        }
-        return false;
-      },
-      ua: JSEngine.rule.userAgent.trim().isNotEmpty
-          ? JSEngine.rule.userAgent
-          : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.42 Safari/537.36 Edg/86.0.622.19',
-      cookies: JSEngine.rule.cookies,
-    );
+    //print("嗅探正则:${r[0]}");
+
+    if (Platform.isIOS) {
+      await webviewIOS(
+        url: url,
+        duration: duration,
+        callback: (args) {
+          print("args.url:${args}");
+          if ((args["url"] as String).contains(RegExp(r[0]))) {
+            result.add(covertHeaders(args));
+            return true;
+          }
+          return false;
+        },
+        ua: JSEngine.rule.userAgent.trim().isNotEmpty
+            ? JSEngine.rule.userAgent
+            : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.42 Safari/537.36 Edg/86.0.622.19',
+        cookies: JSEngine.rule.cookies,
+      );
+    } else if (Platform.isAndroid || Platform.isWindows) {
+      await webview(
+        url: url,
+        duration: duration,
+        callback: (args) {
+          //print("args.url:${args["url"]}");
+          if ((args["url"] as String).contains(RegExp(r[0]))) {
+            print("args:${args}");
+            result.add(covertHeaders(args));
+            return true;
+          }
+          return false;
+        },
+        ua: JSEngine.rule.userAgent.trim().isNotEmpty
+            ? JSEngine.rule.userAgent
+            : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.42 Safari/537.36 Edg/86.0.622.19',
+        cookies: JSEngine.rule.cookies,
+      );
+    }
 
     return result;
   }

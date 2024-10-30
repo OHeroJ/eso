@@ -20,7 +20,7 @@ import 'discover_page.dart';
 import 'favorite_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key});
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() => _HomePageState();

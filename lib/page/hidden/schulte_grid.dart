@@ -7,16 +7,17 @@ class SchulteGrid extends StatefulWidget {
   _SchulteGridState createState() => _SchulteGridState();
 }
 
-class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStateMixin {
-  int count;
-  int nextNum;
-  int curNum;
-  int secondsPassed;
-  int millPassed;
-  List<int> data = List<int>();
-  AnimationController controller;
-  Animation<Color> animation;
-  Timer timer;
+class _SchulteGridState extends State<SchulteGrid>
+    with SingleTickerProviderStateMixin {
+  late int count;
+  late int nextNum;
+  late int curNum;
+  late int secondsPassed;
+  late int millPassed;
+  List<int> data = [];
+  late AnimationController controller;
+  Animation<Color?>? animation;
+  Timer? timer;
   @override
   void initState() {
     super.initState();
@@ -80,7 +81,7 @@ class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStat
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () async {
-                      if (nextNum == 0 && (timer == null || !timer.isActive)) {
+                      if (nextNum == 0 && (timer == null || !timer!.isActive)) {
                         startTick();
                       }
                       curNum = data[index];
@@ -106,13 +107,14 @@ class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStat
                       await controller.reverse();
                       if (nextNum == count) {
                         nextNum++;
-                        timer.cancel();
+                        timer?.cancel();
                         showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
                                 title: Text("恭喜！"),
-                                content: Text("您的成绩为 $secondsPassed.$millPassed"),
+                                content:
+                                    Text("您的成绩为 $secondsPassed.$millPassed"),
                                 actions: <Widget>[
                                   TextButton(
                                       onPressed: () {
@@ -130,8 +132,9 @@ class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStat
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border.all(width: 1),
-                        color:
-                            curNum == data[index] ? animation.value : Colors.transparent,
+                        color: curNum == data[index]
+                            ? animation!.value
+                            : Colors.transparent,
                       ),
                       child: Text(
                         '${data[index]}',
@@ -149,8 +152,8 @@ class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStat
                     // color: Colors.blue,
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      backgroundColor:
-                          MaterialStateProperty.all(Theme.of(context).cardColor),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).cardColor),
                     ),
                     child: Text('16格子'),
                     onPressed: () {
@@ -162,8 +165,8 @@ class _SchulteGridState extends State<SchulteGrid> with SingleTickerProviderStat
                   OutlinedButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      backgroundColor:
-                          MaterialStateProperty.all(Theme.of(context).cardColor),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).cardColor),
                     ),
                     child: Text('25格子'),
                     onPressed: () {
