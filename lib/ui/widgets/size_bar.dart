@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 /// 支持设置大小和背景色的 Bar
 class SizedBar extends StatefulWidget implements PreferredSizeWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
   final double width, height;
-  final BoxConstraints constraints;
-  final Decoration decoration;
+  final BoxConstraints? constraints;
+  final Decoration? decoration;
 
   const SizedBar(
       {super.key,
@@ -15,8 +15,7 @@ class SizedBar extends StatefulWidget implements PreferredSizeWidget {
       this.height = 50.0,
       this.constraints,
       this.decoration,
-      this.child})
-      : super(key: key);
+      this.child});
 
   @override
   State<StatefulWidget> createState() => _SizedBarState();

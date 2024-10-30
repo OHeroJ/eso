@@ -13,10 +13,9 @@ class KeepAliveWidget extends StatefulWidget {
 
   const KeepAliveWidget({
     super.key,
-    @required this.wantKeepAlive,
-    @required this.child,
-  })  : assert(wantKeepAlive != null),
-        super(key: key);
+    required this.wantKeepAlive,
+    required this.child,
+  });
 
   @override
   _KeepAliveWidgetState createState() => _KeepAliveWidgetState();

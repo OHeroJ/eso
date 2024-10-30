@@ -21,9 +21,9 @@ class SharePage extends HookWidget {
   final String fileName;
   const SharePage(
       {super.key,
-      @required this.text,
-      @required this.addInfo,
-      @required this.fileName});
+      required this.text,
+      required this.addInfo,
+      required this.fileName});
 
   @override
   Widget build(BuildContext context) {

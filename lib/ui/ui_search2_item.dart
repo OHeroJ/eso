@@ -11,7 +11,7 @@ class UiSearch2Item extends StatelessWidget {
   final bool showType;
 
   const UiSearch2Item({
-    @required this.item,
+    required this.item,
     this.showType = false,
     super.key,
   });

@@ -2706,8 +2706,8 @@ class FlutterSliderSizedBox {
       {this.decoration,
       this.foregroundDecoration,
       this.transform,
-      @required this.height,
-      @required this.width})
+      required this.height,
+      required this.width})
       : assert(width != null && height != null && width > 0 && height > 0);
 
   @override

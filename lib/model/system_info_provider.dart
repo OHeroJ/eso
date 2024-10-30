@@ -8,12 +8,12 @@ import 'package:intl/intl.dart' as intl;
 
 class SystemInfoProvider with ChangeNotifier {
   final _format = intl.DateFormat('HH:mm');
-  Timer _timer;
+  late Timer _timer;
 
-  String _now;
+  late String _now;
   String get now => _now;
 
-  int _level;
+  late int _level;
   int get level => _level;
 
   SystemInfoProvider() {

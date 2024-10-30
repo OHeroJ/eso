@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 /// 旋转动画组件
 class AnimationRotateView extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final bool followAudio;
-  const AnimationRotateView({super.key, this.child, this.followAudio = true})
-      : super(key: key);
+  const AnimationRotateView({super.key, this.child, this.followAudio = true});
 
   @override
   State<StatefulWidget> createState() => _AnimationRotateViewState();
@@ -13,7 +12,7 @@ class AnimationRotateView extends StatefulWidget {
 
 class _AnimationRotateViewState extends State<AnimationRotateView>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
+  late AnimationController controller;
 
   @override
   void initState() {

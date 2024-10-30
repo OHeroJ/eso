@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 
 class EmptyListMsgView extends StatelessWidget {
   final Widget text;
-  final IconData icon;
+  final IconData? icon;
   final double iconSize;
-  const EmptyListMsgView(
-      {super.key, this.text, this.icon, this.iconSize = 128});
+  const EmptyListMsgView({
+    super.key,
+    required this.text,
+    this.icon,
+    this.iconSize = 128,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +30,9 @@ class EmptyListMsgView extends StatelessWidget {
                 style: TextStyle(
                     color: Theme.of(context)
                         .textTheme
-                        .bodyText2
-                        .color
-                        .withAlpha(50),
+                        .bodyMedium
+                        ?.color
+                        ?.withAlpha(50),
                     fontFamily: ESOTheme.staticFontFamily),
                 child: text,
               ),

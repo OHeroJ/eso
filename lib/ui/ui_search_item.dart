@@ -12,7 +12,7 @@ class UiSearchItem extends StatelessWidget {
   final bool showType;
 
   const UiSearchItem({
-    @required this.item,
+    required this.item,
     this.showType = false,
     super.key,
   });

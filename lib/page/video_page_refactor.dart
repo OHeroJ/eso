@@ -497,8 +497,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   String get durationString => Utils.formatDuration(_controller.value.duration);
 
   final ContentProvider contentProvider;
-  VideoPageProvider(
-      {@required this.searchItem, @required this.contentProvider}) {
+  VideoPageProvider({required this.searchItem, required this.contentProvider}) {
     WidgetsBinding.instance.addObserver(this);
     // if (searchItem.chapters?.length == 0 &&
     //     SearchItemManager.isFavorite(searchItem.originTag, searchItem.url)) {

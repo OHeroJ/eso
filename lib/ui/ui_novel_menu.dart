@@ -368,11 +368,11 @@
 //   }
 //
 //   Widget _buildAdjustEdit({
-//     @required String inputFormattersRegExp,
-//     @required ValueChanged<double> onIncDec,
-//     @required ValueChanged<double> onChange,
-//     @required double adjust,
-//     @required String text,
+//     required String inputFormattersRegExp,
+//     required ValueChanged<double> onIncDec,
+//     required ValueChanged<double> onChange,
+//     required double adjust,
+//     required String text,
 //     String hint,
 //   }) {
 //     return Row(

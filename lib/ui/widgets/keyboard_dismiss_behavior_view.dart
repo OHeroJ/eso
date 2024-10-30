@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 
 /// 滚动时隐藏软键盘
 class KeyboardDismissBehaviorView extends StatelessWidget {
-  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  final ScrollViewKeyboardDismissBehavior? keyboardDismissBehavior;
   final Widget child;
-  const KeyboardDismissBehaviorView(
-      {super.key,
-      this.child,
-      this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.onDrag})
-      : super(key: key);
+  const KeyboardDismissBehaviorView({
+    super.key,
+    required this.child,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.onDrag,
+  });
 
   @override
   Widget build(BuildContext context) {

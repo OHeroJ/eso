@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PageSwitch with ChangeNotifier {
-  PageController _pageController;
+  late PageController _pageController;
   PageController get pageController => _pageController;
   int _currentIndex;
   int get currentIndex => _currentIndex;
 
   PageSwitch([this._currentIndex = 0]) {
-    if(_currentIndex == null){
+    if (_currentIndex == null) {
       _currentIndex = 0;
     }
     updatePageController();
@@ -29,7 +29,7 @@ class PageSwitch with ChangeNotifier {
     }
   }
 
-  void refreshList(){
+  void refreshList() {
     notifyListeners();
   }
 

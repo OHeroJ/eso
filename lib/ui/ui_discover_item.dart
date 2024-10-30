@@ -8,7 +8,7 @@ class UIDiscoverItem extends StatelessWidget {
   final SearchItem searchItem;
 
   const UIDiscoverItem({
-    @required this.searchItem,
+    required this.searchItem,
     super.key,
   });
 

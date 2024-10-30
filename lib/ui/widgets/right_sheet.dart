@@ -1,17 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
-Future<T> showModalRightSheet<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
-  bool clickEmptyPop,
+Future<T?> showModalRightSheet<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  bool? clickEmptyPop,
 }) {
-  assert(context != null);
-  assert(builder != null);
-  assert(debugCheckHasMaterialLocalizations(context));
   return Navigator.push(
       context,
       _ModalRightSheetRoute<T>(
@@ -31,14 +27,14 @@ class _ModalRightSheetRoute<T> extends PopupRoute<T> {
   _ModalRightSheetRoute({
     this.builder,
     this.theme,
-    this.barrierLabel,
+    required this.barrierLabel,
     this.clickEmptyPop,
-    RouteSettings settings,
-  }) : super(settings: settings);
+    super.settings,
+  });
 
-  final WidgetBuilder builder;
-  final ThemeData theme;
-  final bool clickEmptyPop;
+  final WidgetBuilder? builder;
+  final ThemeData? theme;
+  final bool? clickEmptyPop;
 
   @override
   Duration get transitionDuration => _kRightSheetDuration;
@@ -52,14 +48,14 @@ class _ModalRightSheetRoute<T> extends PopupRoute<T> {
   @override
   Color get barrierColor => Colors.black54;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
     _animationController =
-        RightSheet.createAnimationController(navigator.overlay);
-    return _animationController;
+        RightSheet.createAnimationController(navigator!.overlay!);
+    return _animationController!;
   }
 
   @override
@@ -73,13 +69,14 @@ class _ModalRightSheetRoute<T> extends PopupRoute<T> {
       child: _ModalRightSheet<T>(
           route: this, clickEmptyPop: this.clickEmptyPop ?? true),
     );
-    if (theme != null) rightSheet = Theme(data: theme, child: rightSheet);
+    if (theme != null) rightSheet = Theme(data: theme!, child: rightSheet);
     return rightSheet;
   }
 }
 
 class _ModalRightSheet<T> extends StatefulWidget {
-  const _ModalRightSheet({super.key, this.route, this.clickEmptyPop = true});
+  const _ModalRightSheet(
+      {super.key, required this.route, this.clickEmptyPop = true});
 
   final _ModalRightSheetRoute<T> route;
   final bool clickEmptyPop;
@@ -94,7 +91,7 @@ class _ModalRightSheetState<T> extends State<_ModalRightSheet<T>> {
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
-    String routeLabel;
+    String? routeLabel;
     switch (defaultTargetPlatform) {
       case TargetPlatform.iOS:
         routeLabel = '';
@@ -107,33 +104,35 @@ class _ModalRightSheetState<T> extends State<_ModalRightSheet<T>> {
     }
 
     return GestureDetector(
-        excludeFromSemantics: true,
-        onTap: widget.clickEmptyPop ? () => Navigator.pop(context) : null,
-        child: AnimatedBuilder(
-            animation: widget.route.animation,
-            builder: (BuildContext context, Widget child) {
-              // Disable the initial animation when accessible navigation is on so
-              // that the semantics are added to the tree at the correct time.
-              final double animationValue = mediaQuery.accessibleNavigation
-                  ? 1.0
-                  : widget.route.animation.value;
-              return Semantics(
-                scopesRoute: true,
-                namesRoute: true,
-                label: routeLabel,
-                explicitChildNodes: true,
-                child: ClipRect(
-                  child: CustomSingleChildLayout(
-                    delegate: _ModalRightSheetLayout(animationValue),
-                    child: RightSheet(
-                      animationController: widget.route._animationController,
-                      onClosing: () => Navigator.pop(context),
-                      builder: widget.route.builder,
-                    ),
-                  ),
+      excludeFromSemantics: true,
+      onTap: widget.clickEmptyPop ? () => Navigator.pop(context) : null,
+      child: AnimatedBuilder(
+        animation: widget.route.animation!,
+        builder: (BuildContext context, Widget? child) {
+          // Disable the initial animation when accessible navigation is on so
+          // that the semantics are added to the tree at the correct time.
+          final double animationValue = mediaQuery.accessibleNavigation
+              ? 1.0
+              : widget.route.animation!.value;
+          return Semantics(
+            scopesRoute: true,
+            namesRoute: true,
+            label: routeLabel,
+            explicitChildNodes: true,
+            child: ClipRect(
+              child: CustomSingleChildLayout(
+                delegate: _ModalRightSheetLayout(animationValue),
+                child: RightSheet(
+                  animationController: widget.route._animationController!,
+                  onClosing: () => Navigator.pop(context),
+                  builder: widget.route.builder!,
                 ),
-              );
-            }));
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -170,16 +169,11 @@ class RightSheet extends StatefulWidget {
   /// [showModalRightSheet], for modal right sheets.
   const RightSheet(
       {super.key,
-      this.animationController,
+      required this.animationController,
       this.enableDrag = true,
       this.elevation = 8.0,
-      @required this.onClosing,
-      @required this.builder})
-      : assert(enableDrag != null),
-        assert(onClosing != null),
-        assert(builder != null),
-        assert(elevation != null),
-        super(key: key);
+      required this.onClosing,
+      required this.builder});
 
   /// The animation that controls the right sheet's position.
   ///
@@ -229,7 +223,8 @@ class _RightSheetState extends State<RightSheet> {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'RightSheet child');
 
   double get _childWidth {
-    final RenderBox renderBox = _childKey.currentContext.findRenderObject();
+    final RenderBox renderBox =
+        _childKey.currentContext?.findRenderObject() as RenderBox;
     return renderBox.size.width;
   }
 
@@ -239,7 +234,7 @@ class _RightSheetState extends State<RightSheet> {
   void _handleDragUpdate(DragUpdateDetails details) {
     if (_dismissUnderway) return;
     widget.animationController.value -=
-        details.primaryDelta / (_childWidth ?? details.primaryDelta);
+        details.primaryDelta! / (_childWidth ?? details.primaryDelta!);
   }
 
   void _handleDragEnd(DragEndDetails details) {

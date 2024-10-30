@@ -52,7 +52,7 @@ class PhotoViewPage extends StatefulWidget {
 
   const PhotoViewPage(
       {super.key,
-      @required this.items,
+      required this.items,
       this.index = 0,
       this.enableRotation = false,
       this.heroTag,

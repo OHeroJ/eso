@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class RSSPageProvider with ChangeNotifier {
   final SearchItem searchItem;
-  List<String> _content;
+  late List<String> _content;
   List<String> get content => _content;
-  bool _isLoading;
+  late bool _isLoading;
   bool get isLoading => _isLoading;
-  bool _showChapter;
+  late bool _showChapter;
   bool get showChapter => _showChapter;
   set showChapter(bool value) {
     if (_showChapter != value) {
@@ -19,7 +19,7 @@ class RSSPageProvider with ChangeNotifier {
     }
   }
 
-  RSSPageProvider({this.searchItem}) {
+  RSSPageProvider({required this.searchItem}) {
     _isLoading = false;
     _showChapter = false;
     // if (searchItem.chapters?.length == 0 &&
@@ -30,8 +30,8 @@ class RSSPageProvider with ChangeNotifier {
   }
 
   void _initContent() async {
-    _content = await APIManager.getContent(
-        searchItem.originTag, searchItem.chapters[searchItem.durChapterIndex].url);
+    _content = await APIManager.getContent(searchItem.originTag,
+        searchItem.chapters![searchItem.durChapterIndex!].url!);
     notifyListeners();
   }
 
@@ -40,13 +40,13 @@ class RSSPageProvider with ChangeNotifier {
     if (isLoading ||
         chapterIndex == searchItem.durChapterIndex ||
         chapterIndex < 0 ||
-        chapterIndex >= searchItem.chapters.length) return;
+        chapterIndex >= searchItem.chapters!.length) return;
     _isLoading = true;
     notifyListeners();
     _content = await APIManager.getContent(
-        searchItem.originTag, searchItem.chapters[chapterIndex].url);
+        searchItem.originTag, searchItem.chapters![chapterIndex].url!);
     searchItem.durChapterIndex = chapterIndex;
-    searchItem.durChapter = searchItem.chapters[chapterIndex].name;
+    searchItem.durChapter = searchItem.chapters![chapterIndex].name;
     searchItem.durContentIndex = 1;
     // await SearchItemManager.saveSearchItem();
     await searchItem.save();

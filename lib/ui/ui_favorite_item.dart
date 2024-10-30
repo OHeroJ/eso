@@ -9,7 +9,7 @@ class UIFavoriteItem extends StatelessWidget {
   final SearchItem searchItem;
 
   const UIFavoriteItem({
-    @required this.searchItem,
+    required this.searchItem,
     super.key,
   });
 

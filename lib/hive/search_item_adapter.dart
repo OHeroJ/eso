@@ -35,7 +35,8 @@ class SearchItemAdapter extends TypeAdapter<SearchItem> {
         updateTime = cast(reader.readInt(), now.microsecondsSinceEpoch),
         lastReadTime = cast(reader.readInt(), now.microsecondsSinceEpoch),
         count = cast(reader.readInt(), 0),
-        chapters = List.generate(count, (_) => ChapterItemAdapter().read(reader));
+        chapters =
+            List.generate(count, (_) => ChapterItemAdapter().read(reader));
     return SearchItem.fromAdapter(
       searchUrl,
       chapterUrl,
@@ -93,8 +94,10 @@ class SearchItemAdapter extends TypeAdapter<SearchItem> {
     writer.writeInt(cast(item.updateTime, now.microsecondsSinceEpoch));
     writer.writeInt(cast(item.lastReadTime, now.microsecondsSinceEpoch));
     writer.writeInt(item.chapters?.length ?? 0);
-    for (var chapter in item.chapters) {
-      ChapterItemAdapter().write(writer, chapter);
+    if (item.chapters != null) {
+      for (var chapter in item.chapters!) {
+        ChapterItemAdapter().write(writer, chapter);
+      }
     }
   }
 }

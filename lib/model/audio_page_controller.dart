@@ -35,7 +35,7 @@
 //     notifyListeners();
 //   }
 
-//   AudioPageController({@required SearchItem searchItem}) {
+//   AudioPageController({required SearchItem searchItem}) {
 //     // init
 //     _audioService = AudioService();
 //     _showLyric = false;

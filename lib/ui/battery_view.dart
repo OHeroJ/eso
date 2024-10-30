@@ -10,7 +10,7 @@ class BatteryView extends StatefulWidget {
 
   BatteryView({
     super.key,
-    this.electricQuantity,
+    required this.electricQuantity,
     this.width = 18,
     this.height = 10,
   });
@@ -57,8 +57,8 @@ class BatteryViewState extends State<BatteryView> {
 }
 
 class BatteryViewPainter extends CustomPainter {
-  double electricQuantity;
-  Paint mPaint;
+  late double electricQuantity;
+  late Paint mPaint;
   double mStrokeWidth = 0.0;
   double mPaintStrokeWidth = 1.0;
 

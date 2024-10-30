@@ -107,8 +107,9 @@ class SearchItemManager {
     if (_searchItem == null || _searchItem.isEmpty) initSearchItem();
     return json.encode(_searchItem.map((item) {
       Map<String, dynamic> json = item.toJson();
-      json["chapters"] =
-          item.chapters.map((chapter) => jsonEncode(chapter.toJson())).toList();
+      json["chapters"] = item.chapters!
+          .map((chapter) => jsonEncode(chapter.toJson()))
+          .toList();
       return json;
     }).toList());
   }
@@ -162,7 +163,7 @@ class SearchItemManager {
       Utils.toast("${item.name} 章节为空");
       return;
     }
-    final newCount = chapters.length - item.chapters.length;
+    final newCount = chapters.length - item.chapters!.length;
     if (newCount > 0) {
       Utils.toast("${item.name} 新增 $newCount 章节");
       item.chapters = chapters;

@@ -7,9 +7,9 @@ class LoadMoreView extends StatefulWidget {
   const LoadMoreView(
       {super.key, this.msg, this.axis = Axis.horizontal, this.timeout});
 
-  final String msg;
+  final String? msg;
   final Axis axis;
-  final int timeout;
+  final int? timeout;
 
   @override
   State<StatefulWidget> createState() => _LoadMoreViewState();
@@ -17,12 +17,12 @@ class LoadMoreView extends StatefulWidget {
 
 class _LoadMoreViewState extends State<LoadMoreView> {
   bool isTimeout = false;
-  Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
-    if (widget.timeout != null && widget.timeout > 0) {
-      _timer = Timer(Duration(milliseconds: widget.timeout), () {
+    if (widget.timeout != null && widget.timeout! > 0) {
+      _timer = Timer(Duration(milliseconds: widget.timeout!), () {
         if (this.mounted) {
           setState(() {
             isTimeout = true;
@@ -45,7 +45,7 @@ class _LoadMoreViewState extends State<LoadMoreView> {
     return Container(
         height: 50,
         alignment: Alignment.center,
-        child: widget.axis == null || widget.axis == Axis.horizontal
+        child: widget.axis == Axis.horizontal
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
