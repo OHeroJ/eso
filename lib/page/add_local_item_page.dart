@@ -19,7 +19,7 @@ import 'search_page.dart';
 
 class AddLocalItemPage extends StatefulWidget {
   final PlatformFile platformFile;
-  AddLocalItemPage({Key key, this.platformFile}) : super(key: key);
+  AddLocalItemPage({super.key, this.platformFile});
 
   @override
   State<AddLocalItemPage> createState() => _AddLocalItemPageState();
@@ -135,16 +135,20 @@ class _AddLocalItemPageState extends State<AddLocalItemPage> {
     }
     if (platformFile.extension == "epub") {
       try {
-        epubBook = await EpubReader.readBook(File(platformFile.path).readAsBytesSync());
+        epubBook = await EpubReader.readBook(
+            File(platformFile.path).readAsBytesSync());
         textEditingController.text = epubBook.Title;
         searchItem = SearchItem(
-          cover: "data:image/png;base64," + base64Encode(epubBook.CoverImage.getBytes()),
+          cover: "data:image/png;base64," +
+              base64Encode(epubBook.CoverImage.getBytes()),
           name: epubBook.Title,
           author: epubBook.Author,
-          chapter: epubBook.Chapters.isNotEmpty ? epubBook.Chapters.last.Title : "",
+          chapter:
+              epubBook.Chapters.isNotEmpty ? epubBook.Chapters.last.Title : "",
           description: "",
           url: platformFile.path,
-          api: BaseAPI(origin: "本地", originTag: "本地", ruleContentType: API.NOVEL),
+          api: BaseAPI(
+              origin: "本地", originTag: "本地", ruleContentType: API.NOVEL),
           tags: [],
         );
         textEditingControllerReg.text = "";
@@ -173,7 +177,8 @@ class _AddLocalItemPageState extends State<AddLocalItemPage> {
           chapter: "",
           description: "",
           url: platformFile.path,
-          api: BaseAPI(origin: "本地", originTag: "本地", ruleContentType: API.NOVEL),
+          api: BaseAPI(
+              origin: "本地", originTag: "本地", ruleContentType: API.NOVEL),
           tags: [],
         );
         parseText();
@@ -237,9 +242,10 @@ class _AddLocalItemPageState extends State<AddLocalItemPage> {
               children: [
                 TextButton(
                     onPressed: () async {
-                      final r = await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              SimpleChangeRule(searchItem: searchItem)));
+                      final r = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SimpleChangeRule(searchItem: searchItem)));
                       if (r != null && r is SearchItem) {
                         searchItem.localAddInfo(r);
                         setState(() {});
@@ -266,7 +272,8 @@ class _AddLocalItemPageState extends State<AddLocalItemPage> {
                   onPressed: () async {
                     // 写入文件
                     final cache = CacheUtil(
-                        basePath: "cache${Platform.pathSeparator}${searchItem.id}");
+                        basePath:
+                            "cache${Platform.pathSeparator}${searchItem.id}");
                     final dir = await cache.cacheDir();
                     final d = Directory(dir);
                     if (!d.existsSync()) {
@@ -276,7 +283,10 @@ class _AddLocalItemPageState extends State<AddLocalItemPage> {
                     final reg = RegExp(r"^\s*|(\s{2,}|\n)\s*");
                     for (var i = 0; i < contents.length; i++) {
                       File(path.join(dir, '$i.txt')).writeAsStringSync(
-                          contents[i].split(reg).map((s) => s.trimLeft()).join("\n"));
+                          contents[i]
+                              .split(reg)
+                              .map((s) => s.trimLeft())
+                              .join("\n"));
                     }
                     SearchItemManager.addSearchItem(searchItem);
                     Utils.toast("成功");

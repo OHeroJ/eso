@@ -21,8 +21,8 @@ class UIChapterSelect extends StatefulWidget {
     this.fontColor,
     this.heightScale = 0.55,
     this.border,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _UIChapterSelectState();
@@ -47,7 +47,8 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
   Widget build(BuildContext context) {
     final _theme = MediaQuery.of(context);
     final size = _theme.size;
-    final screenHeight = size.height - _theme.padding.top - _theme.padding.bottom - 50;
+    final screenHeight =
+        size.height - _theme.padding.top - _theme.padding.bottom - 50;
     final _height = widget.searchItem.chapters.length * itemHeight;
     final durHeight = widget.searchItem.durChapterIndex * itemHeight;
     double offset;
@@ -63,7 +64,9 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
 
     final primaryColor = Theme.of(context).primaryColor;
     final _divider = UIDash(
-        height: Global.lineSize, dashWidth: 4, color: Theme.of(context).dividerColor);
+        height: Global.lineSize,
+        dashWidth: 4,
+        color: Theme.of(context).dividerColor);
     final _count = widget.searchItem.chapters.length;
 
     final _listView = ListView.builder(
@@ -95,7 +98,8 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
             color: Colors.transparent,
             child: DefaultTextStyle(
               style: TextStyle(
-                  color: widget.fontColor ?? Theme.of(context).textTheme.bodyText1.color,
+                  color: widget.fontColor ??
+                      Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 16,
                   fontFamily: ESOTheme.staticFontFamily),
               child: _count > 64

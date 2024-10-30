@@ -39,11 +39,12 @@ import 'source/edit_rule_page.dart';
 
 class DiscoverFuture extends StatelessWidget {
   final Rule rule;
-  const DiscoverFuture({Key key, this.rule}) : super(key: key);
+  const DiscoverFuture({super.key, this.rule});
 
   @override
   Widget build(BuildContext context) {
-    if (rule.discoverUrl.startsWith("测试新发现瀑布流") || rule.discoverUrl.contains("@@DiscoverRule:")) {
+    if (rule.discoverUrl.startsWith("测试新发现瀑布流") ||
+        rule.discoverUrl.contains("@@DiscoverRule:")) {
       return DiscoverWaterfallPage(rule: rule);
     }
     if (rule.discoverUrl.startsWith("测试新发现")) {
@@ -255,7 +256,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 controller: _searchEdit,
                 hintText: "搜索发现站点(共${provider.rules?.length ?? 0}条)",
                 onSubmitted: (value) => __provider.getRuleListByName(value),
-                onChanged: (value) => __provider.getRuleListByNameDebounce(value),
+                onChanged: (value) =>
+                    __provider.getRuleListByNameDebounce(value),
               ),
               actions: [
                 IconButton(
@@ -271,14 +273,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   icon: Icon(OMIcons.settingsEthernet),
                   tooltip: '新建空白规则',
                   onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => EditRulePage()))
+                      .push(MaterialPageRoute(
+                          builder: (context) => EditRulePage()))
                       .whenComplete(() => refreshData(provider)),
                 ),
                 IconButton(
                   icon: Icon(FIcons.edit),
                   tooltip: '规则管理',
-                  onPressed: () => Utils.startPageWait(context, EditSourcePage())
-                      .whenComplete(() => refreshData(provider)),
+                  onPressed: () =>
+                      Utils.startPageWait(context, EditSourcePage())
+                          .whenComplete(() => refreshData(provider)),
                 ),
               ],
             ),
@@ -301,26 +305,31 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   );
                 }
 
-                final box = Hive.box<int>(EditSourceProvider.unlock_hidden_functions);
+                final box =
+                    Hive.box<int>(EditSourceProvider.unlock_hidden_functions);
                 int extCount = 1;
                 final extW = <Widget>[];
                 if (box.get(EditSourceProvider.schulte_grid) == null) {
                   box.put(EditSourceProvider.schulte_grid, 1);
                 }
-                if (box.get(EditSourceProvider.schulte_grid, defaultValue: 0) == 1) {
+                if (box.get(EditSourceProvider.schulte_grid, defaultValue: 0) ==
+                    1) {
                   extCount += 1;
                   extW.add(InkWell(
-                      onTap: () => invokeTap(SchulteGrid()), child: _buildSchulteGrid()));
+                      onTap: () => invokeTap(SchulteGrid()),
+                      child: _buildSchulteGrid()));
                 }
                 if (box.get(EditSourceProvider.leshi, defaultValue: 0) == 1) {
                   extCount += 1;
-                  extW.add(
-                      InkWell(onTap: () => invokeTap(LeshiPage()), child: _buildLeshi()));
+                  extW.add(InkWell(
+                      onTap: () => invokeTap(LeshiPage()),
+                      child: _buildLeshi()));
                 }
                 if (box.get(EditSourceProvider.linyuan, defaultValue: 0) == 1) {
                   extCount += 1;
                   extW.add(InkWell(
-                      onTap: () => invokeTap(LinyuanPage()), child: _buildLinyuan()));
+                      onTap: () => invokeTap(LinyuanPage()),
+                      child: _buildLinyuan()));
                 }
 
                 final _listView = ListView.builder(
@@ -383,7 +392,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
           provider.getRuleListByName(_searchEdit.text);
       },
       child: Material(
-        color: selected ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+        color: selected
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             side: BorderSide(
@@ -442,7 +453,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
         : Uri.tryParse(rule.host)?.resolve("/favicon.ico")?.toString();
     var showIcon = iconUrl != null;
     final hostPre = RegExp("https?://");
-    final host = rule.host.replaceFirst("https://", "").replaceFirst("http://", "");
+    final host =
+        rule.host.replaceFirst("https://", "").replaceFirst("http://", "");
     Widget _child = ListTile(
       minLeadingWidth: 6,
       leading: StatefulBuilder(
@@ -488,9 +500,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
           );
         },
       ),
-      onTap: () => invokeTap(DiscoverFuture(rule: rule, key: Key(rule.id.toString()))),
+      onTap: () =>
+          invokeTap(DiscoverFuture(rule: rule, key: Key(rule.id.toString()))),
       onLongPress: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)))
+          .push(
+              MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)))
           .whenComplete(() => refreshData(provider)),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -568,7 +582,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
               break;
             case MenuDiscoverSource.edit:
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)))
+                  .push(MaterialPageRoute(
+                      builder: (context) => EditRulePage(rule: rule)))
                   .whenComplete(() => refreshData(provider));
               break;
             case MenuDiscoverSource.delete:
@@ -582,7 +597,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         TextButton(
                           child: Text(
                             "取消",
-                            style: TextStyle(color: Theme.of(context).hintColor),
+                            style:
+                                TextStyle(color: Theme.of(context).hintColor),
                           ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
@@ -592,7 +608,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             style: TextStyle(color: Colors.red),
                           ),
                           onPressed: () {
-                            provider.handleSelect([rule], MenuEditSource.delete_this);
+                            provider.handleSelect(
+                                [rule], MenuEditSource.delete_this);
                             Navigator.of(context).pop();
                           },
                         ),
@@ -615,10 +632,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildEmptyHintView(EditSourceProvider provider) {
     final _shape = RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(3),
-        side:
-            BorderSide(color: Theme.of(context).dividerColor, width: Global.borderSize));
-    final _txtStyle =
-        TextStyle(fontSize: 13, color: Theme.of(context).hintColor, height: 1.3);
+        side: BorderSide(
+            color: Theme.of(context).dividerColor, width: Global.borderSize));
+    final _txtStyle = TextStyle(
+        fontSize: 13, color: Theme.of(context).hintColor, height: 1.3);
     return EmptyListMsgView(
         text: Column(
       children: [
@@ -644,13 +661,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
               ),
               TextButton(
                 child: Text("新建规则", style: _txtStyle),
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => EditRulePage())),
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => EditRulePage())),
               ),
               TextButton(
                 child: Text("规则管理", style: _txtStyle),
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => EditSourcePage())),
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => EditSourcePage())),
               ),
             ],
           ),

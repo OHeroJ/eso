@@ -9,11 +9,11 @@ class BatteryView extends StatefulWidget {
   final double height;
 
   BatteryView({
-    Key key,
+    super.key,
     this.electricQuantity,
     this.width = 18,
     this.height = 10,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -38,13 +38,17 @@ class BatteryViewState extends State<BatteryView> {
               size: Size(widget.width, widget.height),
               painter: BatteryViewPainter(widget.electricQuantity / 100)),
           Center(
-            child: Text('${widget.electricQuantity}', style: TextStyle(
-              fontSize: 10,
-              height: 1.0,
-              color: Colors.white,
-              fontFamily: Platform.isIOS ? ".SF UI Display" : "Roboto",
-              shadows: [Shadow(blurRadius: 1.5, offset: Offset(0.5, 0.5))],
-            ), textAlign: TextAlign.center, maxLines: 1, textScaleFactor: 1.0),
+            child: Text('${widget.electricQuantity}',
+                style: TextStyle(
+                  fontSize: 10,
+                  height: 1.0,
+                  color: Colors.white,
+                  fontFamily: Platform.isIOS ? ".SF UI Display" : "Roboto",
+                  shadows: [Shadow(blurRadius: 1.5, offset: Offset(0.5, 0.5))],
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                textScaleFactor: 1.0),
           )
         ],
       ),
@@ -73,7 +77,7 @@ class BatteryViewPainter extends CustomPainter {
 
     //电量位置
     double electricQuantityLeft = mPaintStrokeWidth;
-    double electricQuantityTop = mPaintStrokeWidth ;
+    double electricQuantityTop = mPaintStrokeWidth;
     double electricQuantityRight = mPaintStrokeWidth +
         (size.width - mPaintStrokeWidth * 2) * electricQuantity;
     double electricQuantityBottom = size.height - mPaintStrokeWidth;

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'linyuan_page.dart';
 
 class LeshiPage extends StatelessWidget {
-  LeshiPage({Key key}) : super(key: key);
+  LeshiPage({super.key});
 
   List<ArticleTitle> getArticleTitle(String html) {
     return AnalyzerHtml().parse(html).getElements("article").map((el) {
@@ -71,12 +71,16 @@ class LeshiPage extends StatelessWidget {
                               Utils.startPageWait(
                                   context,
                                   LaunchUrlWithWebview(
-                                    url: "https://sosadfun.link/quote/${title.number}",
+                                    url:
+                                        "https://sosadfun.link/quote/${title.number}",
                                     title: "#${title.number}号题头",
                                     icon: "https://sosadfun.link/favicon.ico",
                                   ));
                             },
-                            child: Row(children: [Text("#${title.number}"), Spacer()])),
+                            child: Row(children: [
+                              Text("#${title.number}"),
+                              Spacer()
+                            ])),
                         Divider(),
                         Text(
                           "${title.content}",

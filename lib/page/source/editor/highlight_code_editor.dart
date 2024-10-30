@@ -11,8 +11,7 @@ class HighLightCodeEditor extends StatefulWidget {
   final FocusNode focusNode;
 
   HighLightCodeEditor(this.key, this.code,
-      {this.readOnly = false, this.padding, this.focusNode})
-      : super(key: key);
+      {this.readOnly = false, this.padding, this.focusNode});
 
   @override
   State<StatefulWidget> createState() => HighLightCodeEditorState();
@@ -150,7 +149,8 @@ class HighLightCodeEditorState extends State<HighLightCodeEditor> {
     String text = codeTextController.text;
     TextSelection textSelection = codeTextController.selection;
     if (textSelection.isValid) {
-      String newText = text.replaceRange(textSelection.start, textSelection.end, code);
+      String newText =
+          text.replaceRange(textSelection.start, textSelection.end, code);
       final codeLength = code.length;
       codeTextController.text = newText;
       codeTextController.selection = textSelection.copyWith(
@@ -168,7 +168,8 @@ class HighLightCodeEditorState extends State<HighLightCodeEditor> {
     setLines(value);
     if (_lastTextLength == null ||
         (_lastTextLength != null && _lastTextLength < value.length)) {
-      var currentChar = value.characters.elementAt(controller.selection.baseOffset - 1);
+      var currentChar =
+          value.characters.elementAt(controller.selection.baseOffset - 1);
       if (currentChar == '\n') {
         _reindent();
       }

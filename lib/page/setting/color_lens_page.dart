@@ -5,7 +5,7 @@
 // import '../../eso_theme.dart';
 
 // class ColorLensPage extends StatelessWidget {
-//   const ColorLensPage({Key key}) : super(key: key);
+//   const ColorLensPage({Key key});
 
 //   @override
 //   Widget build(BuildContext context) {

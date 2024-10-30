@@ -31,7 +31,7 @@ import '../../utils/rule_comparess.dart';
 import '../discover_search_page.dart';
 
 class EditSourcePage extends StatefulWidget {
-  const EditSourcePage({Key key}) : super(key: key);
+  const EditSourcePage({Key key});
 
   @override
   _EditSourcePageState createState() => _EditSourcePageState();
@@ -55,10 +55,12 @@ class _EditSourcePageState extends State<EditSourcePage> {
                 controller: _searchEdit,
                 hintText:
                     "搜索名称和分组(共${Provider.of<EditSourceProvider>(context, listen: false)?.rules?.length ?? 0}条)",
-                onSubmitted: Provider.of<EditSourceProvider>(context, listen: false)
-                    .getRuleListByName,
-                onChanged: Provider.of<EditSourceProvider>(context, listen: false)
-                    .getRuleListByNameDebounce,
+                onSubmitted:
+                    Provider.of<EditSourceProvider>(context, listen: false)
+                        .getRuleListByName,
+                onChanged:
+                    Provider.of<EditSourceProvider>(context, listen: false)
+                        .getRuleListByNameDebounce,
               ),
               actions: [
                 IconButton(
@@ -74,7 +76,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                   icon: Icon(OMIcons.settingsEthernet),
                   tooltip: '新建空白规则',
                   onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => EditRulePage()))
+                      .push(MaterialPageRoute(
+                          builder: (context) => EditRulePage()))
                       .whenComplete(() => refreshData(provider)),
                 ),
                 Menu<MenuEditSource>(
@@ -101,7 +104,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                       return;
                     }
                     final rules = provider.rules
-                        .where((element) => provider.checkSelectMap[element.id] == true)
+                        .where((element) =>
+                            provider.checkSelectMap[element.id] == true)
                         .toList();
                     if (value != MenuEditSource.all &&
                         value != MenuEditSource.revert &&
@@ -119,7 +123,9 @@ class _EditSourcePageState extends State<EditSourcePage> {
                         value == MenuEditSource.delete_group) {
                       group = "";
                       alert(
-                        value == MenuEditSource.add_group ? Text('添加分组') : Text('移除分组'),
+                        value == MenuEditSource.add_group
+                            ? Text('添加分组')
+                            : Text('移除分组'),
                         TextField(onChanged: (value) => group = value),
                         () => provider.handleSelect(rules, value, group: group),
                       );
@@ -158,7 +164,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                           child: Text(
                             " ${sort.key}${(RuleDao.sortOrder == RuleDao.desc ? "⇓" : "⇑")}",
                             style: TextStyle(
-                                fontSize: 14, color: Theme.of(context).primaryColor),
+                                fontSize: 14,
+                                color: Theme.of(context).primaryColor),
                           ),
                           onTap: () {
                             if (RuleDao.sortOrder == RuleDao.desc) {
@@ -166,7 +173,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                             } else {
                               RuleDao.sortOrder = RuleDao.desc;
                             }
-                            Provider.of<EditSourceProvider>(context, listen: false)
+                            Provider.of<EditSourceProvider>(context,
+                                    listen: false)
                                 .refreshData();
                           },
                         )
@@ -178,7 +186,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                           ),
                           onTap: () {
                             RuleDao.sortName = sort.value;
-                            Provider.of<EditSourceProvider>(context, listen: false)
+                            Provider.of<EditSourceProvider>(context,
+                                    listen: false)
                                 .refreshData();
                           },
                         )
@@ -192,12 +201,15 @@ class _EditSourcePageState extends State<EditSourcePage> {
                   return LandingPage();
                 }
                 return ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) => Divider(),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 9),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 9),
                   itemCount: provider.rules.length,
                   physics: BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    return _buildItem(context, provider, provider.rules[index], index);
+                    return _buildItem(
+                        context, provider, provider.rules[index], index);
                   },
                 );
               },
@@ -334,13 +346,16 @@ class _EditSourcePageState extends State<EditSourcePage> {
                     Icon(
                       rule.enableSearch ? FIcons.check_square : FIcons.square,
                       size: 10,
-                      color: rule.enableSearch ? _theme.primaryColor : Colors.grey,
+                      color:
+                          rule.enableSearch ? _theme.primaryColor : Colors.grey,
                     ),
                     Text(
                       "搜索",
                       style: TextStyle(
                         fontSize: 12,
-                        color: rule.enableSearch ? _theme.primaryColor : Colors.grey,
+                        color: rule.enableSearch
+                            ? _theme.primaryColor
+                            : Colors.grey,
                         // decoration: TextDecoration.underline,
                       ),
                     ),
@@ -348,13 +363,17 @@ class _EditSourcePageState extends State<EditSourcePage> {
                     Icon(
                       rule.enableDiscover ? FIcons.check_circle : FIcons.circle,
                       size: 10,
-                      color: rule.enableDiscover ? _theme.primaryColor : Colors.grey,
+                      color: rule.enableDiscover
+                          ? _theme.primaryColor
+                          : Colors.grey,
                     ),
                     Text(
                       "发现",
                       style: TextStyle(
                         fontSize: 12,
-                        color: rule.enableDiscover ? _theme.primaryColor : Colors.grey,
+                        color: rule.enableDiscover
+                            ? _theme.primaryColor
+                            : Colors.grey,
                         // decoration: TextDecoration.underline,
                       ),
                     ),
@@ -365,7 +384,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 12),
                       ),
-                    if (rule.host != null && rule.host.isNotEmpty) SizedBox(width: 4),
+                    if (rule.host != null && rule.host.isNotEmpty)
+                      SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         '${cleanHost.firstMatch(rule.host)?.group(1) ?? ""}',
@@ -387,7 +407,8 @@ class _EditSourcePageState extends State<EditSourcePage> {
               tooltip: "编辑",
               icon: Icon(OMIcons.settingsEthernet),
               onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)))
+                  .push(MaterialPageRoute(
+                      builder: (context) => EditRulePage(rule: rule)))
                   .whenComplete(() => refreshData(provider))),
           Menu<MenuEditSource>(
             tooltip: "选项",

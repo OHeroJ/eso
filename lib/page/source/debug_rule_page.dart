@@ -11,7 +11,7 @@ import '../../fonticons_icons.dart';
 
 class DebugRulePage extends StatelessWidget {
   final Rule rule;
-  const DebugRulePage({this.rule, Key key}) : super(key: key);
+  const DebugRulePage({this.rule, Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +24,28 @@ class DebugRulePage extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: SearchTextField(
-              controller:
-                  Provider.of<DebugRuleProvider>(context, listen: false).searchController,
+              controller: Provider.of<DebugRuleProvider>(context, listen: false)
+                  .searchController,
               hintText: '请输入关键词开始测试',
               autofocus: true,
               focusNode: focus,
-              onSubmitted: Provider.of<DebugRuleProvider>(context, listen: false).handle,
+              onSubmitted:
+                  Provider.of<DebugRuleProvider>(context, listen: false).handle,
             ),
             actions: [
               IconButton(
                 icon: Icon(FIcons.chevrons_right),
                 tooltip: "开始或刷新",
-                onPressed: Provider.of<DebugRuleProvider>(context, listen: false).handle,
+                onPressed:
+                    Provider.of<DebugRuleProvider>(context, listen: false)
+                        .handle,
               ),
               IconButton(
                 icon: Icon(FIcons.compass),
                 tooltip: "发现测试",
                 onPressed:
-                    Provider.of<DebugRuleProvider>(context, listen: false).discover,
+                    Provider.of<DebugRuleProvider>(context, listen: false)
+                        .discover,
               ),
             ],
           ),
@@ -81,7 +85,9 @@ class DebugRulePage extends StatelessWidget {
                       child: Center(
                         child: Icon(FIcons.cpu,
                             size: 128,
-                            color: Theme.of(context).primaryColorDark.withOpacity(0.08)),
+                            color: Theme.of(context)
+                                .primaryColorDark
+                                .withOpacity(0.08)),
                       ),
                     ),
                   ],

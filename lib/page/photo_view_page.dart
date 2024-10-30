@@ -51,13 +51,12 @@ class PhotoViewPage extends StatefulWidget {
   final ValueChanged<int> onLongPress;
 
   const PhotoViewPage(
-      {Key key,
+      {super.key,
       @required this.items,
       this.index = 0,
       this.enableRotation = false,
       this.heroTag,
-      this.onLongPress})
-      : super(key: key);
+      this.onLongPress});
 
   @override
   State<StatefulWidget> createState() => _PhotoViewPageState();

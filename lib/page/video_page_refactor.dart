@@ -28,7 +28,7 @@ import 'content_page_manager.dart';
 
 class VideoPage extends StatelessWidget {
   final SearchItem searchItem;
-  const VideoPage({this.searchItem, Key key}) : super(key: key);
+  const VideoPage({this.searchItem, Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +38,19 @@ class VideoPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black87,
         body: ChangeNotifierProvider<VideoPageProvider>(
-          create: (context) =>
-              VideoPageProvider(searchItem: searchItem, contentProvider: contentProvider),
+          create: (context) => VideoPageProvider(
+              searchItem: searchItem, contentProvider: contentProvider),
           builder: (BuildContext context, child) {
-            final provider = Provider.of<VideoPageProvider>(context, listen: false);
-            final isLoading =
-                context.select((VideoPageProvider provider) => provider.isLoading);
-            final showController =
-                context.select((VideoPageProvider provider) => provider.showController);
-            final hint = context.select((VideoPageProvider provider) => provider.hint);
-            final showChapter =
-                context.select((VideoPageProvider provider) => provider.showChapter);
+            final provider =
+                Provider.of<VideoPageProvider>(context, listen: false);
+            final isLoading = context
+                .select((VideoPageProvider provider) => provider.isLoading);
+            final showController = context.select(
+                (VideoPageProvider provider) => provider.showController);
+            final hint =
+                context.select((VideoPageProvider provider) => provider.hint);
+            final showChapter = context
+                .select((VideoPageProvider provider) => provider.showChapter);
             return Stack(
               children: [
                 _buildPlayer(!isLoading && !Global.isDesktop, context),
@@ -89,7 +91,8 @@ class VideoPage extends StatelessWidget {
                     searchItem: searchItem,
                     color: Colors.black45,
                     fontColor: Colors.white70,
-                    border: BorderSide(color: Colors.white12, width: Global.borderSize),
+                    border: BorderSide(
+                        color: Colors.white12, width: Global.borderSize),
                     heightScale: 0.6,
                   ),
                 if (hint != null)
@@ -126,7 +129,8 @@ class VideoPage extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           alignment: Alignment.center,
-          child: aspectRatio == VideoAspectRatio.full || provider.getAspectRatio() == 0
+          child: aspectRatio == VideoAspectRatio.full ||
+                  provider.getAspectRatio() == 0
               ? VideoPlayer(controller)
               : AspectRatio(
                   aspectRatio: provider.getAspectRatio(),
@@ -204,9 +208,10 @@ class VideoPage extends StatelessWidget {
 
   Widget _buildTopBar(BuildContext context) {
     final provider = Provider.of<VideoPageProvider>(context, listen: false);
-    final vertical = context
-        .select((VideoPageProvider provider) => provider.screenAxis == Axis.vertical);
-    final speed = context.select((VideoPageProvider provider) => provider.currentSpeed);
+    final vertical = context.select(
+        (VideoPageProvider provider) => provider.screenAxis == Axis.vertical);
+    final speed =
+        context.select((VideoPageProvider provider) => provider.currentSpeed);
     final primaryColor = Theme.of(context).primaryColor;
     return Row(
       children: [
@@ -235,8 +240,8 @@ class VideoPage extends StatelessWidget {
             iconSize: 20,
             padding: EdgeInsets.zero,
             icon: Icon(Icons.open_in_browser),
-            onPressed: () =>
-                launch(searchItem.chapters[searchItem.durChapterIndex].contentUrl),
+            onPressed: () => launch(
+                searchItem.chapters[searchItem.durChapterIndex].contentUrl),
             tooltip: "查看原网页",
           ),
         ),
@@ -261,7 +266,8 @@ class VideoPage extends StatelessWidget {
                 .map((value) => MenuItem<double>(
                       value: value,
                       text: "$value",
-                      textColor: (speed - value).abs() < 0.1 ? primaryColor : null,
+                      textColor:
+                          (speed - value).abs() < 0.1 ? primaryColor : null,
                     ))
                 .toList(),
             onSelect: (double value) async {
@@ -304,7 +310,8 @@ class VideoPage extends StatelessWidget {
   Widget _buildBottomBar(BuildContext context) {
     return Consumer<VideoPageProvider>(
       builder: (context, provider, child) {
-        final value = provider.isLoading ? 0 : provider.position.inSeconds.toDouble();
+        final value =
+            provider.isLoading ? 0 : provider.position.inSeconds.toDouble();
         return SafeArea(
           top: false,
           child: Column(
@@ -324,11 +331,11 @@ class VideoPage extends StatelessWidget {
                       onDragging: (handlerIndex, lowerValue, upperValue) {
                         provider.setHintText(
                             "跳转至  " +
-                                Utils.formatDuration(
-                                    Duration(seconds: (lowerValue as double).toInt())),
+                                Utils.formatDuration(Duration(
+                                    seconds: (lowerValue as double).toInt())),
                             true);
-                        provider.controller
-                            .seekTo(Duration(seconds: (lowerValue as double).toInt()));
+                        provider.controller.seekTo(
+                            Duration(seconds: (lowerValue as double).toInt()));
                       },
                       handlerHeight: 12,
                       handlerWidth: 12,
@@ -337,7 +344,8 @@ class VideoPage extends StatelessWidget {
                           width: 12,
                           height: 12,
                           alignment: Alignment.center,
-                          child: Icon(Icons.videocam, color: Colors.red, size: 8),
+                          child:
+                              Icon(Icons.videocam, color: Colors.red, size: 8),
                         ),
                       ),
                       touchSize: 20,
@@ -367,12 +375,13 @@ class VideoPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                    color: provider.allowPlaybackground ? Colors.red : Colors.grey,
+                    color:
+                        provider.allowPlaybackground ? Colors.red : Colors.grey,
                     iconSize: 20,
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.switch_video),
-                    onPressed: () =>
-                        provider.allowPlaybackground = !provider.allowPlaybackground,
+                    onPressed: () => provider.allowPlaybackground =
+                        !provider.allowPlaybackground,
                     tooltip: "后台播放",
                   ),
                   if (provider.screenAxis == Axis.horizontal)
@@ -401,7 +410,8 @@ class VideoPage extends StatelessWidget {
                         ? Icons.pause
                         : Icons.play_arrow),
                     onPressed: provider.playOrPause,
-                    tooltip: !provider.isLoading && provider.isPlaying ? "暂停" : "播放",
+                    tooltip:
+                        !provider.isLoading && provider.isPlaying ? "暂停" : "播放",
                   ),
                   IconButton(
                     color: Colors.white,
@@ -487,7 +497,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   String get durationString => Utils.formatDuration(_controller.value.duration);
 
   final ContentProvider contentProvider;
-  VideoPageProvider({@required this.searchItem, @required this.contentProvider}) {
+  VideoPageProvider(
+      {@required this.searchItem, @required this.contentProvider}) {
     WidgetsBinding.instance.addObserver(this);
     // if (searchItem.chapters?.length == 0 &&
     //     SearchItemManager.isFavorite(searchItem.originTag, searchItem.url)) {
@@ -532,8 +543,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     } catch (e) {}
     if (_disposed) return;
     try {
-      _content =
-          await contentProvider.loadChapter(chapterIndex ?? searchItem.durChapterIndex);
+      _content = await contentProvider
+          .loadChapter(chapterIndex ?? searchItem.durChapterIndex);
       if (_content.isEmpty || _content.first.isEmpty) {
         _content = null;
         _isLoading = null;
@@ -547,7 +558,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
       loadingText.add("获取视频信息...");
       notifyListeners();
       (VideoPlayerController controller) {
-        Future.delayed(Duration(microseconds: 120)).then((value) => controller.dispose());
+        Future.delayed(Duration(microseconds: 120))
+            .then((value) => controller.dispose());
       }(_controller);
       _controller?.dispose();
       if (_disposed) return;
@@ -588,7 +600,10 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
         DateTime.now().difference(_lastNotifyTime).inMicroseconds > 1000) {
       _lastNotifyTime = DateTime.now();
       if (showController &&
-          DateTime.now().difference(_controllerTime).compareTo(_controllerDelay) >= 0) {
+          DateTime.now()
+                  .difference(_controllerTime)
+                  .compareTo(_controllerDelay) >=
+              0) {
         hideController();
         _showChapter = false;
       }
@@ -912,7 +927,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
-    final d = Duration(seconds: (details.globalPosition.dx - _dragStartPosition) ~/ 10);
+    final d = Duration(
+        seconds: (details.globalPosition.dx - _dragStartPosition) ~/ 10);
     _gesturePosition = position + d;
     final prefix = d.compareTo(Duration.zero) < 0 ? "-" : "+";
     setHintText(
@@ -926,7 +942,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     if (_draging == true) return;
     _draging = true;
     double number = (_dragStartPosition - details.globalPosition.dy) / 200;
-    if (details.globalPosition.dx < (_screenAxis == Axis.horizontal ? 400 : 200)) {
+    if (details.globalPosition.dx <
+        (_screenAxis == Axis.horizontal ? 400 : 200)) {
       IconData icon = OMIcons.brightnessLow;
       var brightness = await DeviceDisplayBrightness.getBrightness();
       if (brightness > 1) {

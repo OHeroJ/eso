@@ -14,8 +14,8 @@ class RSSPage extends StatefulWidget {
 
   const RSSPage({
     this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _RSSPageState createState() => _RSSPageState();
@@ -85,8 +85,8 @@ class _RSSContentPage extends StatefulWidget {
   _RSSContentPage({
     this.searchItem,
     this.content,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   __RSSContentPageState createState() => __RSSContentPageState();

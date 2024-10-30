@@ -15,7 +15,7 @@ import 'langding_page.dart';
 
 class DiscoverNewPage extends StatefulWidget {
   final Rule rule;
-  DiscoverNewPage({Key key, this.rule}) : super(key: key);
+  DiscoverNewPage({super.key, this.rule});
 
   @override
   State<DiscoverNewPage> createState() => _DiscoverNewPageState();
@@ -134,7 +134,8 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
   parseRule() async {
     JSEngine.setEnvironment(1, widget.rule, "", widget.rule.host, "", "");
     discoverUrl = await JSEngine.evaluate(
-        "${JSEngine.environment};;1+1;rules = ${jsonEncode(_discoverRule.rules)};;1+1;" + _discoverRule.js);
+        "${JSEngine.environment};;1+1;rules = ${jsonEncode(_discoverRule.rules)};;1+1;" +
+            _discoverRule.js);
     setState(() {});
   }
 
@@ -171,7 +172,8 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
   }
 
   Widget _buildBanner() {
-    if (_discoverRule == null) return SliverToBoxAdapter(child: Text("加载分类中。。。"));
+    if (_discoverRule == null)
+      return SliverToBoxAdapter(child: Text("加载分类中。。。"));
     final nomal = TextStyle(color: Theme.of(context).textTheme.bodyText1.color);
     final primary = TextStyle(color: Theme.of(context).primaryColor);
 
@@ -212,7 +214,8 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
   }
 
   Widget _buildStickyBar() {
-    if (_discoverRule == null) return SliverToBoxAdapter(child: Text("加载结果中。。。"));
+    if (_discoverRule == null)
+      return SliverToBoxAdapter(child: Text("加载结果中。。。"));
 
     return SliverPersistentHeader(
       pinned: true, //是否固定在顶部
@@ -223,8 +226,8 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
-            for (var rule
-                in _discoverRule.rules.where((element) => element.option.isNotEmpty))
+            for (var rule in _discoverRule.rules
+                .where((element) => element.option.isNotEmpty))
               Card(
                 child: Center(
                   child: Text(
@@ -242,8 +245,10 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
     if (_discoverRule == null || discoverUrl == null)
       return SliverToBoxAdapter(child: Text("加载地址中。。。"));
     return FutureBuilder<List<SearchItem>>(
-      future: APIManager.discover(widget.rule.id, {"": DiscoverPair("", discoverUrl)}, 1),
-      builder: (BuildContext context, AsyncSnapshot<List<SearchItem>> snapshot) {
+      future: APIManager.discover(
+          widget.rule.id, {"": DiscoverPair("", discoverUrl)}, 1),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<SearchItem>> snapshot) {
         if (snapshot.hasError) {
           return SliverToBoxAdapter(child: Text("error: ${snapshot.error}"));
         }
@@ -287,7 +292,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => maxHeight;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedBox.expand(child: child);
   }
 

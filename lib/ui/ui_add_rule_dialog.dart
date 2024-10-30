@@ -19,11 +19,11 @@ class UIAddRuleDialog extends StatelessWidget {
   final String fileContent;
   final String fileName;
   const UIAddRuleDialog({
-    Key key,
+    super.key,
     this.refresh,
     this.fileContent,
     this.fileName = "未选择文件",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class UIAddRuleDialog extends StatelessWidget {
           create: (context) => AddRuleProvider(
               refresh, () => Navigator.pop(context), fileContent, fileName),
           builder: (context, child) {
-            final provider = Provider.of<AddRuleProvider>(context, listen: true);
+            final provider =
+                Provider.of<AddRuleProvider>(context, listen: true);
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -187,7 +188,8 @@ class AddRuleProvider extends ChangeNotifier {
     }
   }
 
-  AddRuleProvider(this.refresh, this.close, String fileContent, String fileName) {
+  AddRuleProvider(
+      this.refresh, this.close, String fileContent, String fileName) {
     ruleController.addListener(ruleListener);
     if (fileContent != null) {
       _fileName = fileName;
@@ -207,7 +209,8 @@ class AddRuleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String prettyJson(String s) => JsonEncoder.withIndent("  ").convert(jsonDecode(s));
+  String prettyJson(String s) =>
+      JsonEncoder.withIndent("  ").convert(jsonDecode(s));
 
   void stringify() {
     final s = ruleController.text.trim();
@@ -284,7 +287,8 @@ class AddRuleProvider extends ChangeNotifier {
     var fileContent = autoReadFile(platformFile.path).trim();
     if (fileContent.startsWith(esoStart)) {
       fileContent = RuleCompress.decompassString(fileContent);
-    } else if (fileContent.startsWith('"' + esoStart) && fileContent.endsWith('"')) {
+    } else if (fileContent.startsWith('"' + esoStart) &&
+        fileContent.endsWith('"')) {
       fileContent = fileContent.substring(1, fileContent.length - 1);
     }
     _fileName = Utils.getFileNameAndExt(platformFile.name);
@@ -305,7 +309,8 @@ class AddRuleProvider extends ChangeNotifier {
       } else {
         _currentFileIndex = 1;
         _importType = ImportType.file;
-        ruleController.text = JsonEncoder.withIndent("  ").convert(_fileContent.first);
+        ruleController.text =
+            JsonEncoder.withIndent("  ").convert(_fileContent.first);
       }
       _totalFileIndex = _fileContent.length;
     } catch (e) {
@@ -320,8 +325,8 @@ class AddRuleProvider extends ChangeNotifier {
     if (_currentFileIndex < 1) {
       _currentFileIndex = _totalFileIndex;
     }
-    ruleController.text =
-        JsonEncoder.withIndent("  ").convert(_fileContent[_currentFileIndex - 1]);
+    ruleController.text = JsonEncoder.withIndent("  ")
+        .convert(_fileContent[_currentFileIndex - 1]);
     notifyListeners();
   }
 
@@ -331,8 +336,8 @@ class AddRuleProvider extends ChangeNotifier {
     if (_currentFileIndex >= _totalFileIndex) {
       _currentFileIndex = 1;
     }
-    ruleController.text =
-        JsonEncoder.withIndent("  ").convert(_fileContent[_currentFileIndex - 1]);
+    ruleController.text = JsonEncoder.withIndent("  ")
+        .convert(_fileContent[_currentFileIndex - 1]);
     notifyListeners();
   }
 

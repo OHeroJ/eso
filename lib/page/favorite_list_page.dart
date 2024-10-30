@@ -16,7 +16,7 @@ import 'chapter_page.dart';
 class FavoriteListPage extends StatelessWidget {
   final void Function(Widget) invokeTap;
   final int type;
-  const FavoriteListPage({this.type, Key key, this.invokeTap}) : super(key: key);
+  const FavoriteListPage({this.type, super.key, this.invokeTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,8 @@ class FavoriteListPage extends StatelessWidget {
     return ChangeNotifierProvider<FavoriteListProvider>(
       create: (context) => FavoriteListProvider(type),
       builder: (context, child) {
-        final provider = Provider.of<FavoriteListProvider>(context, listen: true);
+        final provider =
+            Provider.of<FavoriteListProvider>(context, listen: true);
         final menuList = [
           // ['收藏顺序', SortType.CREATE],
           // ['更新时间', SortType.UPDATE],
@@ -91,7 +92,8 @@ class FavoriteListPage extends StatelessWidget {
                                                   TextButton(
                                                       onPressed: () {
                                                         provider.removeTag(tag);
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context)
+                                                            .pop();
                                                         Navigator.of(_c).pop();
                                                       },
                                                       child: Text("确定"))
@@ -119,8 +121,10 @@ class FavoriteListPage extends StatelessWidget {
                                     children: [
                                       for (var item in provider.allSearchList)
                                         StatefulBuilder(
-                                          builder: (BuildContext context, setState) {
-                                            final select = item.tags.contains(tag);
+                                          builder:
+                                              (BuildContext context, setState) {
+                                            final select =
+                                                item.tags.contains(tag);
                                             return ListTile(
                                               onTap: () {
                                                 if (select) {
@@ -141,10 +145,13 @@ class FavoriteListPage extends StatelessWidget {
                                                 maxLines: 1,
                                               ),
                                               trailing: Icon(
-                                                  Icons.check_circle_outline_outlined,
+                                                  Icons
+                                                      .check_circle_outline_outlined,
                                                   color: select
-                                                      ? Theme.of(context).primaryColor
-                                                      : Theme.of(context).highlightColor),
+                                                      ? Theme.of(context)
+                                                          .primaryColor
+                                                      : Theme.of(context)
+                                                          .highlightColor),
                                             );
                                           },
                                         ),
@@ -169,7 +176,8 @@ class FavoriteListPage extends StatelessWidget {
                             } else {
                               provider.addToTag(tag);
                               Navigator.of(context).pop();
-                              Future.delayed(Duration(seconds: 1), controller.dispose);
+                              Future.delayed(
+                                  Duration(seconds: 1), controller.dispose);
                             }
                             ;
                           };
@@ -202,7 +210,8 @@ class FavoriteListPage extends StatelessWidget {
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).cardColor,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
                             side: BorderSide(
                                 width: Global.borderSize,
                                 color: _isSelect

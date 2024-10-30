@@ -10,7 +10,7 @@ import 'package:webview_windows/webview_windows.dart';
 import '../../utils.dart';
 
 class LinyuanPage extends StatelessWidget {
-  const LinyuanPage({Key key}) : super(key: key);
+  const LinyuanPage({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,7 @@ class LaunchUrlWithWebview extends StatelessWidget {
   final String url;
   final String title;
   final String icon;
-  const LaunchUrlWithWebview({Key key, this.url, this.title, this.icon})
-      : super(key: key);
+  const LaunchUrlWithWebview({super.key, this.url, this.title, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class WebInAppAndroid extends StatelessWidget {
   final String url;
   final String title;
   final String icon;
-  WebInAppAndroid({Key key, this.url, this.title, this.icon}) : super(key: key);
+  WebInAppAndroid({super.key, this.url, this.title, this.icon});
 
   // Future<bool> setCookies() async {
   //   return await MethodChannel('plugins.flutter.io/cookie_manager').invokeMethod<bool>(
@@ -93,7 +92,8 @@ class WebInAppAndroid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Completer<WebViewController> _controller = Completer<WebViewController>();
+    final Completer<WebViewController> _controller =
+        Completer<WebViewController>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -111,22 +111,22 @@ class WebInAppAndroid extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      size: 28,
-                    ),
-                    tooltip: "关闭",
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+              icon: Icon(
+                Icons.close,
+                size: 28,
+              ),
+              tooltip: "关闭",
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
             leadingWidth: 30,
             title: ListTile(
               leading: icon == null
-                ? null
-                : CircleAvatar(
-                backgroundImage: NetworkImage(icon),
-              ),
+                  ? null
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(icon),
+                    ),
               title: Text(title, maxLines: 1),
               subtitle: Text(url, maxLines: 1),
             ),
@@ -182,7 +182,7 @@ class WebInAppWindows extends StatefulWidget {
   final String url;
   final String title;
   final String icon;
-  WebInAppWindows({Key key, this.url, this.title, this.icon}) : super(key: key);
+  WebInAppWindows({super.key, this.url, this.title, this.icon});
 
   @override
   State<WebInAppWindows> createState() => _WebInAppWindowsState();

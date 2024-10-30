@@ -11,10 +11,11 @@ import '../../fonticons_icons.dart';
 
 class LoginRulePage extends StatelessWidget {
   final Rule rule;
-  const LoginRulePage({this.rule, Key key}) : super(key: key);
+  const LoginRulePage({this.rule, Key key});
 
   Future<bool> setCookies() async {
-    return await MethodChannel('plugins.flutter.io/cookie_manager').invokeMethod<bool>(
+    return await MethodChannel('plugins.flutter.io/cookie_manager')
+        .invokeMethod<bool>(
       'setCookies',
       <String, dynamic>{
         'url': rule.loginUrl,
@@ -24,7 +25,8 @@ class LoginRulePage extends StatelessWidget {
   }
 
   Future<String> getCookies() async {
-    return await MethodChannel('plugins.flutter.io/cookie_manager').invokeMethod<String>(
+    return await MethodChannel('plugins.flutter.io/cookie_manager')
+        .invokeMethod<String>(
       'getCookies',
       <String, String>{
         'url': rule.loginUrl,
@@ -34,7 +36,8 @@ class LoginRulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Completer<WebViewController> _controller = Completer<WebViewController>();
+    final Completer<WebViewController> _controller =
+        Completer<WebViewController>();
     if (rule.cookies != null && rule.cookies.isNotEmpty) {
       setCookies();
     }

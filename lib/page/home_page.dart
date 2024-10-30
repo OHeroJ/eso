@@ -20,7 +20,7 @@ import 'discover_page.dart';
 import 'favorite_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key key});
 
   @override
   State<StatefulWidget> createState() => _HomePageState();
@@ -74,7 +74,8 @@ class _HomePageState extends State<HomePage> {
       return ChangeNotifierProvider(
         create: (BuildContext context) => PageSwitch(Global.currentHomePage),
         child: Consumer<PageSwitch>(
-          builder: (BuildContext context, PageSwitch pageSwitch, Widget widget) {
+          builder:
+              (BuildContext context, PageSwitch pageSwitch, Widget widget) {
             Global.currentHomePage = pageSwitch.currentIndex;
             pageSwitch.updatePageController();
             final _pageView = PageView(
@@ -119,10 +120,12 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Icon(FIcons.heart,
-                                          color: getColor(pageSwitch, context, 0)),
+                                          color:
+                                              getColor(pageSwitch, context, 0)),
                                       Text("收藏",
                                           style: TextStyle(
-                                              color: getColor(pageSwitch, context, 0)))
+                                              color: getColor(
+                                                  pageSwitch, context, 0)))
                                     ],
                                   ),
                                 ),
@@ -134,10 +137,12 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Icon(FIcons.compass,
-                                          color: getColor(pageSwitch, context, 1)),
+                                          color:
+                                              getColor(pageSwitch, context, 1)),
                                       Text("发现",
                                           style: TextStyle(
-                                              color: getColor(pageSwitch, context, 1)))
+                                              color: getColor(
+                                                  pageSwitch, context, 1)))
                                     ],
                                   ),
                                 ),
@@ -161,10 +166,12 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         Icon(Icons.history,
-                                            color: getColor(pageSwitch, context, 2)),
+                                            color: getColor(
+                                                pageSwitch, context, 2)),
                                         Text("历史",
                                             style: TextStyle(
-                                                color: getColor(pageSwitch, context, 2)))
+                                                color: getColor(
+                                                    pageSwitch, context, 2)))
                                       ],
                                     ),
                                   ),
@@ -176,10 +183,12 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         Icon(Icons.info_outline_rounded,
-                                            color: getColor(pageSwitch, context, 3)),
+                                            color: getColor(
+                                                pageSwitch, context, 3)),
                                         Text("关于",
                                             style: TextStyle(
-                                                color: getColor(pageSwitch, context, 3)))
+                                                color: getColor(
+                                                    pageSwitch, context, 3)))
                                       ],
                                     ),
                                   ),
@@ -191,15 +200,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                floatingActionButton: profile.searchPostion == ESOTheme.searchAction
+                floatingActionButton: profile.searchPostion ==
+                        ESOTheme.searchAction
                     ? null
                     : FloatingActionButton(
                         elevation: 1,
                         tooltip: "搜索",
                         backgroundColor: Theme.of(context).primaryColor,
-                        onPressed: () => Utils.startPageWait(context, SearchPage())
-                            .whenComplete(() => pageSwitch.refreshList()),
-                        child: Icon(FIcons.search, color: Theme.of(context).canvasColor),
+                        onPressed: () =>
+                            Utils.startPageWait(context, SearchPage())
+                                .whenComplete(() => pageSwitch.refreshList()),
+                        child: Icon(FIcons.search,
+                            color: Theme.of(context).canvasColor),
                       ),
                 floatingActionButtonLocation:
                     profile.searchPostion == ESOTheme.searchAction

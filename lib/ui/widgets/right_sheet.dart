@@ -79,8 +79,7 @@ class _ModalRightSheetRoute<T> extends PopupRoute<T> {
 }
 
 class _ModalRightSheet<T> extends StatefulWidget {
-  const _ModalRightSheet({Key key, this.route, this.clickEmptyPop = true})
-      : super(key: key);
+  const _ModalRightSheet({super.key, this.route, this.clickEmptyPop = true});
 
   final _ModalRightSheetRoute<T> route;
   final bool clickEmptyPop;
@@ -170,7 +169,7 @@ class RightSheet extends StatefulWidget {
   /// [ScaffoldState.showRightSheet], for persistent right sheets, or by
   /// [showModalRightSheet], for modal right sheets.
   const RightSheet(
-      {Key key,
+      {super.key,
       this.animationController,
       this.enableDrag = true,
       this.elevation = 8.0,

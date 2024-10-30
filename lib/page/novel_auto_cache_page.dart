@@ -19,7 +19,8 @@ class NovelCacheService {
   NovelCacheService._privateConstructor()
       : _listeners = [],
         _startTable = {};
-  static final NovelCacheService _instance = NovelCacheService._privateConstructor();
+  static final NovelCacheService _instance =
+      NovelCacheService._privateConstructor();
   factory NovelCacheService() {
     return _instance;
   }
@@ -49,7 +50,8 @@ class NovelCacheService {
 
   bool _exportLoading;
 
-  void exportCache(SearchItem searchItem, String exportChapterName, bool isShare) async {
+  void exportCache(
+      SearchItem searchItem, String exportChapterName, bool isShare) async {
     if (_exportLoading == true) {
       Utils.toast("正在导出...");
       return;
@@ -57,7 +59,8 @@ class NovelCacheService {
     _exportLoading = true;
     Utils.toast("开始导出已缓存章节");
     final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
-    final chapterUrl = searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
+    final chapterUrl =
+        searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
     try {
       final chapters = searchItem.chapters;
       final export = <String>[
@@ -97,8 +100,9 @@ class NovelCacheService {
       await cache.putData(name, export.join("\n"),
           hashCodeKey: false, shouldEncode: false);
 
-      final filePath =
-          exportDir == null ? await cache.cacheDir() + name : Utils.join(exportDir, name);
+      final filePath = exportDir == null
+          ? await cache.cacheDir() + name
+          : Utils.join(exportDir, name);
       // final download = await path.getApplicationDocumentsDirectory();
       // final filePath = Utils.join(download.path, "eso", name);
       await File(filePath).writeAsString(export.join("\n"));
@@ -158,9 +162,9 @@ class NovelCacheService {
 class NovelAutoCachePage extends StatefulWidget {
   final SearchItem searchItem;
   const NovelAutoCachePage({
-    Key key,
+    super.key,
     this.searchItem,
-  }) : super(key: key);
+  });
 
   @override
   _NovelAutoCachePageState createState() => _NovelAutoCachePageState();
@@ -183,7 +187,8 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
     scrollController = ScrollController();
     NovelCacheService().addListener(refresh);
     NovelCacheService().start(widget.searchItem);
-    novel_cache_export_dir_box = await Hive.openBox<String>('novel_cache_export_dir');
+    novel_cache_export_dir_box =
+        await Hive.openBox<String>('novel_cache_export_dir');
     exportDir = novel_cache_export_dir_box.get(0);
     if (exportDir == null) {
       final cache = CacheUtil(basePath: "txt");
@@ -236,8 +241,9 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
             tooltip: "导出已缓存章节",
           ),
           IconButton(
-            onPressed: () =>
-                isCaching ? service.stop(searchItem) : service.start(searchItem),
+            onPressed: () => isCaching
+                ? service.stop(searchItem)
+                : service.start(searchItem),
             icon: Icon(isCaching ? Icons.stop : Icons.play_arrow),
             tooltip: isCaching ? "取消缓存" : "开始缓存",
           ),
@@ -287,7 +293,8 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
                     //   requestPermission: CacheUtil.requestPermission,
                     //   rootName: rootDirectory.path,
                     // );
-                    final p = await Utils.pickFolder(context,title: "选择导出路径",
+                    final p = await Utils.pickFolder(context,
+                        title: "选择导出路径",
                         initialDirectory: novel_cache_export_dir_box.get(0));
                     if (p != null) {
                       exportDir = p;
@@ -323,7 +330,9 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
                         maxLines: 1,
                       ),
                     ),
-                    cacheIndex.contains(index.toString()) ? cacheText : noCacheText,
+                    cacheIndex.contains(index.toString())
+                        ? cacheText
+                        : noCacheText,
                   ],
                 ),
               );

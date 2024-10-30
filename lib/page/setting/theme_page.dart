@@ -14,7 +14,7 @@ import '../../utils.dart';
 class ColorPick extends StatefulWidget {
   final int color;
   final void Function(Color) onColorChanged;
-  ColorPick({Key key, this.color, this.onColorChanged}) : super(key: key);
+  ColorPick({super.key, this.color, this.onColorChanged});
 
   @override
   State<ColorPick> createState() => _ColorPickState();
@@ -50,7 +50,7 @@ class _ColorPickState extends State<ColorPick> {
 }
 
 class ThemePage extends StatelessWidget {
-  const ThemePage({Key key}) : super(key: key);
+  const ThemePage({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,8 @@ class ThemePage extends StatelessWidget {
         );
 
     return ValueListenableBuilder<Box>(
-        valueListenable: themeBox.listenable(keys: <String>[decorationImageKey]),
+        valueListenable:
+            themeBox.listenable(keys: <String>[decorationImageKey]),
         builder: (BuildContext context, Box _, Widget child) {
           return Container(
             decoration: globalDecoration,
@@ -142,10 +143,11 @@ class ThemePage extends StatelessWidget {
                                       controller: controller,
                                       maxLines: 8,
                                       decoration: InputDecoration(
-                                        labelText: "不了解请勿手动编辑", 
+                                        labelText: "不了解请勿手动编辑",
                                         // helperText: "",
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
                                       ),
                                     ),
@@ -163,8 +165,8 @@ class ThemePage extends StatelessWidget {
                                       child: Text("粘贴")),
                                   TextButton(
                                       onPressed: () {
-                                        Clipboard.setData(
-                                            ClipboardData(text: controller.text));
+                                        Clipboard.setData(ClipboardData(
+                                            text: controller.text));
                                         Utils.toast("已保存到剪贴板");
                                       },
                                       child: Text("复制")),
@@ -177,7 +179,8 @@ class ThemePage extends StatelessWidget {
                                       onPressed: () {
                                         try {
                                           final json = controller.text
-                                              .replaceAll(RegExp("\\s*//.*"), "")
+                                              .replaceAll(
+                                                  RegExp("\\s*//.*"), "")
                                               .trim();
                                           final obj = jsonDecode(json);
                                           if (obj is Map) {
@@ -195,19 +198,23 @@ class ThemePage extends StatelessWidget {
                                                 themeBox.put(decorationImageKey,
                                                     "assets/ba/${entry.value}");
                                               } else {
-                                                final value =
-                                                    int.tryParse(entry.value, radix: 16);
+                                                final value = int.tryParse(
+                                                    entry.value,
+                                                    radix: 16);
                                                 if (value != null &&
                                                     value > 0 &&
                                                     value <= 0xFFFFFFFF) {
-                                                  themeBox.put(entry.key, value);
+                                                  themeBox.put(
+                                                      entry.key, value);
                                                 } else {
-                                                  Utils.toast("错误, ${entry.key}数值不对");
+                                                  Utils.toast(
+                                                      "错误, ${entry.key}数值不对");
                                                 }
                                               }
                                             Utils.toast("应用成功");
                                             Navigator.of(context).pop();
-                                            Future.delayed(Duration(seconds: 1), () {
+                                            Future.delayed(Duration(seconds: 1),
+                                                () {
                                               controller.dispose();
                                             });
                                           } else {
@@ -235,7 +242,8 @@ class ThemePage extends StatelessWidget {
                             leading: const Icon(Icons.color_lens),
                             title: const Text("调色板"),
                           ),
-                          pick('主题色', primaryColorKey, tomatoCat[primaryColorKey]),
+                          pick('主题色', primaryColorKey,
+                              tomatoCat[primaryColorKey]),
                           pick('图标色', iconColorKey, tomatoCat[iconColorKey]),
                         ],
                       ),
@@ -243,7 +251,8 @@ class ThemePage extends StatelessWidget {
                     Card(
                       child: ValueListenableBuilder<Box<int>>(
                         valueListenable: themeModeBox.listenable(),
-                        builder: (BuildContext context, Box<int> box, Widget child) {
+                        builder:
+                            (BuildContext context, Box<int> box, Widget child) {
                           const done = const Icon(Icons.done, size: 32);
                           return Column(
                             children: [
@@ -251,15 +260,17 @@ class ThemePage extends StatelessWidget {
                                 leading: const Icon(Icons.auto_mode_outlined),
                                 title: Text("跟随系统"),
                                 onTap: () => themeMode = ThemeMode.system.index,
-                                trailing:
-                                    ThemeMode.system.index == themeMode ? done : null,
+                                trailing: ThemeMode.system.index == themeMode
+                                    ? done
+                                    : null,
                               ),
                               ListTile(
                                 leading: const Icon(Icons.light_mode_outlined),
                                 title: Text("白天模式"),
                                 onTap: () => themeMode = ThemeMode.light.index,
-                                trailing:
-                                    ThemeMode.light.index == themeMode ? done : null,
+                                trailing: ThemeMode.light.index == themeMode
+                                    ? done
+                                    : null,
                               ),
                               pick('顶栏前景色', appBarForegroundColorKey,
                                   tomatoCat[appBarForegroundColorKey]),
@@ -273,13 +284,18 @@ class ThemePage extends StatelessWidget {
                                 leading: const Icon(Icons.dark_mode_outlined),
                                 title: Text("黑夜模式"),
                                 onTap: () => themeMode = ThemeMode.dark.index,
-                                trailing: ThemeMode.dark.index == themeMode ? done : null,
+                                trailing: ThemeMode.dark.index == themeMode
+                                    ? done
+                                    : null,
                               ),
-                              pick('顶栏前景色', appBarForegroundDarkColorKey, colors["象牙色"]),
-                              pick('顶栏背景色', appBarBackgroundDarkColorKey, colors["星空灰"]),
-                              pick(
-                                  '页面背景色', scaffoldBackgroundDarkColorKey, colors["星空灰"]),
-                              pick('卡片背景色', cardBackgroundDarkColorKey, colors["星空灰"]),
+                              pick('顶栏前景色', appBarForegroundDarkColorKey,
+                                  colors["象牙色"]),
+                              pick('顶栏背景色', appBarBackgroundDarkColorKey,
+                                  colors["星空灰"]),
+                              pick('页面背景色', scaffoldBackgroundDarkColorKey,
+                                  colors["星空灰"]),
+                              pick('卡片背景色', cardBackgroundDarkColorKey,
+                                  colors["星空灰"]),
                             ],
                           );
                         },
@@ -301,7 +317,8 @@ class ThemePage extends StatelessWidget {
                           ].map((u) {
                             return InkWell(
                               onTap: () {
-                                themeBox.put(decorationImageKey, "assets/ba/$u.jpg");
+                                themeBox.put(
+                                    decorationImageKey, "assets/ba/$u.jpg");
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),

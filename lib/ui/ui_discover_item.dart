@@ -9,8 +9,8 @@ class UIDiscoverItem extends StatelessWidget {
 
   const UIDiscoverItem({
     @required this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +18,17 @@ class UIDiscoverItem extends StatelessWidget {
       direction: Axis.vertical,
       children: <Widget>[
         Expanded(
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(4),
-            child: UIImageItem(cover: searchItem.cover, hero: Utils.empty(searchItem.cover) ? null : "${searchItem.name}.${searchItem.cover}.${searchItem.id}"),
-            decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).dividerColor, width: 0.1)
-            ),
+            child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.all(4),
+          child: UIImageItem(
+              cover: searchItem.cover,
+              hero: Utils.empty(searchItem.cover)
+                  ? null
+                  : "${searchItem.name}.${searchItem.cover}.${searchItem.id}"),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context).dividerColor, width: 0.1)),
         )),
         Container(
           alignment: Alignment.bottomLeft,

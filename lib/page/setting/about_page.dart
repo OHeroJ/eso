@@ -75,7 +75,7 @@ class _AboutPageState extends State<AboutPage> {
 
 class AboutPage2 extends StatelessWidget {
   final void Function(Widget) invokeTap;
-  const AboutPage2({Key key, this.invokeTap}) : super(key: key);
+  const AboutPage2({super.key, this.invokeTap});
 
   joinGroup([String group]) {
     final key =
@@ -457,7 +457,7 @@ class AboutPage2 extends StatelessWidget {
 }
 
 class ConfigSettingPage extends StatefulWidget {
-  const ConfigSettingPage({Key key}) : super(key: key);
+  const ConfigSettingPage({Key key});
 
   @override
   _ConfigSettingPageState createState() => _ConfigSettingPageState();

@@ -15,8 +15,8 @@ class UIMangaMenu extends StatelessWidget {
   final SearchItem searchItem;
   const UIMangaMenu({
     this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,8 @@ class UIMangaMenu extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(3),
                             color: bgColor,
-                            border: Border.all(color: color.withOpacity(0.65), width: 1),
+                            border: Border.all(
+                                color: color.withOpacity(0.65), width: 1),
                           ),
                         ),
                       ),
@@ -97,8 +98,8 @@ class UIMangaMenu extends StatelessWidget {
                           color: bgColor,
                           child: Text((value as double).toStringAsFixed(0)),
                         ),
-                        positionOffset:
-                            FlutterSliderTooltipPositionOffset(left: -20, right: -20),
+                        positionOffset: FlutterSliderTooltipPositionOffset(
+                            left: -20, right: -20),
                       ),
                     ),
                   ),
@@ -126,7 +127,8 @@ class UIMangaMenu extends StatelessWidget {
                     child: OutlinedButton(
                       child: Text("上->下", style: TextStyle(color: color)),
                       onPressed: () {
-                        profile.mangaDirection = ESOTheme.mangaDirectionTopToBottom;
+                        profile.mangaDirection =
+                            ESOTheme.mangaDirectionTopToBottom;
                       },
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -141,7 +143,8 @@ class UIMangaMenu extends StatelessWidget {
                     child: OutlinedButton(
                       child: Text("左->右", style: TextStyle(color: color)),
                       onPressed: () {
-                        profile.mangaDirection = ESOTheme.mangaDirectionLeftToRight;
+                        profile.mangaDirection =
+                            ESOTheme.mangaDirectionLeftToRight;
                       },
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -156,7 +159,8 @@ class UIMangaMenu extends StatelessWidget {
                     child: OutlinedButton(
                       child: Text("右->左", style: TextStyle(color: color)),
                       onPressed: () {
-                        profile.mangaDirection = ESOTheme.mangaDirectionRightToLeft;
+                        profile.mangaDirection =
+                            ESOTheme.mangaDirectionRightToLeft;
                       },
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -213,7 +217,8 @@ class UIMangaMenu extends StatelessWidget {
         IconButton(
             icon: Icon(FIcons.share_2),
             tooltip: "分享",
-            onPressed: Provider.of<MangaPageProvider>(context, listen: false).share),
+            onPressed:
+                Provider.of<MangaPageProvider>(context, listen: false).share),
         _buildPopupmenu(context, bgColor, color),
       ],
     );
@@ -244,9 +249,11 @@ class UIMangaMenu extends StatelessWidget {
             }
             break;
           case LAUCH:
-            final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
+            final rule =
+                await Global.ruleDao.findRuleById(searchItem.originTag);
             final chapter = searchItem.chapters[searchItem.durChapterIndex];
-            final url = chapter.contentUrl ?? Utils.getUrl(rule.host, chapter.url);
+            final url =
+                chapter.contentUrl ?? Utils.getUrl(rule.host, chapter.url);
             if (url != null) {
               launch(url);
             } else {
@@ -355,7 +362,8 @@ class UIMangaMenu extends StatelessWidget {
                     '章节',
                     style: TextStyle(color: color),
                   ),
-                  onTap: () => provider.loadChapter(searchItem.durChapterIndex - 1),
+                  onTap: () =>
+                      provider.loadChapter(searchItem.durChapterIndex - 1),
                 ),
                 SizedBox(width: 10),
                 Expanded(
@@ -376,7 +384,8 @@ class UIMangaMenu extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(3),
                           color: bgColor,
-                          border: Border.all(color: color.withOpacity(0.65), width: 1),
+                          border: Border.all(
+                              color: color.withOpacity(0.65), width: 1),
                         ),
                       ),
                     ),
@@ -444,7 +453,8 @@ class UIMangaMenu extends StatelessWidget {
                     '共${searchItem.chaptersCount}话',
                     style: TextStyle(color: color),
                   ),
-                  onTap: () => provider.loadChapter(searchItem.durChapterIndex + 1),
+                  onTap: () =>
+                      provider.loadChapter(searchItem.durChapterIndex + 1),
                 ),
               ],
             ),
@@ -463,12 +473,14 @@ class UIMangaMenu extends StatelessWidget {
                         Text("上一章", style: TextStyle(color: color))
                       ],
                     ),
-                    onTap: () => provider.loadChapter(searchItem.durChapterIndex - 1),
+                    onTap: () =>
+                        provider.loadChapter(searchItem.durChapterIndex - 1),
                   ),
                   InkWell(
                     child: Column(
                       children: [
-                        Icon(Icons.format_list_bulleted, color: color, size: 28),
+                        Icon(Icons.format_list_bulleted,
+                            color: color, size: 28),
                         Text("目录", style: TextStyle(color: color))
                       ],
                     ),
@@ -493,7 +505,8 @@ class UIMangaMenu extends StatelessWidget {
                         Text("下一章", style: TextStyle(color: color))
                       ],
                     ),
-                    onTap: () => provider.loadChapter(searchItem.durChapterIndex + 1),
+                    onTap: () =>
+                        provider.loadChapter(searchItem.durChapterIndex + 1),
                   ),
                 ],
               ),

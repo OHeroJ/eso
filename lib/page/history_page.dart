@@ -62,8 +62,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
 class HistoryPage2 extends StatelessWidget {
   final void Function(Widget) invokeTap;
-  const HistoryPage2({Key key, this.invokeTap}) : super(key: key);
-  void alert(BuildContext context, Widget title, Widget content, VoidCallback handle) =>
+  const HistoryPage2({super.key, this.invokeTap});
+  void alert(BuildContext context, Widget title, Widget content,
+          VoidCallback handle) =>
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -97,14 +98,15 @@ class HistoryPage2 extends StatelessWidget {
       builder: (context, child) {
         final provider = Provider.of<HistoryPageProvider>(context);
         final historyItem = provider.historyItem;
-        final today =
-            DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-                .add(Duration(days: 1));
+        final today = DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .add(Duration(days: 1));
         int days = -1;
         final lastReadTimeList = <DateTime>[];
         final daysList = <int>[];
         for (var item in historyItem) {
-          final lastReadTime = DateTime.fromMicrosecondsSinceEpoch(item.lastReadTime);
+          final lastReadTime =
+              DateTime.fromMicrosecondsSinceEpoch(item.lastReadTime);
           lastReadTimeList.add(lastReadTime);
 
           final _days = today.difference(lastReadTime).inDays;
@@ -202,8 +204,9 @@ class HistoryPage2 extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color:
-                provider.isCheck(item.id) ? Color(primaryColor).withOpacity(0.3) : null,
+            color: provider.isCheck(item.id)
+                ? Color(primaryColor).withOpacity(0.3)
+                : null,
             border: Border(
                 top: days > 0
                     ? BorderSide(color: Colors.grey, width: 0.6)
@@ -224,7 +227,8 @@ class HistoryPage2 extends StatelessWidget {
                         ? const Text("今天")
                         : days == 1
                             ? const Text("昨天")
-                            : Text("${days}${days.toString().length > 2 ? "\n" : ""}天前"),
+                            : Text(
+                                "${days}${days.toString().length > 2 ? "\n" : ""}天前"),
               ),
             ),
             // if (provider.checkkMode)
@@ -285,10 +289,12 @@ class HistoryPage2 extends StatelessWidget {
         context.select((HistoryPageProvider provider) => provider.contentType);
     final selected = curContentType == contentType;
     return GestureDetector(
-      onTap: () => Provider.of<HistoryPageProvider>(context, listen: false).contentType =
-          contentType,
+      onTap: () => Provider.of<HistoryPageProvider>(context, listen: false)
+          .contentType = contentType,
       child: Material(
-        color: selected ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+        color: selected
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             side: BorderSide(
@@ -299,7 +305,9 @@ class HistoryPage2 extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
           child: Text(
-            contentType == null ? '全部' : API.getRuleContentTypeName(contentType),
+            contentType == null
+                ? '全部'
+                : API.getRuleContentTypeName(contentType),
             style: TextStyle(
               fontSize: 11,
               color: selected
@@ -327,8 +335,8 @@ class HistoryPageProvider with ChangeNotifier {
 
   delete() async {
     await HistoryItemManager.removeSearchItem(_idSet);
-    _historyItem =
-        HistoryItemManager.getHistoryItemByType(_editingController.text, _contentType);
+    _historyItem = HistoryItemManager.getHistoryItemByType(
+        _editingController.text, _contentType);
     notifyListeners();
   }
 
@@ -360,8 +368,8 @@ class HistoryPageProvider with ChangeNotifier {
 
   HistoryPageProvider() {
     _editingController = TextEditingController();
-    _historyItem =
-        HistoryItemManager.getHistoryItemByType(_editingController.text, _contentType);
+    _historyItem = HistoryItemManager.getHistoryItemByType(
+        _editingController.text, _contentType);
   }
 
   Future<void> refresh() async {

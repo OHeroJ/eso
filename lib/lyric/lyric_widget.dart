@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'lyric.dart';
 import 'lyric_controller.dart';
@@ -10,13 +9,11 @@ class LyricWidget extends StatefulWidget {
   final List<Lyric> lyrics;
   final List<Lyric> remarkLyrics;
   final Size size;
-  final LyricController? controller;
+  final LyricController controller;
   final TextStyle lyricStyle;
   final TextStyle remarkStyle;
   final TextStyle currLyricStyle;
-  final TextStyle? _currRemarkLyricStyle;
-  final TextStyle? _draggingLyricStyle;
-  final TextStyle? _draggingRemarkLyricStyle;
+
   final double lyricGap;
   final double remarkLyricGap;
   final bool enableDrag;
@@ -35,7 +32,7 @@ class LyricWidget extends StatefulWidget {
       required this.lyrics,
       this.remarkLyrics = const [],
       required this.size,
-      this.controller,
+      required this.controller,
       this.lyricStyle = const TextStyle(color: Colors.grey, fontSize: 14),
       this.remarkStyle = const TextStyle(color: Colors.black, fontSize: 14),
       this.currLyricStyle = const TextStyle(color: Colors.red, fontSize: 14),
@@ -70,10 +67,10 @@ class LyricWidget extends StatefulWidget {
 }
 
 class _LyricWidgetState extends State<LyricWidget> {
-  LyricPainter _lyricPainter;
-  AnimationController _animationController;
-  Animation<double> animation;
-  double lyricMaxWidth;
+  LyricPainter? _lyricPainter;
+  AnimationController? _animationController;
+  Animation<double>? animation;
+  late double lyricMaxWidth;
   double totalHeight = 0;
 
   @override
@@ -85,14 +82,14 @@ class _LyricWidgetState extends State<LyricWidget> {
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: widget.controller.vsync, duration: Duration(milliseconds: 500));
-    _animationController.addListener(_updateOffset);
+        vsync: widget.controller.vsync!, duration: Duration(milliseconds: 500));
+    _animationController?.addListener(_updateOffset);
 
     lyricMaxWidth = widget.lyricMaxWidth;
     widget.controller.draggingComplete = () {
       cancelTimer();
       widget.controller.progress = widget.controller.draggingProgress;
-      _lyricPainter.draggingLine = null;
+      _lyricPainter?.draggingLine = null;
       widget.controller.isDragging = false;
     };
     WidgetsBinding.instance.addPostFrameCallback((call) {
@@ -102,12 +99,12 @@ class _LyricWidgetState extends State<LyricWidget> {
       var curLine =
           findLyricIndexByDuration(widget.controller.progress, widget.lyrics);
       if (widget.controller.oldLine != curLine) {
-        _lyricPainter.currentLyricIndex = curLine;
+        _lyricPainter?.currentLyricIndex = curLine;
         if (!widget.controller.isDragging) {
           if (widget.controller.vsync == null) {
-            _lyricPainter.offset = -computeScrollY(curLine);
+            _lyricPainter?.offset = -computeScrollY(curLine);
           } else {
-            animationScrollY(curLine, widget.controller.vsync);
+            animationScrollY(curLine, widget.controller.vsync!);
           }
         }
         widget.controller.oldLine = curLine;
@@ -120,9 +117,9 @@ class _LyricWidgetState extends State<LyricWidget> {
 
   _updateOffset() {
     // print("$aniBegin, $aniEnd, ${_animationController.value}");
-    _lyricPainter.offset =
-        -(aniBegin + (aniEnd - aniBegin) * _animationController.value);
-    _lastOffset = _lyricPainter.offset;
+    _lyricPainter?.offset =
+        -(aniBegin + (aniEnd - aniBegin) * (_animationController?.value ?? 0));
+    _lastOffset = _lyricPainter?.offset;
   }
 
   ///因空行高度与非空行高度不一致，获取非空行的位置

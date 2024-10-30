@@ -12,7 +12,7 @@ import '../page/audio_page_refactor.dart';
 class AudioView extends StatefulWidget {
   final BuildContext context;
 
-  const AudioView({this.context, Key key}) : super(key: key);
+  const AudioView({this.context, Key key});
 
   @override
   State<AudioView> createState() => _AudioViewState();
@@ -108,7 +108,8 @@ class _AudioViewState extends State<AudioView> {
                   child: audioHandler.emptyCover
                       ? Padding(
                           padding: EdgeInsets.all(10),
-                          child: Icon(Icons.audiotrack, color: Colors.white, size: 24),
+                          child: Icon(Icons.audiotrack,
+                              color: Colors.white, size: 24),
                         )
                       : null,
                 ),
@@ -116,7 +117,9 @@ class _AudioViewState extends State<AudioView> {
               IconButton(
                 color: Colors.white.withOpacity(0.5),
                 onPressed: audioHandler.playOrPause,
-                icon: audioHandler.playing ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+                icon: audioHandler.playing
+                    ? Icon(Icons.pause)
+                    : Icon(Icons.play_arrow),
               ),
               IconButton(
                 color: Colors.white.withOpacity(0.5),
@@ -141,7 +144,8 @@ class _AudioViewState extends State<AudioView> {
             message: '正在播放: ' + audioHandler.chapter?.name ?? '',
           ),
           onTap: () {
-            Utils.startPageWait(context, AudioPage(searchItem: audioHandler.searchItem));
+            Utils.startPageWait(
+                context, AudioPage(searchItem: audioHandler.searchItem));
           },
         );
       },

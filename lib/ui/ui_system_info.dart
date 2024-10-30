@@ -13,8 +13,8 @@ class UISystemInfo extends StatefulWidget {
     this.mangaInfo,
     this.mangaCount,
     this.mangeCurrent,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _UISystemInfoState createState() => _UISystemInfoState();
@@ -79,7 +79,10 @@ class _UISystemInfoState extends State<UISystemInfo> {
                     SizedBox(width: 8),
                     Text('${provider.now}'),
                     SizedBox(width: 6),
-                    BatteryView(electricQuantity: provider.level, height: 11, width: 20),
+                    BatteryView(
+                        electricQuantity: provider.level,
+                        height: 11,
+                        width: 20),
                   ],
                 ),
               ),

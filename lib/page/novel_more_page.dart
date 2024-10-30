@@ -17,7 +17,7 @@ import 'dart:ui' as ui;
 
 class NovelMorePage extends StatelessWidget {
   final SearchItem searchItem;
-  NovelMorePage({Key key, this.searchItem}) : super(key: key);
+  NovelMorePage({super.key, this.searchItem});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +40,12 @@ class NovelMorePage extends StatelessWidget {
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: Theme.of(context).textTheme.titleSmall.color),
-                              children:
-                                  buildSpansFlatter(snapshot.data, searchItem.chapter))),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      .color),
+                              children: buildSpansFlatter(
+                                  snapshot.data, searchItem.chapter))),
                     ),
                   ),
                 ],
@@ -236,7 +239,8 @@ List<List<TextSpan>> buildSpans(List<String> content, String chapter) {
                 fontSize: __profile.novelFontSize,
                 //color: fontColor,
                 height: __profile.novelHeight,
-                letterSpacing: (width - tp.width) / (text.length - firstPos - 1),
+                letterSpacing:
+                    (width - tp.width) / (text.length - firstPos - 1),
               )));
           currentSpans.add(TextSpan(
             text: text.substring(text.length - 1),

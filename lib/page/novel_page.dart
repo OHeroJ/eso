@@ -17,7 +17,7 @@
 // /// 文字阅读页面
 // class NovelPage extends StatefulWidget {
 //   final SearchItem searchItem;
-//   const NovelPage({this.searchItem, Key key}) : super(key: key);
+//   const NovelPage({this.searchItem, Key key});
 
 //   @override
 //   State<StatefulWidget> createState() => _NovelPageState();

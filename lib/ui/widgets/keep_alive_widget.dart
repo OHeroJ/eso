@@ -12,7 +12,7 @@ class KeepAliveWidget extends StatefulWidget {
   final Widget child;
 
   const KeepAliveWidget({
-    Key key,
+    super.key,
     @required this.wantKeepAlive,
     @required this.child,
   })  : assert(wantKeepAlive != null),
@@ -22,7 +22,8 @@ class KeepAliveWidget extends StatefulWidget {
   _KeepAliveWidgetState createState() => _KeepAliveWidgetState();
 }
 
-class _KeepAliveWidgetState extends State<KeepAliveWidget> with AutomaticKeepAliveClientMixin {
+class _KeepAliveWidgetState extends State<KeepAliveWidget>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);

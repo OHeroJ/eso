@@ -19,7 +19,7 @@ import '../main.dart';
 import 'chapter_page.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key key}) : super(key: key);
+  SearchPage({Key key});
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -59,10 +59,11 @@ class _SearchPageState extends State<SearchPage> {
                 titleSpacing: 0,
                 title: SearchTextField(
                   autofocus: true,
-                  focusNode:
-                      Provider.of<SearchProvider>(context, listen: false).focusNode,
-                  controller: Provider.of<SearchProvider>(context, listen: false)
-                      .searchController,
+                  focusNode: Provider.of<SearchProvider>(context, listen: false)
+                      .focusNode,
+                  controller:
+                      Provider.of<SearchProvider>(context, listen: false)
+                          .searchController,
                   hintText: "请输入关键词",
                   prefix: Container(
                     width: 48,
@@ -82,8 +83,8 @@ class _SearchPageState extends State<SearchPage> {
                       isDense: true,
                       underline: SizedBox(),
                       onChanged: (v) =>
-                          Provider.of<SearchProvider>(context, listen: false).sourceType =
-                              v,
+                          Provider.of<SearchProvider>(context, listen: false)
+                              .sourceType = v,
                       items: <DropdownMenuItem<int>>[
                         DropdownMenuItem<int>(child: Text('全部'), value: -1),
                         DropdownMenuItem<int>(
@@ -99,11 +100,13 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text(API.getRuleContentTypeName(API.VIDEO)),
                             value: API.VIDEO),
                       ],
-                      value:
-                          Provider.of<SearchProvider>(context, listen: true).sourceType,
+                      value: Provider.of<SearchProvider>(context, listen: true)
+                          .sourceType,
                     ),
                   ),
-                  onSubmitted: Provider.of<SearchProvider>(context, listen: false).search,
+                  onSubmitted:
+                      Provider.of<SearchProvider>(context, listen: false)
+                          .search,
                 ),
                 actions: [
                   SizedBox(width: 20),
@@ -134,21 +137,21 @@ class _SearchPageState extends State<SearchPage> {
                                   onPressed: null,
                                   child: Text("结果过滤"),
                                   style: ButtonStyle(
-                                      padding:
-                                          MaterialStateProperty.all(EdgeInsets.zero)),
+                                      padding: MaterialStateProperty.all(
+                                          EdgeInsets.zero)),
                                 ),
                                 _buildFilterOpt(
                                     provider, profile, '无', SearchOption.None),
-                                _buildFilterOpt(
-                                    provider, profile, '普通', SearchOption.Normal),
-                                _buildFilterOpt(
-                                    provider, profile, '精确', SearchOption.Accurate),
+                                _buildFilterOpt(provider, profile, '普通',
+                                    SearchOption.Normal),
+                                _buildFilterOpt(provider, profile, '精确',
+                                    SearchOption.Accurate),
                                 TextButton(
                                   onPressed: null,
                                   child: Text("并发数"),
                                   style: ButtonStyle(
-                                      padding:
-                                          MaterialStateProperty.all(EdgeInsets.zero)),
+                                      padding: MaterialStateProperty.all(
+                                          EdgeInsets.zero)),
                                 ),
                                 Center(
                                   child: DropdownButton<int>(
@@ -173,10 +176,12 @@ class _SearchPageState extends State<SearchPage> {
                                         .toList(),
                                     isDense: true,
                                     underline: Container(),
-                                    value: context.select((SearchProvider provider) =>
-                                        provider.threadCount),
+                                    value: context.select(
+                                        (SearchProvider provider) =>
+                                            provider.threadCount),
                                     onChanged: (value) {
-                                      Provider.of<SearchProvider>(context, listen: false)
+                                      Provider.of<SearchProvider>(context,
+                                              listen: false)
                                           .threadCount = value;
                                       profile.searchCount = value;
                                     },
@@ -227,34 +232,51 @@ class _SearchPageState extends State<SearchPage> {
                                 onPressed: null,
                                 child: Text("结果过滤"),
                                 style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(EdgeInsets.zero)),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.zero)),
                               ),
-                              _buildFilterOpt(provider, profile, '无', SearchOption.None),
+                              _buildFilterOpt(
+                                  provider, profile, '无', SearchOption.None),
                               _buildFilterOpt(
                                   provider, profile, '普通', SearchOption.Normal),
-                              _buildFilterOpt(
-                                  provider, profile, '精确', SearchOption.Accurate),
+                              _buildFilterOpt(provider, profile, '精确',
+                                  SearchOption.Accurate),
                               TextButton(
                                 onPressed: null,
                                 child: Text("并发数"),
                                 style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(EdgeInsets.zero)),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.zero)),
                               ),
                               Center(
                                 child: DropdownButton<int>(
-                                  items:
-                                      [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
-                                          .map((count) => DropdownMenuItem<int>(
-                                                child: Text('$count'),
-                                                value: count,
-                                              ))
-                                          .toList(),
+                                  items: [
+                                    10,
+                                    20,
+                                    30,
+                                    40,
+                                    50,
+                                    60,
+                                    70,
+                                    80,
+                                    90,
+                                    100,
+                                    110,
+                                    120
+                                  ]
+                                      .map((count) => DropdownMenuItem<int>(
+                                            child: Text('$count'),
+                                            value: count,
+                                          ))
+                                      .toList(),
                                   isDense: true,
                                   underline: Container(),
                                   value: context.select(
-                                      (SearchProvider provider) => provider.threadCount),
+                                      (SearchProvider provider) =>
+                                          provider.threadCount),
                                   onChanged: (value) {
-                                    Provider.of<SearchProvider>(context, listen: false)
+                                    Provider.of<SearchProvider>(context,
+                                            listen: false)
                                         .threadCount = value;
                                     profile.searchCount = value;
                                   },
@@ -306,7 +328,10 @@ class _SearchPageState extends State<SearchPage> {
                                 ],
                                 style: TextStyle(
                                     fontFamily: ESOTheme.staticFontFamily,
-                                    color: Theme.of(context).textTheme.bodyText1.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                     height: 1.55),
                               ),
                             ),
@@ -326,7 +351,8 @@ class _SearchPageState extends State<SearchPage> {
                                       separatorBuilder: (context, index) =>
                                           SizedBox(height: 8),
                                       itemCount: searchList.length,
-                                      itemBuilder: (BuildContext context, int index) {
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
                                         return InkWell(
                                           child: UiSearchItem(
                                             item: searchList[index],
@@ -377,8 +403,8 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  _buildFilterOpt(
-      SearchProvider provider, ESOTheme profile, String text, SearchOption searchOption) {
+  _buildFilterOpt(SearchProvider provider, ESOTheme profile, String text,
+      SearchOption searchOption) {
     final _selected = provider.searchOption == searchOption;
     return Container(
       alignment: Alignment.center,
@@ -393,11 +419,13 @@ class _SearchPageState extends State<SearchPage> {
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(10, 10)),
           padding: MaterialStateProperty.all(EdgeInsets.zero),
-          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+          shape:
+              MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: _selected
                 ? BorderSide(
-                    color: Theme.of(context).primaryColor, width: Global.borderSize)
+                    color: Theme.of(context).primaryColor,
+                    width: Global.borderSize)
                 : BorderSide.none,
           )),
         ),
@@ -409,7 +437,7 @@ class _SearchPageState extends State<SearchPage> {
 
 class SimpleChangeRule extends StatelessWidget {
   final SearchItem searchItem;
-  const SimpleChangeRule({this.searchItem, Key key}) : super(key: key);
+  const SimpleChangeRule({this.searchItem, Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -433,7 +461,8 @@ class SimpleChangeRule extends StatelessWidget {
               final count = searchList.length;
               final progress = provider.rulesCount == 0.0
                   ? 0.0
-                  : (provider.successCount + provider.failureCount) / provider.rulesCount;
+                  : (provider.successCount + provider.failureCount) /
+                      provider.rulesCount;
               return Column(
                 children: [
                   SizedBox(
@@ -459,7 +488,9 @@ class SimpleChangeRule extends StatelessWidget {
                             text: '${provider.failureCount} (失败)',
                             style: TextStyle(color: Colors.red),
                           ),
-                          TextSpan(text: ' | ${provider.rulesCount} (总数) | 结果数: $count'),
+                          TextSpan(
+                              text:
+                                  ' | ${provider.rulesCount} (总数) | 结果数: $count'),
                         ],
                         style: TextStyle(
                             fontFamily: ESOTheme.staticFontFamily,
@@ -474,7 +505,8 @@ class SimpleChangeRule extends StatelessWidget {
                         : searchList.isEmpty
                             ? EmptyListMsgView(text: Text("没有数据哦！~"))
                             : ListView.separated(
-                                separatorBuilder: (context, index) => SizedBox(height: 8),
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 8),
                                 itemCount: searchList.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
@@ -482,8 +514,8 @@ class SimpleChangeRule extends StatelessWidget {
                                       item: searchList[index],
                                       showType: true,
                                     ),
-                                    onTap: () =>
-                                        Navigator.of(context).pop(searchList[index]),
+                                    onTap: () => Navigator.of(context)
+                                        .pop(searchList[index]),
                                   );
                                 },
                               ),
@@ -560,7 +592,8 @@ class SearchProvider with ChangeNotifier {
     _rules = <Rule>[];
     _searchId = 0;
     _showHistory = true;
-    _searchController = TextEditingController()..addListener(_handleSearchChange);
+    _searchController = TextEditingController()
+      ..addListener(_handleSearchChange);
     _history = List.from(HistoryManager.searchHistory);
     _focusNode = FocusNode()..addListener(_handleFocusChange);
     APIFromRUle.clearNextUrl();
@@ -569,8 +602,9 @@ class SearchProvider with ChangeNotifier {
 
   void _handleSearchChange() {
     final text = _searchController.text.trim();
-    _history =
-        HistoryManager.searchHistory.where((element) => element.contains(text)).toList();
+    _history = HistoryManager.searchHistory
+        .where((element) => element.contains(text))
+        .toList();
     notifyListeners();
   }
 
@@ -680,8 +714,9 @@ class SearchProvider with ChangeNotifier {
 
   void init(int ruleContentType, String searchKey) async {
     await RuleDao.gaixieguizheng();
-    final rules =
-        (await Global.ruleDao.findAllRules()).where((e) => e.enableSearch).toList();
+    final rules = (await Global.ruleDao.findAllRules())
+        .where((e) => e.enableSearch)
+        .toList();
 
     _novelRules = rules.where((r) => r.contentType == API.NOVEL).toList();
     _mangaRules = rules.where((r) => r.contentType == API.MANGA).toList();

@@ -22,10 +22,10 @@ import 'package:path/path.dart';
 import '../../global.dart';
 
 class AutoBackupPage extends StatelessWidget {
-  const AutoBackupPage({Key key}) : super(key: key);
+  const AutoBackupPage({Key key});
 
-  AlertDialog showTextDialog(
-      BuildContext context, String title, String s, void Function(String s) press,
+  AlertDialog showTextDialog(BuildContext context, String title, String s,
+      void Function(String s) press,
       [bool isPassword = false]) {
     TextEditingController controller = TextEditingController(text: s);
     return AlertDialog(
@@ -180,8 +180,8 @@ class AutoBackupPage extends StatelessWidget {
                     child: ListTile(
                       title: Text('导入分享的规则'),
                     ),
-                    onTapUp: (TapUpDetails details) =>
-                        restoreShareRule(context, details.globalPosition, false),
+                    onTapUp: (TapUpDetails details) => restoreShareRule(
+                        context, details.globalPosition, false),
                   ),
                   GestureDetector(
                     child: ListTile(
@@ -200,7 +200,8 @@ class AutoBackupPage extends StatelessWidget {
                     builder: (context, setState) => SwitchListTile(
                       title: Text('启用webdav自动同步'),
                       subtitle: Text('备份或自动备份后自动上传至webdav'),
-                      onChanged: (value) => setState(() => profile.enableWebdav = value),
+                      onChanged: (value) =>
+                          setState(() => profile.enableWebdav = value),
                       value: profile.enableWebdav,
                     ),
                   ),
@@ -227,8 +228,9 @@ class AutoBackupPage extends StatelessWidget {
                   ),
                   ListTile(
                     title: Text('账号'),
-                    subtitle: Text(
-                        profile.webdavAccount.isEmpty ? '输入您的账号' : profile.webdavAccount),
+                    subtitle: Text(profile.webdavAccount.isEmpty
+                        ? '输入您的账号'
+                        : profile.webdavAccount),
                     onTap: () => showDialog(
                       context: context,
                       builder: (context) => showTextDialog(
@@ -259,16 +261,16 @@ class AutoBackupPage extends StatelessWidget {
                       title: Text('恢复'),
                       subtitle: Text('从webdav恢复'),
                     ),
-                    onTapUp: (TapUpDetails details) =>
-                        restoreFromWebDav(context, details.globalPosition, false),
+                    onTapUp: (TapUpDetails details) => restoreFromWebDav(
+                        context, details.globalPosition, false),
                   ),
                   GestureDetector(
                     child: ListTile(
                       title: Text('仅恢复规则'),
                       subtitle: Text('从webdav恢复'),
                     ),
-                    onTapUp: (TapUpDetails details) =>
-                        restoreFromWebDav(context, details.globalPosition, true),
+                    onTapUp: (TapUpDetails details) => restoreFromWebDav(
+                        context, details.globalPosition, true),
                   ),
                 ],
               ),
@@ -289,7 +291,8 @@ class AutoBackupPage extends StatelessWidget {
     final fileName = Uri.encodeComponent(
         'share.${profile.webdavRuleCheckcode}.rule.${profile.webdavRuleAccount}.$today.zip');
     if (autoShare) {
-      if (today == profile.autoRuleUploadLastDay || !profile.enableWebdavRule) return;
+      if (today == profile.autoRuleUploadLastDay || !profile.enableWebdavRule)
+        return;
       if (profile.webdavRuleAccount.trim().isEmpty ||
           profile.webdavRuleCheckcode.trim().isEmpty) {
         profile.autoRuleUploadLastDay = today;
@@ -300,20 +303,23 @@ class AutoBackupPage extends StatelessWidget {
       await Future.delayed(Duration(seconds: 1));
     }
     try {
-      final rules = await Rule.backupRules(await Global.ruleDao.findUploadRules());
+      final rules =
+          await Rule.backupRules(await Global.ruleDao.findUploadRules());
       final archive = Archive();
       archive.addFile(getArchiveFile("rules", rules));
       final bytes = ZipEncoder().encode(archive);
 
       try {
-        Client client =
-            Client(myWebdavServer, myWebdavAccount, myWebdavPassword, path: "ESO");
+        Client client = Client(
+            myWebdavServer, myWebdavAccount, myWebdavPassword,
+            path: "ESO");
         await client.upload(bytes, "$fileName");
         profile.autoRuleUploadLastDay = today;
         Utils.toast("上传分享规则（共${rules.length}条）至webdav成功");
       } catch (e, st) {
         print("上传分享规则至webdav错误 e:$e, st: $st");
-        Utils.toast("上传分享规则至webdav错误 e:$e\n请检查账户密码或网络", duration: Duration(seconds: 3));
+        Utils.toast("上传分享规则至webdav错误 e:$e\n请检查账户密码或网络",
+            duration: Duration(seconds: 3));
       }
     } catch (e) {
       print("上传规则失败 $e");
@@ -365,11 +371,12 @@ class AutoBackupPage extends StatelessWidget {
       final archive = Archive();
       archive.addFile(getArchiveFile("rules", rules));
       archive.addFile(getArchiveFile(Global.searchItemKey, favorite));
-      archive.addFile(getArchiveFile(Global.profileKey, ESOTheme.backUpESOTheme()));
       archive.addFile(
-          getArchiveFile(Global.historyItemKey, HistoryItemManager.backupItems()));
-      archive.addFile(
-          getArchiveFile(Global.searchHistoryKey, HistoryManager.backUpsearchHistory()));
+          getArchiveFile(Global.profileKey, ESOTheme.backUpESOTheme()));
+      archive.addFile(getArchiveFile(
+          Global.historyItemKey, HistoryItemManager.backupItems()));
+      archive.addFile(getArchiveFile(
+          Global.searchHistoryKey, HistoryManager.backUpsearchHistory()));
       // archive.addFile(getArchiveFile(Global.profileKey, "", 1));
       // archive.addFile(getArchiveFile(Global.historyItemKey, "", 2));
       // archive.addFile(getArchiveFile(Global.searchHistoryKey, "", 2));
@@ -386,15 +393,16 @@ class AutoBackupPage extends StatelessWidget {
       profile.autoBackupLastDay = today;
       if (profile.enableWebdav) {
         try {
-          Client client = Client(
-              profile.webdavServer, profile.webdavAccount, profile.webdavPassword,
+          Client client = Client(profile.webdavServer, profile.webdavAccount,
+              profile.webdavPassword,
               path: "ESO");
           await client.mkdir("");
           await client.upload(bytes, "$fileName");
           Utils.toast("备份至webdav成功");
         } catch (e, st) {
           print("备份至webdav错误 e:$e, st: $st");
-          Utils.toast("备份至webdav错误 e:$e\n请检查账户密码或网络", duration: Duration(seconds: 3));
+          Utils.toast("备份至webdav错误 e:$e\n请检查账户密码或网络",
+              duration: Duration(seconds: 3));
         }
       }
     } catch (e) {
@@ -406,7 +414,8 @@ class AutoBackupPage extends StatelessWidget {
   void restore(List<int> bytes, bool isOnlyRule) {
     ZipDecoder().decodeBytes(bytes).files.forEach((file) async {
       if (file.name == "rules.json") {
-        final rules = jsonDecode(utf8.decode(file.content, allowMalformed: true));
+        final rules =
+            jsonDecode(utf8.decode(file.content, allowMalformed: true));
         if (rules is List) {
           Rule.restore(rules, false);
           Utils.toast("规则导入${rules.length}条");
@@ -426,12 +435,16 @@ class AutoBackupPage extends StatelessWidget {
         }
       } else if (file.name == "${Global.searchItemKey}.json") {
         final searchItem = utf8.decode(file.content, allowMalformed: true);
-        if (searchItem != null && searchItem is String && searchItem.isNotEmpty) {
+        if (searchItem != null &&
+            searchItem is String &&
+            searchItem.isNotEmpty) {
           SearchItemManager.restore(searchItem);
         }
       } else if (file.name == "${Global.historyItemKey}.json") {
         final historyItem = utf8.decode(file.content, allowMalformed: true);
-        if (historyItem != null && historyItem is String && historyItem.isNotEmpty) {
+        if (historyItem != null &&
+            historyItem is String &&
+            historyItem.isNotEmpty) {
           HistoryItemManager.restore(historyItem);
         }
       } else if (file.name == "${Global.searchHistoryKey}.json") {
@@ -478,12 +491,14 @@ class AutoBackupPage extends StatelessWidget {
 
   void restoreShareRule(BuildContext context, Offset pos, bool download) async {
     try {
-      var client = Client(myWebdavServer, myWebdavAccount, myWebdavPassword, path: "ESO");
+      var client = Client(myWebdavServer, myWebdavAccount, myWebdavPassword,
+          path: "ESO");
       final files = await client.ls();
       final fs = <String>[];
       for (var file in files) {
         final name = Utils.getFileNameAndExt(file.path);
-        if (name.startsWith("share.") && name.indexOf(".rule..") == -1) fs.add(name);
+        if (name.startsWith("share.") && name.indexOf(".rule..") == -1)
+          fs.add(name);
       }
       showMenu(
         context: context,
@@ -496,15 +511,16 @@ class AutoBackupPage extends StatelessWidget {
         }).toList(),
       ).then((value) async {
         if (value == null) return;
-        final req = await client.httpClient.getUrl(Uri.parse(client.getUrl("$value")));
+        final req =
+            await client.httpClient.getUrl(Uri.parse(client.getUrl("$value")));
         final res = await req.close();
         final r = await res.toList();
         final bytes = r.reduce((value, element) => <int>[]
           ..addAll(value)
           ..addAll(element));
         if (download) {
-          final dir =
-              join(await CacheUtil(backup: true).cacheDir(), decodeShareRuleName(value));
+          final dir = join(await CacheUtil(backup: true).cacheDir(),
+              decodeShareRuleName(value));
           File(dir)
             ..create(recursive: true)
             ..writeAsBytes(bytes);
@@ -519,14 +535,17 @@ class AutoBackupPage extends StatelessWidget {
     }
   }
 
-  void restoreFromWebDav(BuildContext context, Offset pos, bool isOnlyRule) async {
+  void restoreFromWebDav(
+      BuildContext context, Offset pos, bool isOnlyRule) async {
     final profile = ESOTheme();
     try {
       Client client = Client(
           profile.webdavServer, profile.webdavAccount, profile.webdavPassword,
           path: "ESO");
 
-      final fs = (await client.ls()).map((e) => Utils.getFileNameAndExt(e.path)).toList();
+      final fs = (await client.ls())
+          .map((e) => Utils.getFileNameAndExt(e.path))
+          .toList();
       showMenu(
         context: context,
         position: RelativeRect.fromLTRB(pos.dx, pos.dy, pos.dx + 100, 0),
@@ -538,7 +557,8 @@ class AutoBackupPage extends StatelessWidget {
             .toList(),
       ).then((value) async {
         if (value == null) return;
-        final req = await client.httpClient.getUrl(Uri.parse(client.getUrl("$value")));
+        final req =
+            await client.httpClient.getUrl(Uri.parse(client.getUrl("$value")));
         final res = await req.close();
         final r = await res.toList();
         restore(

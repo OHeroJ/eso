@@ -63,9 +63,9 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
   //滑动到的行
   int? _draggingLine;
 
-  get draggingLine => _draggingLine;
+  int? get draggingLine => _draggingLine;
 
-  set draggingLine(value) {
+  set draggingLine(int? value) {
     this._draggingLine = value;
     notifyListeners();
   }
@@ -86,7 +86,7 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
       this.draggingSubLyricTextStyle,
       this.lyricGapValue = 0,
       this.subLyricGapValue = 0,
-      this.lyricMaxWidth = 0});
+      this.lyricMaxWidth = double.infinity});
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -6,6 +6,7 @@ class IconText extends StatelessWidget {
   final Icon icon;
   final double iconSize;
   final Axis direction;
+
   /// icon padding
   final EdgeInsetsGeometry padding;
   final TextStyle style;
@@ -15,7 +16,7 @@ class IconText extends StatelessWidget {
   final TextAlign textAlign;
 
   const IconText(this.text,
-      {Key key,
+      {super.key,
       this.icon,
       this.iconSize,
       this.direction = Axis.horizontal,
@@ -58,7 +59,10 @@ class IconText extends StatelessWidget {
                 maxLines: maxLines,
                 softWrap: softWrap ?? true,
                 overflow: overflow ?? TextOverflow.clip,
-                textAlign: textAlign ?? (direction == Axis.horizontal ? TextAlign.start : TextAlign.center),
+                textAlign: textAlign ??
+                    (direction == Axis.horizontal
+                        ? TextAlign.start
+                        : TextAlign.center),
               );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// 用于状态更新的 View
 class StateView extends StatefulWidget {
   final WidgetBuilder builder;
-  const StateView({Key key, this.builder}) : super(key: key);
+  const StateView({super.key, this.builder});
 
   @override
   State<StatefulWidget> createState() => StateViewState();

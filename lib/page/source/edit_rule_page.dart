@@ -26,13 +26,14 @@ class EditRulePage extends StatefulWidget {
   final Rule rule;
   const EditRulePage({
     this.rule,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   _EditRulePageState createState() => _EditRulePageState();
 }
 
-class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver {
+class _EditRulePageState extends State<EditRulePage>
+    with WidgetsBindingObserver {
   var isLoading = false;
   Color primaryColor;
   Rule rule;
@@ -291,7 +292,8 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                     child: Container(
                       width: isNotCollapsed ? size.width - 10 : null,
                       constraints: isNotCollapsed
-                          ? BoxConstraints(maxHeight: size.height - 150 - bottom)
+                          ? BoxConstraints(
+                              maxHeight: size.height - 150 - bottom)
                           : null,
                       child: Card(
                         child: isNotCollapsed
@@ -308,15 +310,17 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child:
-                                        SingleChildScrollView(child: SelectableText(s)),
+                                    child: SingleChildScrollView(
+                                        child: SelectableText(s)),
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       InkWell(
                                         onTap: () async {
-                                          await Clipboard.setData(ClipboardData(text: s));
+                                          await Clipboard.setData(
+                                              ClipboardData(text: s));
                                           Utils.toast("已复制结果");
                                         },
                                         child: Padding(
@@ -327,7 +331,9 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                                       InkWell(
                                         onTap: () async {
                                           await Clipboard.setData(ClipboardData(
-                                              text: codeKey.currentState?.code ?? code));
+                                              text:
+                                                  codeKey.currentState?.code ??
+                                                      code));
                                           Utils.toast("已复制代码");
                                         },
                                         child: Padding(
@@ -336,7 +342,8 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: () => codeKey.currentState?.format(),
+                                        onTap: () =>
+                                            codeKey.currentState?.format(),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text("格式化"),
@@ -347,9 +354,11 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                                           try {
                                             await JSEngine.setEnvironment(
                                                 1, rule, "", rule.host, "", "");
-                                            await JSEngine.evaluate(JSEngine.environment);
+                                            await JSEngine.evaluate(
+                                                JSEngine.environment);
                                             final x = await JSEngine.evaluate(
-                                                codeKey.currentState?.code ?? code);
+                                                codeKey.currentState?.code ??
+                                                    code);
                                             setState(() {
                                               s = "$x";
                                             });
@@ -366,9 +375,10 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          code = codeKey.currentState?.code ?? code;
-                                          setState(
-                                              () => isNotCollapsed = !isNotCollapsed);
+                                          code = codeKey.currentState?.code ??
+                                              code;
+                                          setState(() =>
+                                              isNotCollapsed = !isNotCollapsed);
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -382,7 +392,8 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
                             : InkWell(
                                 onTap: () {
                                   code = codeKey.currentState?.code ?? code;
-                                  setState(() => isNotCollapsed = !isNotCollapsed);
+                                  setState(
+                                      () => isNotCollapsed = !isNotCollapsed);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -526,7 +537,8 @@ class _EditRulePageState extends State<EditRulePage> with WidgetsBindingObserver
       initiallyExpanded: _infoExpanded,
       onExpansionChanged: (value) => _infoExpanded = value,
       children: [
-        _buildDetailsText('创建时间：${DateTime.fromMicrosecondsSinceEpoch(rule.createTime)}'),
+        _buildDetailsText(
+            '创建时间：${DateTime.fromMicrosecondsSinceEpoch(rule.createTime)}'),
         _buildDetailsText(
             '修改时间：${DateTime.fromMicrosecondsSinceEpoch(rule.modifiedTime)}'),
         Padding(

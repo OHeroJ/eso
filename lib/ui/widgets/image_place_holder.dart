@@ -8,14 +8,14 @@ class ImagePlaceHolder extends StatelessWidget {
   final double width;
   final bool error;
   const ImagePlaceHolder(
-      {Key key, this.height = 400, this.width = 400, this.error = false})
-      : super(key: key);
+      {super.key, this.height = 400, this.width = 400, this.error = false});
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).dividerColor.withOpacity(0.02),
-      shape: Border.all(color: Theme.of(context).dividerColor, width: Global.lineSize),
+      shape: Border.all(
+          color: Theme.of(context).dividerColor, width: Global.lineSize),
       child: Container(
         height: height,
         width: width,
@@ -27,7 +27,8 @@ class ImagePlaceHolder extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(error ? Icons.broken_image : Icons.image,
-                    color: Theme.of(context).primaryColor.withOpacity(0.2), size: 64),
+                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    size: 64),
                 Text(
                   "eso",
                   maxLines: 1,

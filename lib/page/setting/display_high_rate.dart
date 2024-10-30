@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 class DisplayHighRate extends StatefulWidget {
-  DisplayHighRate({Key key}) : super(key: key);
+  DisplayHighRate({Key key});
 
   @override
   State<DisplayHighRate> createState() => _DisplayHighRateState();
@@ -42,7 +42,8 @@ class _DisplayHighRateState extends State<DisplayHighRate> {
         body: ListView(
           children: [
             SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
               title: Text("强制高刷"),
               subtitle: Text(
                 "一加的部分机型可能需要，正常不需要启用",

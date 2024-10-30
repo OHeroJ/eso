@@ -20,8 +20,10 @@ class SharePage extends HookWidget {
   final String addInfo;
   final String fileName;
   const SharePage(
-      {Key key, @required this.text, @required this.addInfo, @required this.fileName})
-      : super(key: key);
+      {super.key,
+      @required this.text,
+      @required this.addInfo,
+      @required this.fileName});
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +57,15 @@ class SharePage extends HookWidget {
                       Utils.toast("已保存到剪贴板 $addInfo");
                     },
                     child: Text("复制文本"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
                 TextButton(
                     onPressed: () {
                       Share.share(text);
                     },
                     child: Text("分享文本"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
                 TextButton(
                     onPressed: () async {
                       // 生成文件
@@ -74,8 +76,8 @@ class SharePage extends HookWidget {
                       Share.shareFiles([file]);
                     },
                     child: Text("分享文件"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
               ],
             ),
             Divider(),
@@ -85,7 +87,8 @@ class SharePage extends HookWidget {
                 Utils.startPageWait(
                     context,
                     LaunchUrlWithWebview(
-                        title: "在线剪贴板", url: "https://netcut.cn/${netcut.text}"));
+                        title: "在线剪贴板",
+                        url: "https://netcut.cn/${netcut.text}"));
               },
             ),
             TextField(
@@ -120,11 +123,13 @@ class SharePage extends HookWidget {
                                 "note_pwd": "0",
                                 "expire_time": "259200",
                               });
-                          id = cast(jsonDecode(res.body)["data"]["note_id"], "");
+                          id =
+                              cast(jsonDecode(res.body)["data"]["note_id"], "");
                           Utils.toast("数据上传成功");
                         } else {
                           id = ids.first.trim();
-                          await http.post(Uri.parse("https://netcut.cn/api/note/update/"),
+                          await http.post(
+                              Uri.parse("https://netcut.cn/api/note/update/"),
                               body: {
                                 "note_id": "$id",
                                 "note_content": text,
@@ -132,17 +137,18 @@ class SharePage extends HookWidget {
                           Utils.toast("数据上传成功");
                         }
                       } else {
-                        await http
-                            .post(Uri.parse("https://netcut.cn/api/note/update/"), body: {
-                          "note_id": "$id",
-                          "note_content": text,
-                        });
+                        await http.post(
+                            Uri.parse("https://netcut.cn/api/note/update/"),
+                            body: {
+                              "note_id": "$id",
+                              "note_content": text,
+                            });
                         Utils.toast("数据上传成功");
                       }
                     },
                     child: Text("上传"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
                 TextButton(
                     onPressed: () {
                       final s = """ESO APP 规则分享
@@ -153,8 +159,8 @@ class SharePage extends HookWidget {
                       Utils.toast("已保存到剪贴板 $s");
                     },
                     child: Text("复制网址"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
                 TextButton(
                     onPressed: () {
                       final s = """ESO APP 复杂分享
@@ -164,8 +170,8 @@ class SharePage extends HookWidget {
                       Share.share(s);
                     },
                     child: Text("分享网址"),
-                    style:
-                        ButtonStyle(fixedSize: MaterialStateProperty.all(Size(100, 30)))),
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(100, 30)))),
               ],
             ),
           ],

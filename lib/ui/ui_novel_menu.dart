@@ -28,8 +28,8 @@
 //   const UINovelMenu({
 //     this.searchItem,
 //     this.profile,
-//     Key key,
-//   }) : super(key: key);
+//     super.key,
+//   });
 //
 //   @override
 //   Widget build(BuildContext context) {

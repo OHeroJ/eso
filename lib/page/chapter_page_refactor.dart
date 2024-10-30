@@ -22,7 +22,7 @@
 
 // class ChapterPage extends StatefulWidget {
 //   final SearchItem searchItem;
-//   const ChapterPage({this.searchItem, Key key}) : super(key: key);
+//   const ChapterPage({this.searchItem, Key key});
 
 //   @override
 //   _ChapterPageState createState() => _ChapterPageState();

@@ -10,8 +10,8 @@ class UIBigListChapterItem extends StatelessWidget {
   const UIBigListChapterItem({
     this.chapter,
     this.chapterNum,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,8 @@ class _UIBigListChapterItem extends StatelessWidget {
     this.title,
     this.subtitle,
     this.thumbnail,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _UIBigListChapterItem extends StatelessWidget {
             height: double.infinity,
             child: Center(
               child: Text(
-                '${index < 10 ? '0':''}$index',
+                '${index < 10 ? '0' : ''}$index',
                 style: TextStyle(
                   fontStyle: FontStyle.italic,
                   fontSize: 12,

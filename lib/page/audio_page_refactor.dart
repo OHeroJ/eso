@@ -408,8 +408,8 @@ class AudioPage extends StatefulWidget {
 
   const AudioPage({
     this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _AudioPageState createState() => _AudioPageState();

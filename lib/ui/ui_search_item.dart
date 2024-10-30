@@ -14,8 +14,8 @@ class UiSearchItem extends StatelessWidget {
   const UiSearchItem({
     @required this.item,
     this.showType = false,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,8 @@ class UiSearchItem extends StatelessWidget {
       author: item.author,
       chapter: item.chapter,
       description: item.description,
-      contentTypeName: showType ? API.getRuleContentTypeName(item.ruleContentType) : "",
+      contentTypeName:
+          showType ? API.getRuleContentTypeName(item.ruleContentType) : "",
     );
   }
 }
@@ -51,8 +52,8 @@ class _UiSearchItem extends StatelessWidget {
     this.chapter,
     this.description,
     this.contentTypeName,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const _padding = const EdgeInsets.only(right: 4, bottom: 1);
 
@@ -81,7 +82,8 @@ class _UiSearchItem extends StatelessWidget {
               width: 80,
               height: 104,
               child: UIImageItem(
-                  cover: cover, hero: Utils.empty(cover) ? null : '$name.$cover.$id'),
+                  cover: cover,
+                  hero: Utils.empty(cover) ? null : '$name.$cover.$id'),
             ),
             SizedBox(width: 12),
             Expanded(
@@ -98,7 +100,8 @@ class _UiSearchItem extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: ESOTheme.staticFontFamily,
-                              color: Theme.of(context).textTheme.bodyText1.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
                               fontSize: 15),
                         ),
                       ),
@@ -109,7 +112,8 @@ class _UiSearchItem extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(2),
                               ),
                               margin: const EdgeInsets.only(left: 6),
-                              padding: EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3, vertical: 0),
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 contentTypeName,
@@ -186,7 +190,8 @@ class _UiSearchItem extends StatelessWidget {
       textBaseline: TextBaseline.alphabetic,
       children: <Widget>[
         ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.45),
           child: _authorView,
         ),
         SizedBox(width: 8),

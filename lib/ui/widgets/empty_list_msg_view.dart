@@ -7,8 +7,8 @@ class EmptyListMsgView extends StatelessWidget {
   final Widget text;
   final IconData icon;
   final double iconSize;
-  const EmptyListMsgView({Key key, this.text, this.icon, this.iconSize = 128})
-      : super(key: key);
+  const EmptyListMsgView(
+      {super.key, this.text, this.icon, this.iconSize = 128});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,11 @@ class EmptyListMsgView extends StatelessWidget {
               SizedBox(height: 12),
               DefaultTextStyle(
                 style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText2.color.withAlpha(50),
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .color
+                        .withAlpha(50),
                     fontFamily: ESOTheme.staticFontFamily),
                 child: text,
               ),

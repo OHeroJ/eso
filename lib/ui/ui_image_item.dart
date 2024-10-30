@@ -5,12 +5,12 @@ import '../page/photo_view_page.dart';
 import 'ui_fade_in_image.dart';
 
 class UIImageItem extends StatelessWidget {
-  final String cover;
+  final String? cover;
   final double radius;
   final double initWidth;
   final double initHeight;
-  final BoxFit fit;
-  final String hero;
+  final BoxFit? fit;
+  final String? hero;
 
   const UIImageItem({
     this.cover,
@@ -19,8 +19,8 @@ class UIImageItem extends StatelessWidget {
     this.initHeight = 400,
     this.fit,
     this.hero,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +37,16 @@ class UIImageItem extends StatelessWidget {
           ? BorderRadius.zero
           : BorderRadius.circular(radius),
       child: UIFadeInImage(
-        item: PhotoItem.parse(cover),
+        item: PhotoItem.parse(cover!),
         fit: fit,
         placeHolderWidth: initWidth,
         placeHolderHeight: initHeight,
       ),
     );
-    if (hero == null || hero.isEmpty) return _child;
+    if (hero == null || hero!.isEmpty) return _child;
     return Hero(
       child: _child,
-      tag: hero,
+      tag: hero!,
     );
   }
 

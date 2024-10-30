@@ -19,11 +19,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../database/chapter_item.dart';
 
 class DebugRuleProvider with ChangeNotifier {
-  DateTime _startTime;
+  DateTime? _startTime;
   final Rule rule;
   final Color textColor;
-  bool disposeFlag;
-  ScrollController _controller;
+  late bool disposeFlag;
+  late ScrollController _controller;
   ScrollController get controller => _controller;
 
   DebugRuleProvider(this.rule, this.textColor) {
@@ -37,7 +37,8 @@ class DebugRuleProvider with ChangeNotifier {
     await JSEngine.setFunction("__print", IsolateFunction((s, isUrl) {
       _addContent("JS", s, isUrl, true);
     }));
-    JSEngine.evaluate("var print = function(...args) {__print(args[0], !!args[1]);};");
+    JSEngine.evaluate(
+        "var print = function(...args) {__print(args[0], !!args[1]);};");
   }
 
   final rows = <Row>[];
@@ -74,8 +75,9 @@ class DebugRuleProvider with ChangeNotifier {
     );
   }
 
-  void _addContent(String sInfo, [String s, bool isUrl = false, bool fromJS = false]) {
-    final d = DateTime.now().difference(_startTime).inMicroseconds;
+  void _addContent(String sInfo,
+      [String? s, bool isUrl = false, bool fromJS = false]) {
+    final d = DateTime.now().difference(_startTime!).inMicroseconds;
     rows.add(Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,7 +130,8 @@ class DebugRuleProvider with ChangeNotifier {
   List<String> discoverKeys = ["默认::默认"];
 
   Future<void> updateMap() async {
-    if (rule.searchUrl.trim().startsWith("@js:") || !rule.searchUrl.contains("::")) {
+    if (rule.searchUrl.trim().startsWith("@js:") ||
+        !rule.searchUrl.contains("::")) {
       mapKeys["搜索"] = {"默认": rule.searchUrl};
       searchKeys = ["默认::都市"];
     } else {
@@ -205,7 +208,7 @@ class DebugRuleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void handle([String _rule]) async {
+  void handle([String? _rule]) async {
     updateMap();
     rows.clear();
     _startTime = DateTime.now();
@@ -250,7 +253,7 @@ class DebugRuleProvider with ChangeNotifier {
     }
   }
 
-  void discover([String _rule]) async {
+  void discover([String? _rule]) async {
     if (_rule == null) {
       _startTime = DateTime.now();
       rows.clear();
@@ -271,9 +274,9 @@ class DebugRuleProvider with ChangeNotifier {
           ? ((discoverRule is List
                   ? "${discoverRule.first}"
                   : discoverRule is String
-                      ? discoverRule
-                          .split(RegExp(r"\n+\s*|&&"))
-                          .firstWhere((s) => s.trim().isNotEmpty, orElse: () => "")
+                      ? discoverRule.split(RegExp(r"\n+\s*|&&")).firstWhere(
+                          (s) => s.trim().isNotEmpty,
+                          orElse: () => "")
                       : "")
               .split("::")
               .last)
@@ -298,8 +301,8 @@ class DebugRuleProvider with ChangeNotifier {
             return;
           }
           discoverUrl = discoverResult.request.url.toString();
-          body = DecodeBody()
-              .decode(discoverResult.bodyBytes, discoverResult.headers["content-type"]);
+          body = DecodeBody().decode(
+              discoverResult.bodyBytes, discoverResult.headers["content-type"]);
           _addContent("地址", discoverUrl, true);
         }
       }
@@ -352,7 +355,8 @@ class DebugRuleProvider with ChangeNotifier {
       if (tags != null && tags.trim().isNotEmpty) {
         _addContent(
             "标签",
-            (tags.split(APIConst.tagsSplitRegExp)..removeWhere((tag) => tag.isEmpty))
+            (tags.split(APIConst.tagsSplitRegExp)
+                  ..removeWhere((tag) => tag.isEmpty))
                 .join(", "));
       } else {
         _addContent("标签", "");
@@ -377,7 +381,7 @@ class DebugRuleProvider with ChangeNotifier {
 
   final TextEditingController searchController = TextEditingController();
 
-  void search(String value, [String _rule]) async {
+  void search(String value, [String? _rule]) async {
     if (_rule == null) {
       _startTime = DateTime.now();
       rows.clear();
@@ -406,8 +410,8 @@ class DebugRuleProvider with ChangeNotifier {
           }
           searchUrl = searchResult.request.url.toString();
           _addContent("地址", searchUrl, true);
-          body = DecodeBody()
-              .decode(searchResult.bodyBytes, searchResult.headers["content-type"]);
+          body = DecodeBody().decode(
+              searchResult.bodyBytes, searchResult.headers["content-type"]);
         }
       }
       await JSEngine.setEnvironment(1, rule, "", searchUrl, value, "");
@@ -458,7 +462,8 @@ class DebugRuleProvider with ChangeNotifier {
       if (tags != null && tags.trim().isNotEmpty) {
         _addContent(
             "标签",
-            (tags.split(APIConst.tagsSplitRegExp)..removeWhere((tag) => tag.isEmpty))
+            (tags.split(APIConst.tagsSplitRegExp)
+                  ..removeWhere((tag) => tag.isEmpty))
                 .join(", "));
       } else {
         _addContent("标签", "");
@@ -492,7 +497,8 @@ class DebugRuleProvider with ChangeNotifier {
     dynamic firstChapter;
     String next;
     String chapterUrlRule;
-    final hasNextUrlRule = rule.chapterNextUrl != null && rule.chapterNextUrl.isNotEmpty;
+    final hasNextUrlRule =
+        rule.chapterNextUrl != null && rule.chapterNextUrl.isNotEmpty;
     for (var page = 1; page < 3; page++) {
       if (disposeFlag) return;
       chapterUrlRule = null;
@@ -535,12 +541,14 @@ class DebugRuleProvider with ChangeNotifier {
             }
             chapterUrl = res.request.url.toString();
             _addContent("地址", chapterUrl, true);
-            body = DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
+            body =
+                DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
           }
         }
 
         if (page == 1) {
-          await JSEngine.setEnvironment(page, rule, result, chapterUrl, "", result);
+          await JSEngine.setEnvironment(
+              page, rule, result, chapterUrl, "", result);
         } else {
           await JSEngine.evaluate(
               "baseUrl = ${jsonEncode(chapterUrl)};page = ${jsonEncode(page)};");
@@ -564,7 +572,8 @@ class DebugRuleProvider with ChangeNotifier {
           }
           final road = roads.first;
           analyzerManager = AnalyzerManager(road);
-          _addContent("线路名称", await analyzerManager.getString(rule.chapterRoadName));
+          _addContent(
+              "线路名称", await analyzerManager.getString(rule.chapterRoadName));
         } else {
           analyzerManager = analyzer;
         }
@@ -573,8 +582,8 @@ class DebugRuleProvider with ChangeNotifier {
           _addContent("检测规则以\"-\"开始, 结果将反序");
         }
 
-        final chapterList = await analyzerManager
-            .getElements(reversed ? rule.chapterList.substring(1) : rule.chapterList);
+        final chapterList = await analyzerManager.getElements(
+            reversed ? rule.chapterList.substring(1) : rule.chapterList);
         final count = chapterList.length;
         if (count == 0) {
           _addContent("章节列表个数为0，解析结束！");
@@ -647,9 +656,11 @@ class DebugRuleProvider with ChangeNotifier {
 
   void praseContent(String result) async {
     _beginEvent("正文");
-    final hasNextUrlRule = rule.contentNextUrl != null && rule.contentNextUrl.isNotEmpty;
-    final url =
-        rule.contentUrl != null && rule.contentUrl.isNotEmpty ? rule.contentUrl : result;
+    final hasNextUrlRule =
+        rule.contentNextUrl != null && rule.contentNextUrl.isNotEmpty;
+    final url = rule.contentUrl != null && rule.contentUrl.isNotEmpty
+        ? rule.contentUrl
+        : result;
     String next;
     String contentUrlRule;
     for (var page = 1;; page++) {
@@ -695,11 +706,13 @@ class DebugRuleProvider with ChangeNotifier {
             }
             contentUrl = res.request.url.toString();
             _addContent("地址", contentUrl, true);
-            body = DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
+            body =
+                DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
           }
         }
         if (page == 1) {
-          await JSEngine.setEnvironment(page, rule, result, contentUrl, "", result);
+          await JSEngine.setEnvironment(
+              page, rule, result, contentUrl, "", result);
         } else {
           await JSEngine.evaluate(
               "baseUrl = ${jsonEncode(contentUrl)};page = ${jsonEncode(page)};");
@@ -733,7 +746,8 @@ class DebugRuleProvider with ChangeNotifier {
               children: [
                 Text(
                   "• [${'0' * (3 - i.toString().length)}$i]: ",
-                  style: TextStyle(color: textColor.withOpacity(0.5), height: 2),
+                  style:
+                      TextStyle(color: textColor.withOpacity(0.5), height: 2),
                 ),
                 _buildText(contentItems[i], isUrl),
               ],

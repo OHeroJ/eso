@@ -13,8 +13,8 @@ class UiSearch2Item extends StatelessWidget {
   const UiSearch2Item({
     @required this.item,
     this.showType = false,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,8 @@ class UiSearch2Item extends StatelessWidget {
       author: item.author,
       chapter: item.chapter,
       description: item.description,
-      contentTypeName: showType ? API.getRuleContentTypeName(item.ruleContentType) : "",
+      contentTypeName:
+          showType ? API.getRuleContentTypeName(item.ruleContentType) : "",
     );
   }
 }
@@ -50,8 +51,8 @@ class _UiSearchItem extends StatelessWidget {
     this.chapter,
     this.description,
     this.contentTypeName,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +60,19 @@ class _UiSearchItem extends StatelessWidget {
     final _chapter = chapter?.trim();
     final _description = description?.trim();
     final _origin = origin?.trim();
-    final _txtColor = Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7);
+    final _txtColor =
+        Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7);
     final _textStyle = TextStyle(
-        color: _txtColor, fontFamily: ESOTheme.staticFontFamily, height: 1.0, fontSize: 13);
-    final _chapterText =
-        Utils.empty(_chapter) ? null : Text(_chapter, maxLines: 1, style: _textStyle);
-    final _originText =
-        Utils.empty(_origin) ? null : Text(_origin, maxLines: 1, style: _textStyle);
+        color: _txtColor,
+        fontFamily: ESOTheme.staticFontFamily,
+        height: 1.0,
+        fontSize: 13);
+    final _chapterText = Utils.empty(_chapter)
+        ? null
+        : Text(_chapter, maxLines: 1, style: _textStyle);
+    final _originText = Utils.empty(_origin)
+        ? null
+        : Text(_origin, maxLines: 1, style: _textStyle);
     final _authorText = Utils.empty(_author)
         ? null
         : Text(_author,
@@ -122,7 +129,8 @@ class _UiSearchItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 6),
           child: UIImageItem(
-              cover: cover, hero: Utils.empty(cover) ? null : '$name.$cover.$id'),
+              cover: cover,
+              hero: Utils.empty(cover) ? null : '$name.$cover.$id'),
         ),
       ),
     ];

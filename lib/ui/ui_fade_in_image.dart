@@ -10,14 +10,14 @@ class UIFadeInImage extends StatelessWidget {
   final PhotoItem item;
   final double placeHolderWidth;
   final double placeHolderHeight;
-  final BoxFit fit;
+  final BoxFit? fit;
   const UIFadeInImage({
-    this.item,
+    required this.item,
     this.fit,
     this.placeHolderHeight = 400,
     this.placeHolderWidth = 400,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

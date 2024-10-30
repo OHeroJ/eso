@@ -106,8 +106,8 @@ class SearchTextField extends StatelessWidget {
 //   const FieldRightPopupMenu({
 //     this.controller,
 //     this.child,
-//     Key key,
-//   }) : super(key: key);
+//     super.key,
+//   });
 //   @override
 //   Widget build(BuildContext context) {
 //     if (!Global.isDesktop) return child;

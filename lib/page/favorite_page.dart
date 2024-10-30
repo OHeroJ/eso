@@ -63,7 +63,7 @@ class _FavoritePageState extends State<FavoritePage> {
 
 class FavoritePage2 extends StatelessWidget {
   final void Function(Widget) invokeTap;
-  const FavoritePage2({Key key, this.invokeTap}) : super(key: key);
+  const FavoritePage2({super.key, this.invokeTap});
 
   static const tabs = [
     ["文字", API.NOVEL],
@@ -78,8 +78,8 @@ class FavoritePage2 extends StatelessWidget {
     if (Global.needShowAbout) {
       Global.needShowAbout = false;
       if (profile.version != profile.lastestVersion) {
-        Future.delayed(
-            Duration(milliseconds: 10), () => AboutPage2.showAbout(context, true));
+        Future.delayed(Duration(milliseconds: 10),
+            () => AboutPage2.showAbout(context, true));
       }
       AutoBackupPage.backup(true);
       AutoBackupPage.shareRule(true);
@@ -99,8 +99,8 @@ class FavoritePage2 extends StatelessWidget {
               unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
               indicator: RoundTabIndicator(
                   insets: EdgeInsets.only(left: 5, right: 5),
-                  borderSide:
-                      BorderSide(width: 3.0, color: Theme.of(context).primaryColor)),
+                  borderSide: BorderSide(
+                      width: 3.0, color: Theme.of(context).primaryColor)),
               tabs: tabs
                   .map((tab) => Container(
                       height: 30,
@@ -122,7 +122,8 @@ class FavoritePage2 extends StatelessWidget {
                 IconButton(
                     icon: Icon(Icons.search),
                     tooltip: "搜索",
-                    onPressed: () => Utils.startPageWait(context, SearchPage())),
+                    onPressed: () =>
+                        Utils.startPageWait(context, SearchPage())),
               Menu<MenuFavorite>(
                   // color: Theme.of(context).iconTheme.color,
                   tooltip: "选项",
@@ -157,7 +158,8 @@ class FavoritePage2 extends StatelessWidget {
           ),
           body: TabBarView(
             children: tabs
-                .map((tab) => FavoriteListPage(type: tab[1], invokeTap: invokeTap))
+                .map((tab) =>
+                    FavoriteListPage(type: tab[1], invokeTap: invokeTap))
                 .toList(),
           ),
         ),

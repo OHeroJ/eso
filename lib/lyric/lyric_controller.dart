@@ -6,8 +6,8 @@ class LyricController extends ChangeNotifier {
   //当前进度
   Duration _progress = Duration();
 
-  set progress(Duration value) {
-    _progress = value;
+  set progress(Duration? value) {
+    _progress = value ?? Duration.zero;
     notifyListeners();
   }
 

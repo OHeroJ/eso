@@ -14,8 +14,8 @@ import '../../eso_theme.dart';
 
 class FontFamilyPage extends StatelessWidget {
   const FontFamilyPage({
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,8 @@ class FontFamilyPage extends StatelessWidget {
         body: ChangeNotifierProvider(
           create: (context) => _FontFamilyProvider(),
           builder: (context, child) {
-            context.select((_FontFamilyProvider provider) => provider._ttfList?.length);
+            context.select(
+                (_FontFamilyProvider provider) => provider._ttfList?.length);
             final profile = ESOTheme();
             final fontFamilyProvider =
                 Provider.of<_FontFamilyProvider>(context, listen: false);
@@ -130,8 +131,9 @@ class _FontFamilyProvider with ChangeNotifier {
     }
     final directory = Directory(_dir);
     final files = directory.listSync();
-    _ttfList =
-        files.map((file) => file.path.substring(file.parent.path.length + 1)).toList();
+    _ttfList = files
+        .map((file) => file.path.substring(file.parent.path.length + 1))
+        .toList();
     _ttfList.forEach((ttf) async => await _loadFont(ttf));
     notifyListeners();
     return;
@@ -149,8 +151,8 @@ class _FontFamilyProvider with ChangeNotifier {
     //   fileTileSelectMode: FileTileSelectMode.wholeTile,
     //   requestPermission: CacheUtil.requestPermission,
     // );
-    String ttf =
-        await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], _dir, title: "选择字体");
+    String ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], _dir,
+        title: "选择字体");
     if (ttf == null) {
       Utils.toast('未选取字体文件');
       return;

@@ -10,8 +10,8 @@ class UIFavoriteItem extends StatelessWidget {
 
   const UIFavoriteItem({
     @required this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,8 @@ class UIFavoriteItem extends StatelessWidget {
           width: double.infinity,
           child: UIImageItem(cover: searchItem.cover),
           decoration: BoxDecoration(boxShadow: [
-            BoxShadow(offset: Offset(0, 1), blurRadius: 2, color: Colors.black12)
+            BoxShadow(
+                offset: Offset(0, 1), blurRadius: 2, color: Colors.black12)
           ]),
         )),
         SizedBox(height: 6),

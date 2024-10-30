@@ -10,8 +10,8 @@ class UiShelfItem extends StatelessWidget {
 
   const UiShelfItem({
     this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class _UiShelfItem extends StatelessWidget {
     this.chapter,
     this.durChapter,
     this.chapterNum,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,10 @@ class _UiShelfItem extends StatelessWidget {
                             alignment: Alignment(0, 0),
                             decoration: BoxDecoration(
                                 color: Colors.grey,
-                                borderRadius: BorderRadius.all(Radius.circular(8))),
-                            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 4),
                             child: Text(
                               '$chapterNum',
                               maxLines: 1,
@@ -106,7 +108,11 @@ class _UiShelfItem extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .color
+                        .withOpacity(0.7),
                   ),
                 ),
                 Text(

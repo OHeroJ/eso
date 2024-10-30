@@ -8,7 +8,15 @@ class SizedBar extends StatefulWidget implements PreferredSizeWidget {
   final BoxConstraints constraints;
   final Decoration decoration;
 
-  const SizedBar({Key key, this.color, this.width = double.infinity, this.height = 50.0, this.constraints, this.decoration, this.child}): super(key: key);
+  const SizedBar(
+      {super.key,
+      this.color,
+      this.width = double.infinity,
+      this.height = 50.0,
+      this.constraints,
+      this.decoration,
+      this.child})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SizedBarState();

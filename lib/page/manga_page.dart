@@ -25,8 +25,8 @@ class MangaPage extends StatefulWidget {
 
   const MangaPage({
     this.searchItem,
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _MangaPageState createState() => _MangaPageState();
@@ -108,7 +108,8 @@ class _MangaPageState extends State<MangaPage> {
   }
 
   Widget _buildMangaContent(MangaPageProvider provider, ESOTheme profile) {
-    if (pageMangaContent != null && !provider.shouldUpdateManga) return pageMangaContent;
+    if (pageMangaContent != null && !provider.shouldUpdateManga)
+      return pageMangaContent;
     Axis direction;
     bool reverse;
     switch (profile.mangaDirection) {
@@ -130,7 +131,8 @@ class _MangaPageState extends State<MangaPage> {
     }
     provider.shouldUpdateManga = false;
     pageMangaContent = ListView.builder(
-      key: Key("pageMangaContent" + provider.searchItem.durChapterIndex.toString()),
+      key: Key(
+          "pageMangaContent" + provider.searchItem.durChapterIndex.toString()),
       padding: EdgeInsets.all(0),
       physics: BouncingScrollPhysics(),
       scrollDirection: direction,
@@ -370,8 +372,9 @@ class MangaPageProvider with ChangeNotifier {
       chapterIndex = searchItem.durChapterIndex;
     }
 
-    if (isLoading || chapterIndex < 0 || chapterIndex >= searchItem.chapters.length)
-      return;
+    if (isLoading ||
+        chapterIndex < 0 ||
+        chapterIndex >= searchItem.chapters.length) return;
 
     _isLoading = true;
     notifyListeners();
