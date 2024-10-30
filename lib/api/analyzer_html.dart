@@ -158,7 +158,10 @@ class AnalyzerHtml implements Analyzer {
   }
 
   @override
-  List<String> getStringList(String rule) {
+  List<String> getStringList(String? rule) {
+    if (rule == null) {
+      return <String>[];
+    }
     if (!rule.contains('@')) {
       return <String>[_getResult(_element, rule)];
     }

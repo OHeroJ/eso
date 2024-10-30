@@ -5,12 +5,12 @@ import '../global.dart';
 import 'api.dart';
 
 class APIManager {
-  static Future<APIFromRUle> chooseAPI(String originTag) async {
+  static Future<APIFromRUle?> chooseAPI(String originTag) async {
     return APIFromRUle(await Global.ruleDao.findRuleById(originTag));
   }
 
   static Future<List<SearchItem>> discover(
-      String originTag, Map<String, DiscoverPair> params,
+      String? originTag, Map<String, DiscoverPair> params,
       [int page = 1, int pageSize = 20]) async {
     if (originTag != null) {
       final api = await chooseAPI(originTag);
@@ -19,7 +19,7 @@ class APIManager {
     return <SearchItem>[];
   }
 
-  static Future<List<SearchItem>> search(String originTag, String query,
+  static Future<List<SearchItem>> search(String? originTag, String query,
       [int page = 1, int pageSize = 20]) async {
     if (originTag != null) {
       final api = await chooseAPI(originTag);
@@ -28,7 +28,8 @@ class APIManager {
     return <SearchItem>[];
   }
 
-  static Future<List<ChapterItem>> getChapter(String originTag, String url, [int page]) async {
+  static Future<List<ChapterItem>> getChapter(String? originTag, String url,
+      [int? page]) async {
     if (originTag != null) {
       final api = await chooseAPI(originTag);
       if (api != null) return api.chapter(url, page);
@@ -36,7 +37,7 @@ class APIManager {
     return <ChapterItem>[];
   }
 
-  static Future<List<String>> getContent(String originTag, String url) async {
+  static Future<List<String>> getContent(String? originTag, String url) async {
     if (originTag != null) {
       final api = await chooseAPI(originTag);
       if (api != null) return api.content(url);

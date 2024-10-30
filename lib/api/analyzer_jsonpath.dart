@@ -45,7 +45,7 @@ class AnalyzerJSonPath implements Analyzer {
   }
 
   @override
-  dynamic getStringList(String rule) {
-    return getElements(rule);
+  dynamic getStringList(String? rule) {
+    return getElements(rule ?? '');
   }
 }

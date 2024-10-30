@@ -2,7 +2,7 @@ import 'analyzer.dart';
 import 'package:html/dom.dart';
 
 class AnalyzerRegExp implements Analyzer {
-  String _string;
+  String _string = '';
 
   @override
   AnalyzerRegExp parse(content) {
@@ -25,7 +25,7 @@ class AnalyzerRegExp implements Analyzer {
    <div id="content">[\w\W]*</div>AND<li>.*?</li>
    会先匹配前面的内容，然后在前一个AND的结果中匹配后面的内容
   */
-  List<String> _getList(String rule, String input) {
+  List<String> _getList(String? rule, String input) {
     var result = <String>[];
     if (null == rule || rule.isEmpty) return result;
 
@@ -46,7 +46,7 @@ class AnalyzerRegExp implements Analyzer {
 
         final builder = <String>[];
         for (var m in matcherList) {
-          final value = m.group(0);
+          final value = m.group(0) ?? '';
           if (value.isNotEmpty) {
             // 因为是正则匹配，所以不使用trim()去掉空格
             builder.add(value);
@@ -70,7 +70,7 @@ class AnalyzerRegExp implements Analyzer {
   }
 
   @override
-  List<String> getStringList(String rule) {
+  List<String> getStringList(String? rule) {
     final result = <String>[];
     if (null == rule || rule.isEmpty) return result;
 

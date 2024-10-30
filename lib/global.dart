@@ -52,8 +52,8 @@ class Global with ChangeNotifier {
   static int currentHomePage = 0;
   static Color? primaryColor;
 
-  static RuleDao? _ruleDao;
-  static RuleDao? get ruleDao => _ruleDao;
+  static late RuleDao _ruleDao;
+  static RuleDao get ruleDao => _ruleDao;
 
   static Future<void> initFont() async {
     final profile = ESOTheme();

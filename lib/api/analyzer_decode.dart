@@ -43,7 +43,7 @@ class AnalyzerDecode implements Analyzer {
   }
 
   @override
-  String getStringList(String rule) {
-    return getString(rule);
+  String getStringList(String? rule) {
+    return getString(rule ?? '');
   }
 }

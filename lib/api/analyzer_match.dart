@@ -4,7 +4,7 @@ import 'package:html/dom.dart';
 import 'analyzer.dart';
 
 class AnalyzerMatch implements Analyzer {
-  String _content;
+  String _content = '';
 
   @override
   AnalyzerMatch parse(content) {
@@ -26,15 +26,18 @@ class AnalyzerMatch implements Analyzer {
   }
 
   @override
-  String getString(String rule) {
+  String getString(String? rule) {
     if (null == rule || rule.isEmpty) return "";
     final r = rule.split("@@");
     final group = r.length > 1 ? int.parse(r[1]) : 0;
-    return RegExp(r[0]).allMatches(_content).map((m) => m.group(group)).join("  ");
+    return RegExp(r[0])
+        .allMatches(_content)
+        .map((m) => m.group(group))
+        .join("  ");
   }
 
   @override
-  String getStringList(String rule) {
+  String getStringList(String? rule) {
     return getString(rule);
   }
 }

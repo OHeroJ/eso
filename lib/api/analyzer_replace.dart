@@ -4,7 +4,7 @@ import 'package:html/dom.dart';
 import 'analyzer.dart';
 
 class AnalyzerReplace implements Analyzer {
-  String _content;
+  String _content = '';
 
   @override
   AnalyzerReplace parse(content) {
@@ -26,10 +26,11 @@ class AnalyzerReplace implements Analyzer {
   }
 
   /// from https://github.com/dart-lang/sdk/issues/2336
-  String Function(Match) _replacement(String pattern) => (Match match) =>
-      pattern.replaceAllMapped(RegExp(r'\$(\d+)'), (m) => match[int.parse(m[1])]);
+  String Function(Match) _replacement(String pattern) =>
+      (Match match) => pattern.replaceAllMapped(
+          RegExp(r'\$(\d+)'), (m) => match[int.parse(m[1] ?? '')] ?? '');
 
-  String Function(String) replaceSmart(String replace) {
+  String Function(String) replaceSmart(String? replace) {
     if (null == replace || replace.isEmpty) return (String s) => s;
     final r = replace.split("@@");
     final match = RegExp(r[0]);
@@ -41,7 +42,8 @@ class AnalyzerReplace implements Analyzer {
         if (r.length == 2) {
           return (String s) => s.replaceAllMapped(match, _replacement(pattern));
         } else {
-          return (String s) => s.replaceFirstMapped(match, _replacement(pattern));
+          return (String s) =>
+              s.replaceFirstMapped(match, _replacement(pattern));
         }
       } else {
         if (r.length == 2) {
@@ -59,7 +61,7 @@ class AnalyzerReplace implements Analyzer {
   }
 
   @override
-  String getStringList(String rule) {
-    return getString(rule);
+  String getStringList(String? rule) {
+    return getString(rule ?? '');
   }
 }

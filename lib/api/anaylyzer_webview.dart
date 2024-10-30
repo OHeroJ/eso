@@ -4,12 +4,11 @@ import 'dart:developer';
 
 import 'package:eso/api/api_js_engine.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_webview/flutter_webview.dart';
 
 import 'analyzer.dart';
 
 class AnalyzerWebview implements Analyzer {
-  String _content;
+  String _content = '';
   @override
   AnalyzerWebview parse(content) {
     if (content == null) {
@@ -40,7 +39,9 @@ class AnalyzerWebview implements Analyzer {
       url = JSEngine.rule.host;
     }
     if (url.startsWith("//")) {
-      url = JSEngine.rule.host.startsWith("https") ? "https://$url" : "http://$url";
+      url = JSEngine.rule.host.startsWith("https")
+          ? "https://$url"
+          : "http://$url";
     } else if (url.startsWith("/")) {
       url = Uri.parse(JSEngine.rule.host).resolve(url).toString();
     }
@@ -53,8 +54,9 @@ class AnalyzerWebview implements Analyzer {
         for (var i = 0; i < 60; i++) {
           if (c.isCompleted) return;
           try {
-            final s = await webview.evaluate(
-                rule.trim().isEmpty ? "document.documentElement.outerHTML" : rule);
+            final s = await webview.evaluate(rule.trim().isEmpty
+                ? "document.documentElement.outerHTML"
+                : rule);
             final r = jsonDecode("$s");
             if (r != null && r != "") {
               c.complete(r);
@@ -88,7 +90,7 @@ class AnalyzerWebview implements Analyzer {
   }
 
   @override
-  Future getStringList(String rule) {
-    return _eval(rule);
+  Future getStringList(String? rule) {
+    return _eval(rule ?? '');
   }
 }

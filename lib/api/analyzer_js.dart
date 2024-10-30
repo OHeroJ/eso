@@ -61,7 +61,7 @@ class AnalyzerJS implements Analyzer {
   }
 
   @override
-  Future<dynamic> getStringList(String rule) async {
-    return _eval(rule);
+  Future<dynamic> getStringList(String? rule) async {
+    return _eval(rule ?? '');
   }
 }

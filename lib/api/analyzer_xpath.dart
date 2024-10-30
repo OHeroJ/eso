@@ -1,10 +1,9 @@
 import 'analyzer.dart';
 import 'package:html/dom.dart';
-// import 'package:xpath_parse/xpath_selector.dart';
 import 'package:xpath_selector/xpath_selector.dart';
 
 class AnalyzerXPath implements Analyzer {
-  XPath<Node> _xpath;
+  late XPath<Node> _xpath;
 
   @override
   AnalyzerXPath parse(content) {
@@ -28,7 +27,11 @@ class AnalyzerXPath implements Analyzer {
   List<String> getR(String rule) {
     rule = rule.trimRight();
     if (rule.endsWith("node()")) {
-      return _xpath.query(rule).nodes.map((e) => (e.node as Element).outerHtml).toList();
+      return _xpath
+          .query(rule)
+          .nodes
+          .map((e) => (e.node as Element).outerHtml)
+          .toList();
     } else if (rule.endsWith("/html()")) {
       return _xpath
           .query(rule.substring(0, rule.length - 7))

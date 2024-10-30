@@ -8,6 +8,6 @@ abstract class Analyzer {
   // Analyzer(dynamic content, [int jsEngineId]);
   Analyzer parse(dynamic content);
   FutureOr getString(String rule);
-  FutureOr getStringList(String rule);
+  FutureOr getStringList(String? rule);
   FutureOr getElements(String rule);
 }
