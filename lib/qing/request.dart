@@ -10,7 +10,7 @@ import 'const.dart';
 import '../api/analyze_url_client.dart' as http;
 
 class Request extends StatelessWidget {
-  const Request({Key key}) : super(key: key);
+  const Request({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,8 @@ class Request extends StatelessWidget {
             enabled: false,
           ),
           TextField(
-            decoration: const InputDecoration(labelText: "请求体（body or payload）"),
+            decoration:
+                const InputDecoration(labelText: "请求体（body or payload）"),
             controller: data.body,
           ),
           TextField(
@@ -46,7 +47,8 @@ class Request extends StatelessWidget {
             controller: data.cookies,
           ),
           TextField(
-            decoration: const InputDecoration(labelText: "编码（charset or encode）"),
+            decoration:
+                const InputDecoration(labelText: "编码（charset or encode）"),
             controller: data.encode,
           ),
           Wrap(
@@ -78,21 +80,23 @@ class Request extends StatelessWidget {
 
                     final encoding = data.encode.text.contains("gb")
                         ? gbk
-                        : Encoding.getByName(data.encode.text) ?? const Utf8Codec();
+                        : Encoding.getByName(data.encode.text) ??
+                            const Utf8Codec();
                     u = u.replaceAllMapped(
                         RegExp(r"[^\x00-\x7F]+"),
                         (match) => encoding
-                            .encode(match.group(0))
-                            .map((code) =>
-                                _urlEncode(code.toRadixString(16).toUpperCase()))
+                            .encode(match.group(0) ?? '')
+                            .map((code) => _urlEncode(
+                                code.toRadixString(16).toUpperCase()))
                             .join());
                   }
-                  Response res;
+                  Response? res;
                   if (method.isNotEmpty || method == 'get') {
                     res = await http.get(u, headers: headers);
                   }
                   if (method == "put") {
-                    res = await http.put(u, headers: headers, body: data.body.text);
+                    res = await http.put(u,
+                        headers: headers, body: data.body.text);
                   }
                   if (method == 'post') {
                     res = await http.post(
@@ -102,8 +106,8 @@ class Request extends StatelessWidget {
                     );
                   }
                   res ??= await http.get(u, headers: headers);
-                  data.html.text =
-                      DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
+                  data.html.text = DecodeBody()
+                      .decode(res.bodyBytes, res.headers["content-type"] ?? "");
                 },
                 child: const Text("请求"),
               ),
@@ -176,7 +180,7 @@ class Request extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   final a = await Clipboard.getData(Clipboard.kTextPlain);
-                  if (a?.text != null) data.string.text = a.text;
+                  if (a?.text != null) data.string.text = a!.text!;
                 },
                 child: const Text("粘贴"),
               ),

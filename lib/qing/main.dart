@@ -6,13 +6,13 @@ import 'about.dart';
 import 'parser.dart';
 import 'request.dart';
 
-
 class RequestAndParserTestTool extends StatelessWidget {
-  const RequestAndParserTestTool({Key key}) : super(key: key);
+  const RequestAndParserTestTool({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = Platform.isWindows || Platform.isLinux || Platform.isMacOS;
+    final isDesktop =
+        Platform.isWindows || Platform.isLinux || Platform.isMacOS;
     const r = Request();
     const p = Parser();
     const a = About();

@@ -159,9 +159,9 @@ class JSEngine {
     setToGlobalObject.free();
   }
 
-  static String thisBaseUrl;
+  static late String thisBaseUrl;
 
-  static String environment;
+  static late String environment;
 
   static Future<void> setEnvironment(
     int? page,

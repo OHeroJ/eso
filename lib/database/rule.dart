@@ -161,7 +161,9 @@ class Rule {
     contentItems = '';
   }
 
-  Rule(
+  Rule();
+
+  Rule.create(
     this.id,
     this.createTime,
     this.modifiedTime,
@@ -222,7 +224,7 @@ class Rule {
   );
 
   Rule replica() {
-    return Rule(
+    return Rule.create(
       Uuid().v4(),
       createTime,
       modifiedTime,

@@ -24,7 +24,7 @@ import 'langding_page.dart';
 
 class NextPageAnimation extends StatefulWidget {
   final String text;
-  const NextPageAnimation({Key key, this.text = "加载下一页。。。"}) : super(key: key);
+  const NextPageAnimation({super.key, this.text = "加载下一页。。。"});
 
   @override
   State<NextPageAnimation> createState() => _NextPageAnimationState();
@@ -66,8 +66,8 @@ class _NextPageAnimationState extends State<NextPageAnimation> {
 class ChapterPage extends StatefulWidget {
   final SearchItem searchItem;
   final bool fromHistory;
-  const ChapterPage({this.searchItem, this.fromHistory = false, Key key})
-      : super(key: key);
+  const ChapterPage(
+      {required this.searchItem, this.fromHistory = false, super.key});
 
   @override
   _ChapterPageState createState() => _ChapterPageState(searchItem);
@@ -77,9 +77,9 @@ class _ChapterPageState extends State<ChapterPage> {
   _ChapterPageState(this.searchItem) : super();
 
   double opacity = 0.0;
-  StateSetter state;
+  late StateSetter state;
   final SearchItem searchItem;
-  ScrollController _controller;
+  late ScrollController _controller;
 
   @override
   void initState() {
@@ -93,7 +93,8 @@ class _ChapterPageState extends State<ChapterPage> {
     _controller = ScrollController();
 
     return ChangeNotifierProvider<ChapterPageProvider>(
-      create: (context) => ChapterPageProvider(searchItem: searchItem, size: size),
+      create: (context) =>
+          ChapterPageProvider(searchItem: searchItem, size: size),
       builder: (context, child) => Container(
         decoration: globalDecoration,
         child: Scaffold(
@@ -156,7 +157,8 @@ class _ChapterPageState extends State<ChapterPage> {
     return Positioned(
       right: 20,
       bottom: 10,
-      child: Card(child: Text("${-Provider.of<ChapterPageProvider>(context).page}页")),
+      child: Card(
+          child: Text("${-Provider.of<ChapterPageProvider>(context).page}页")),
     );
   }
 
@@ -166,7 +168,8 @@ class _ChapterPageState extends State<ChapterPage> {
 
     return AppBar(
       elevation: 0.0,
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor.withOpacity(opacity),
+      backgroundColor:
+          Theme.of(context).appBarTheme.backgroundColor.withOpacity(opacity),
       title: Text(
         searchItem.origin,
         maxLines: 1,
@@ -176,7 +179,8 @@ class _ChapterPageState extends State<ChapterPage> {
         // 加入收藏时需要刷新图标，其他不刷新
         Consumer<ChapterPageProvider>(
           builder: (context, provider, child) => IconButton(
-            icon: SearchItemManager.isFavorite(searchItem.originTag, searchItem.url)
+            icon: SearchItemManager.isFavorite(
+                    searchItem.originTag, searchItem.url)
                 ? Icon(Icons.favorite)
                 : Icon(Icons.favorite_border),
             iconSize: 21,
@@ -224,13 +228,14 @@ class _ChapterPageState extends State<ChapterPage> {
                         Expanded(
                           child: Container(
                             child: GestureDetector(
-                              child: UIImageItem(cover: searchItem.cover, hero: _hero),
+                              child: UIImageItem(
+                                  cover: searchItem.cover, hero: _hero),
                               onTap: () {
                                 Utils.startPageWait(
                                     context,
-                                    PhotoViewPage(
-                                        items: [PhotoItem.parse(searchItem.cover)],
-                                        heroTag: _hero));
+                                    PhotoViewPage(items: [
+                                      PhotoItem.parse(searchItem.cover)
+                                    ], heroTag: _hero));
                               },
                             ),
                             decoration: BoxDecoration(boxShadow: [
@@ -246,7 +251,9 @@ class _ChapterPageState extends State<ChapterPage> {
                             fontWeight: FontWeight.w700,
                             fontFamily: ESOTheme.staticFontFamily,
                             fontSize: 18,
-                            shadows: [Shadow(blurRadius: 2, color: Colors.grey)],
+                            shadows: [
+                              Shadow(blurRadius: 2, color: Colors.grey)
+                            ],
                           ),
                         ),
                         SizedBox(height: 4),
@@ -291,7 +298,8 @@ class _ChapterPageState extends State<ChapterPage> {
                             ),
                             decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)),
                             ),
                           ),
                         )
@@ -349,7 +357,8 @@ class _ChapterPageState extends State<ChapterPage> {
                   },
                   child: Text(
                     "更至（${searchItem.chapters.length}）${searchItem.chapters.isNotEmpty ? searchItem.chapters.last.name : "无"}",
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
                   )),
             ),
             Card(
@@ -359,7 +368,8 @@ class _ChapterPageState extends State<ChapterPage> {
                   },
                   child: Text(
                     "阅至（${searchItem.durChapterIndex}）${searchItem.durChapter}",
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color),
                   )),
             ),
             Divider(),
@@ -409,12 +419,14 @@ class _ChapterPageState extends State<ChapterPage> {
   List<ChapterRoad> parseChapers(List<ChapterItem> chapters) {
     currentRoad = 0;
     final roads = <ChapterRoad>[];
-    if (chapters.isEmpty || !chapters.first.name.startsWith('@线路')) return roads;
+    if (chapters.isEmpty || !chapters.first.name.startsWith('@线路'))
+      return roads;
     var roadName = chapters.first.name.substring(3);
     var startIndex = 1;
     for (var i = 1, len = chapters.length; i < len; i++) {
       if (chapters[i].name.startsWith('@线路')) {
-        if (searchItem.durChapterIndex >= startIndex && searchItem.durChapterIndex < i) {
+        if (searchItem.durChapterIndex >= startIndex &&
+            searchItem.durChapterIndex < i) {
           currentRoad = roads.length;
         }
         // 上一个线路
@@ -541,13 +553,17 @@ class _ChapterPageState extends State<ChapterPage> {
                             },
                             child: Container(
                               child: Text(
-                                '${roads[i].name}(${roads[i].length})'.padRight(10),
+                                '${roads[i].name}(${roads[i].length})'
+                                    .padRight(10),
                                 maxLines: 2,
                                 overflow: TextOverflow.clip,
                                 style: TextStyle(
                                   color: i == currentRoad
                                       ? Theme.of(context).primaryColor
-                                      : Theme.of(context).textTheme.bodyText1.color,
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color,
                                 ),
                               ),
                             ),
@@ -583,7 +599,8 @@ class ArcBannerImage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: height,
-            child: UIImageItem(cover: imageUrl, radius: null, fit: BoxFit.cover),
+            child:
+                UIImageItem(cover: imageUrl, radius: null, fit: BoxFit.cover),
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
@@ -609,13 +626,13 @@ class ArcClipper extends CustomClipper<Path> {
 
     var firstControlPoint = Offset(size.width / 4, size.height);
     var firstPoint = Offset(size.width / 2, size.height);
-    path.quadraticBezierTo(
-        firstControlPoint.dx, firstControlPoint.dy, firstPoint.dx, firstPoint.dy);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstPoint.dx, firstPoint.dy);
 
     var secondControlPoint = Offset(size.width - (size.width / 4), size.height);
     var secondPoint = Offset(size.width, size.height - widget.arcH);
-    path.quadraticBezierTo(
-        secondControlPoint.dx, secondControlPoint.dy, secondPoint.dx, secondPoint.dy);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondPoint.dx, secondPoint.dy);
 
     path.lineTo(size.width, 0.0);
     path.close();

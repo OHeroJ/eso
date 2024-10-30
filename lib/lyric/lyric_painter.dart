@@ -14,13 +14,13 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
   Size canvasSize = Size.zero;
 
   //字体最大宽度
-  double? lyricMaxWidth;
+  double lyricMaxWidth;
 
   //歌词间距
-  double? lyricGapValue;
+  double lyricGapValue;
 
   //歌词间距
-  double? subLyricGapValue;
+  double subLyricGapValue;
 
   //通过偏移量控制歌词滑动
   double _offset = 0;
@@ -84,9 +84,9 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
       this.currSubLyricTextStyle,
       this.draggingLyricTextStyle,
       this.draggingSubLyricTextStyle,
-      this.lyricGapValue,
-      this.subLyricGapValue,
-      this.lyricMaxWidth});
+      this.lyricGapValue = 0,
+      this.subLyricGapValue = 0,
+      this.lyricMaxWidth = 0});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -131,14 +131,14 @@ class LyricPainter extends CustomPainter with ChangeNotifier {
       currentLyricY += currentLyricHeight + lyricGapValue;
       //如果有翻译歌词时,寻找该行歌词以后的翻译歌词
       if (subLyrics != null) {
-        List<Lyric> remarkLyrics = subLyrics
+        List<Lyric> remarkLyrics = subLyrics!
             .where((subLyric) =>
                 subLyric.startTime >= currentLyric.startTime &&
                 subLyric.endTime <= currentLyric.endTime)
             .toList();
         remarkLyrics.forEach((remarkLyric) {
           //获取位置
-          var subIndex = subLyrics.indexOf(remarkLyric);
+          var subIndex = subLyrics!.indexOf(remarkLyric);
 
           var currentSubPaint = subLyricTextPaints[subIndex] //设置歌词
             ..text = TextSpan(

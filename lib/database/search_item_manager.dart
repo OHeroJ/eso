@@ -8,15 +8,16 @@ import 'search_item.dart';
 import '../global.dart';
 
 class SearchItemManager {
-  static List<SearchItem> _searchItem;
+  static List<SearchItem> _searchItem = [];
   static List<SearchItem> get searchItem => _searchItem;
   static String get key => Global.searchItemKey;
 
   // static String genChapterKey(int id) => "chapter$id";
 
   /// 根据类型和排序规则取出收藏
-  static List<SearchItem> getSearchItemByType(int contentType, SortType sortType,
-      [String tag]) {
+  static List<SearchItem> getSearchItemByType(
+      int contentType, SortType sortType,
+      [String? tag]) {
     if (tag == "全部") {
       tag = null;
     }
@@ -42,8 +43,9 @@ class SearchItemManager {
     return searchItem;
   }
 
-  static bool isFavorite(String originTag, String url) {
-    return _searchItem.any((item) => item.originTag == originTag && item.url == url);
+  static bool isFavorite(String? originTag, String url) {
+    return _searchItem
+        .any((item) => item.originTag == originTag && item.url == url);
   }
 
   static Future<bool> toggleFavorite(SearchItem searchItem) {

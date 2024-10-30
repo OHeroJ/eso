@@ -11,21 +11,25 @@ class HistoryItemManager {
   static final _box = Hive.box<SearchItem>(Global.historyItemKey);
 
   /// 根据类型和排序规则取出收藏
-  static List<SearchItem> getHistoryItemByType(String name, int contentType) {
+  static List<SearchItem> getHistoryItemByType(String name, int? contentType) {
     if (contentType != null) {
       return historyItem
           .where((element) =>
-              element.ruleContentType == contentType && element.name.contains(name ?? ''))
+              element.ruleContentType == contentType &&
+              element.name?.contains(name ?? '') == true)
           .toList()
         ..sort(((a, b) => b.lastReadTime - a.lastReadTime));
     } else {
-      return historyItem.where((element) => element.name.contains(name ?? '')).toList()
+      return historyItem
+          .where((element) => element.name?.contains(name ?? '') == true)
+          .toList()
         ..sort(((a, b) => b.lastReadTime - a.lastReadTime));
     }
   }
 
   static Future<bool> insertOrUpdateHistoryItem(SearchItem searchItem) async {
-    await _box.put(searchItem.id.toString(), SearchItem.fromJson(searchItem.toJson()));
+    await _box.put(
+        searchItem.id.toString(), SearchItem.fromJson(searchItem.toJson()));
     return true;
   }
 

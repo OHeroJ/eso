@@ -5,7 +5,7 @@ import 'const.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
-  const About({Key key}) : super(key: key);
+  const About({super.key});
 
   Widget buildPindao(PinDao pinDao) {
     return InkWell(

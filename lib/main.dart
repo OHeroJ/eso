@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:eso/hive/theme_box.dart';
 import 'package:eso/page/add_local_item_page.dart';
 import 'package:eso/utils.dart';
-import 'package:eso/utils/local_cupertion_delegate.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

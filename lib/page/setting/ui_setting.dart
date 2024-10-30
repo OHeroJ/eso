@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../fonticons_icons.dart';
 
 class UISetting extends StatelessWidget {
-  const UISetting({Key key}) : super(key: key);
+  const UISetting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class UISetting extends StatelessWidget {
           ),
           body: ValueListenableBuilder<Box<dynamic>>(
               valueListenable: globalConfigBox.listenable(),
-              builder: (BuildContext context, Box<dynamic> _, Widget child) {
+              builder: (BuildContext context, Box<dynamic> _, Widget? child) {
                 return ListView(
                   children: [
                     Card(
@@ -32,7 +32,8 @@ class UISetting extends StatelessWidget {
                           ListTile(
                             title: Text(
                               '入口和功能',
-                              style: TextStyle(color: Theme.of(context).primaryColor),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           Divider(),
@@ -42,13 +43,15 @@ class UISetting extends StatelessWidget {
                                 ? '点击进入目录，长按查看内容'
                                 : '点击查看内容，长按进入目录'),
                             value: profile.switchLongPress,
-                            onChanged: (value) => profile.switchLongPress = value,
+                            onChanged: (value) =>
+                                profile.switchLongPress = value,
                           ),
                           SwitchListTile(
                             title: Text('历史按钮'),
                             subtitle: Text('在关于页中显示历史浏览入口'),
                             value: profile.showHistoryOnAbout,
-                            onChanged: (value) => profile.showHistoryOnAbout = value,
+                            onChanged: (value) =>
+                                profile.showHistoryOnAbout = value,
                           ),
                           SwitchListTile(
                             title: Text('横屏模式 平板 TV'),
@@ -67,7 +70,8 @@ class UISetting extends StatelessWidget {
                           ListTile(
                             title: Text(
                               '主界面布局按钮设置',
-                              style: TextStyle(color: Theme.of(context).primaryColor),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           Divider(),
@@ -79,13 +83,15 @@ class UISetting extends StatelessWidget {
                             title: Text('收藏-发现'),
                             value: 2,
                             groupValue: profile.bottomCount,
-                            onChanged: (int value) => profile.bottomCount = value,
+                            onChanged: (int? value) =>
+                                profile.bottomCount = value,
                           ),
                           RadioListTile<int>(
                             title: Text('收藏-发现-历史-关于'),
                             value: 4,
                             groupValue: profile.bottomCount,
-                            onChanged: (int value) => profile.bottomCount = value,
+                            onChanged: (int? value) =>
+                                profile.bottomCount = value,
                           ),
                           Divider(),
                           ListTile(
@@ -96,31 +102,36 @@ class UISetting extends StatelessWidget {
                             title: Text('凹陷'),
                             value: ESOTheme.searchDocker,
                             groupValue: profile.searchPostion,
-                            onChanged: (int value) => profile.searchPostion = value,
+                            onChanged: (int? value) =>
+                                profile.searchPostion = value,
                           ),
                           RadioListTile<int>(
                             title: Text('浮动'),
                             value: ESOTheme.searchFloat,
                             groupValue: profile.searchPostion,
-                            onChanged: (int value) => profile.searchPostion = value,
+                            onChanged: (int? value) =>
+                                profile.searchPostion = value,
                           ),
                           RadioListTile<int>(
                             title: Text('顶部'),
                             value: ESOTheme.searchAction,
                             groupValue: profile.searchPostion,
-                            onChanged: (int value) => profile.searchPostion = value,
+                            onChanged: (int? value) =>
+                                profile.searchPostion = value,
                           ),
                           Divider(),
                           SwitchListTile(
                             title: Text('顶部历史按钮'),
                             value: profile.showHistoryOnFavorite,
-                            onChanged: (value) => profile.showHistoryOnFavorite = value,
+                            onChanged: (value) =>
+                                profile.showHistoryOnFavorite = value,
                           ),
                           AspectRatio(
                             aspectRatio: 0.8,
                             child: Card(
                               elevation: 20,
-                              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 10),
                               shadowColor: Colors.grey,
                               child: Container(
                                 decoration: globalDecoration,
@@ -130,15 +141,19 @@ class UISetting extends StatelessWidget {
                                     elevation: 0,
                                     leading: Text(''),
                                     actions: [
-                                      if (profile.searchPostion == ESOTheme.searchAction)
+                                      if (profile.searchPostion ==
+                                          ESOTheme.searchAction)
                                         IconButton(
-                                            icon: Icon(Icons.search), onPressed: null),
+                                            icon: Icon(Icons.search),
+                                            onPressed: null),
                                       if (profile.showHistoryOnFavorite)
                                         IconButton(
-                                            icon: Icon(Icons.history), onPressed: null),
+                                            icon: Icon(Icons.history),
+                                            onPressed: null),
                                       if (profile.bottomCount != 4)
                                         IconButton(
-                                            icon: Icon(Icons.settings), onPressed: null),
+                                            icon: Icon(Icons.settings),
+                                            onPressed: null),
                                     ],
                                   ),
                                   bottomNavigationBar: BottomAppBar(
@@ -157,7 +172,8 @@ class UISetting extends StatelessWidget {
                                                 children: <Widget>[
                                                   Icon(
                                                     FIcons.heart,
-                                                    color: Theme.of(context).primaryColor,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
                                                   ),
                                                   Text(
                                                     "收藏",
@@ -189,16 +205,19 @@ class UISetting extends StatelessWidget {
                                                   MainAxisAlignment.spaceAround,
                                               children: [
                                                 Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: <Widget>[
                                                     Icon(Icons.history),
                                                     Text("历史")
                                                   ],
                                                 ),
                                                 Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: <Widget>[
-                                                    Icon(Icons.info_outline_rounded),
+                                                    Icon(Icons
+                                                        .info_outline_rounded),
                                                     Text("关于")
                                                   ],
                                                 ),
@@ -214,17 +233,23 @@ class UISetting extends StatelessWidget {
                                       : FloatingActionButton(
                                           elevation: 1,
                                           tooltip: "搜索",
-                                          backgroundColor: Theme.of(context).primaryColor,
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
                                           onPressed: () {},
                                           child: Icon(FIcons.search,
-                                              color: Theme.of(context).canvasColor),
+                                              color: Theme.of(context)
+                                                  .canvasColor),
                                         ),
                                   floatingActionButtonLocation:
-                                      profile.searchPostion == ESOTheme.searchAction
+                                      profile.searchPostion ==
+                                              ESOTheme.searchAction
                                           ? null
-                                          : profile.searchPostion == ESOTheme.searchFloat
-                                              ? FloatingActionButtonLocation.endFloat
-                                              : FloatingActionButtonLocation.centerDocked,
+                                          : profile.searchPostion ==
+                                                  ESOTheme.searchFloat
+                                              ? FloatingActionButtonLocation
+                                                  .endFloat
+                                              : FloatingActionButtonLocation
+                                                  .centerDocked,
                                 ),
                               ),
                             ),

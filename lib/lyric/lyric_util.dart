@@ -13,7 +13,7 @@ class LyricUtil {
       var time = matchStr.substring(0, symbolIndex);
       var lyric = matchStr.substring(symbolIndex + 1);
       var duration = lyricTimeToDuration(time);
-      return Lyric(lyric, startTime: duration);
+      return Lyric(lyric, startTime: duration, endTime: Duration.zero);
     }).toList();
     //移除所有空歌词
     lyrics.removeWhere((lyric) => lyric.lyric.trim().isEmpty);

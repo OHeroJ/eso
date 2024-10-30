@@ -31,7 +31,7 @@ class ChapterPageProvider with ChangeNotifier {
   static const SmallList = 1;
   static const Grid = 2;
 
-  String getListStyleName([int listStyle]) {
+  String getListStyleName([int? listStyle]) {
     if (listStyle == null) {
       listStyle = searchItem.chapterListStyle;
     }
@@ -47,7 +47,7 @@ class ChapterPageProvider with ChangeNotifier {
     }
   }
 
-  ChapterPageProvider({@required this.searchItem, @required this.size}) {
+  ChapterPageProvider({required this.searchItem, required this.size}) {
     // _controller = ScrollController(initialScrollOffset: _calcHeight);
     _controller = ScrollController();
     _isLoading = false;
@@ -116,11 +116,11 @@ class ChapterPageProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     };
-    
+
     await Duration(milliseconds: 500); // 随意休息一下
     print("加载目录$page");
-    final durChapters =
-        await APIManager.getChapter(searchItem.originTag, searchItem.url, _page);
+    final durChapters = await APIManager.getChapter(
+        searchItem.originTag, searchItem.url, _page);
     if (durChapters.isEmpty) {
       endCheck();
       return;
@@ -219,8 +219,8 @@ class ChapterPageProvider with ChangeNotifier {
         updateChapter();
         break;
       case MenuChapter.clear_cache:
-        final _fileCache =
-            CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
+        final _fileCache = CacheUtil(
+            basePath: "cache${Platform.pathSeparator}${searchItem.id}");
         await CacheUtil.requestPermission();
         await _fileCache.clear();
         Utils.toast("清理成功");
@@ -230,8 +230,8 @@ class ChapterPageProvider with ChangeNotifier {
         break;
       case MenuChapter.edit_rule:
         final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)));
         break;
       case MenuChapter.change:
         final r = await Navigator.of(context).push(MaterialPageRoute(
@@ -261,7 +261,8 @@ class ChapterPageProvider with ChangeNotifier {
         break;
       case MenuChapter.open_chapter_url:
         final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
-        final url = searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
+        final url =
+            searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
         if (url != null) {
           launch(url);
         } else {

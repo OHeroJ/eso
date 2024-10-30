@@ -18,16 +18,16 @@ import 'content_page_manager.dart';
 import 'source/edit_rule_page.dart';
 
 class VideoPageDesktop extends StatefulWidget {
-  final SearchItem searchItem;
-  const VideoPageDesktop({this.searchItem, Key key}) : super(key: key);
+  final SearchItem? searchItem;
+  const VideoPageDesktop({this.searchItem, super.key});
 
   @override
   State<VideoPageDesktop> createState() => _VideoPageDesktopState();
 }
 
 class _VideoPageDesktopState extends State<VideoPageDesktop> {
-  WebviewController webviewController;
-  ESOTheme profile;
+  WebviewController? webviewController;
+  late ESOTheme profile;
   Color primaryColor;
 
   @override
@@ -47,14 +47,15 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
 
   @override
   void dispose() {
-    webviewController.dispose();
+    webviewController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     primaryColor = Theme.of(context).primaryColor;
-    final _divider = UIDash(height: Global.lineSize, dashWidth: 4, color: Colors.black);
+    final _divider =
+        UIDash(height: Global.lineSize, dashWidth: 4, color: Colors.black);
     final contentProvider = Provider.of<ContentProvider>(context);
     return ChangeNotifierProvider<VPDProvider>(
       create: (context) => VPDProvider(
@@ -76,8 +77,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                         icon: Icon(OMIcons.settingsEthernet),
                         tooltip: "编辑规则",
                         onPressed: () async {
-                          final rule =
-                              await Global.ruleDao.findRuleById(searchItem.originTag);
+                          final rule = await Global.ruleDao
+                              .findRuleById(searchItem.originTag);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => EditRulePage(rule: rule)));
                         },
@@ -120,7 +121,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                 )
                               : Container(
                                   height: 500,
-                                  child: Center(child: Webview(webviewController)),
+                                  child:
+                                      Center(child: Webview(webviewController)),
                                 ),
                           Card(
                             child: Padding(
@@ -129,8 +131,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                 children: <Widget>[
                                   if (provider.isLoading)
                                     LinearProgressIndicator(
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(Colors.red),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.red),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   Row(
@@ -145,7 +147,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                         height: 200,
                                         child: TextButton(
                                           onPressed: () => provider.playChapter(
-                                              searchItem.durChapterIndex, false),
+                                              searchItem.durChapterIndex,
+                                              false),
                                           child: Text("解析"),
                                         ),
                                       ),
@@ -158,8 +161,10 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                   ),
                                   ListTile(
                                     title: Text('查看目录原网页'),
-                                    subtitle: Text(searchItem.chapterUrl ?? "无"),
-                                    onTap: () => launch(searchItem.chapterUrl ?? ""),
+                                    subtitle:
+                                        Text(searchItem.chapterUrl ?? "无"),
+                                    onTap: () =>
+                                        launch(searchItem.chapterUrl ?? ""),
                                   ),
                                   Row(
                                     children: [
@@ -170,7 +175,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                               Utils.empty(profile.desktopPlayer)
                                                   ? "未选择播放器"
                                                   : profile.desktopPlayer),
-                                          onTap: () => provider.setPlayer(context),
+                                          onTap: () =>
+                                              provider.setPlayer(context),
                                         ),
                                       ),
                                       Container(
@@ -198,8 +204,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                 Divider(),
                                 ListTile(
                                   title: Text('edge内测版'),
-                                  subtitle:
-                                      Text('https://www.microsoftedgeinsider.com/zh-cn/'),
+                                  subtitle: Text(
+                                      'https://www.microsoftedgeinsider.com/zh-cn/'),
                                   onTap: () => launch(
                                       'https://www.microsoftedgeinsider.com/zh-cn/'),
                                 ),
@@ -242,14 +248,15 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                     maxLines: 1,
                                   ),
                                   onTap: () => provider.playChapter(index),
-                                  subtitle:
-                                      chapter.time != null && chapter.time.isNotEmpty
-                                          ? Text(
-                                              chapter.time,
-                                              style: TextStyle(color: Colors.white70),
-                                              maxLines: 1,
-                                            )
-                                          : null,
+                                  subtitle: chapter.time != null &&
+                                          chapter.time.isNotEmpty
+                                      ? Text(
+                                          chapter.time,
+                                          style:
+                                              TextStyle(color: Colors.white70),
+                                          maxLines: 1,
+                                        )
+                                      : null,
                                 );
                               },
                             ),
@@ -273,7 +280,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                     children: [
                       InkWell(
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 26, bottom: 5, top: 5),
+                          padding: const EdgeInsets.only(
+                              right: 26, bottom: 5, top: 5),
                           child: Icon(
                             OMIcons.list,
                             color: Colors.grey.withOpacity(0.1),
@@ -284,7 +292,8 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                       ),
                       InkWell(
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 26, bottom: 5, top: 5),
+                          padding: const EdgeInsets.only(
+                              right: 26, bottom: 5, top: 5),
                           child: Icon(
                             OMIcons.fullscreen,
                             color: Colors.grey.withOpacity(0.1),
@@ -309,10 +318,10 @@ class VPDProvider extends ChangeNotifier {
   final ContentProvider contentProvider;
 
   VPDProvider({
-    @required this.searchItem,
-    @required this.profile,
-    @required this.webcontroller,
-    @required this.contentProvider,
+    required this.searchItem,
+    required this.profile,
+    required this.webcontroller,
+    required this.contentProvider,
   }) {
     playChapter(searchItem.durChapterIndex, false);
   }
@@ -407,13 +416,15 @@ class VPDProvider extends ChangeNotifier {
       } else {
         _url = content.first;
         log("播放地址 $_url\n自动开始本地播放");
-        if (!webcontroller.value.isInitialized) await webcontroller.initialize();
+        if (!webcontroller.value.isInitialized)
+          await webcontroller.initialize();
         // if (_url.startsWith("https")) {
         // _url = "https://jx.parwix.com:4433/player/?url=" + Uri.encodeFull(_url);
         // } else {
         var dir = kDebugMode
             ? Utils.join(Directory.current.path, "player.html")
-            : Utils.join(Directory.current.path, "data", "flutter_assets", "player.html");
+            : Utils.join(Directory.current.path, "data", "flutter_assets",
+                "player.html");
         dir = Uri.encodeFull(dir).replaceAll("%5C", "\\");
         _url = "file:///$dir#$_url";
         // }
@@ -489,7 +500,8 @@ class VPDProvider extends ChangeNotifier {
     //             color: Theme.of(context).iconTheme.color,
     //           ))
     //     ]);
-    final r = await Utils.pickFile(context, ['.exe'], profile.desktopPlayer ?? 'C:\\',
+    final r = await Utils.pickFile(
+        context, ['.exe'], profile.desktopPlayer ?? 'C:\\',
         title: '选择本地播放器');
     if (r != null) {
       profile.desktopPlayer = r;

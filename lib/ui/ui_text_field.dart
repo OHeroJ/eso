@@ -5,17 +5,17 @@ import 'package:flutter/services.dart';
 
 /// 搜索框
 class SearchTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String hintText;
+  final TextEditingController? controller;
+  final String? hintText;
   final bool autofocus;
-  final FocusNode focusNode;
-  final Widget prefix;
+  final FocusNode? focusNode;
+  final Widget? prefix;
   final TextInputAction textInputAction;
-  final ValueChanged<String> onSubmitted;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
 
   const SearchTextField({
-    Key key,
+    super.key,
     this.controller,
     this.hintText,
     this.autofocus = false,
@@ -24,12 +24,12 @@ class SearchTextField extends StatelessWidget {
     this.textInputAction = TextInputAction.search,
     this.onChanged,
     this.onSubmitted,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     if (controller != null && onChanged != null) {
-      controller.addListener(() => onChanged(controller.text));
+      controller!.addListener(() => onChanged!(controller!.text));
     }
     return TextField(
       controller: controller,
@@ -55,7 +55,7 @@ class SearchTextField extends StatelessWidget {
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.5),
+          color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.5),
           fontSize: 13,
         ),
         isDense: true,
@@ -65,7 +65,11 @@ class SearchTextField extends StatelessWidget {
               padding: const EdgeInsets.only(left: 12, right: 6),
               child: Icon(
                 FIcons.search,
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.2),
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.color
+                    ?.withOpacity(0.2),
               ),
             ),
         prefixIconConstraints: BoxConstraints(),
@@ -76,10 +80,11 @@ class SearchTextField extends StatelessWidget {
             child: Container(
               width: 16.0,
               height: 16.0,
-              child: Icon(Icons.clear, color: Theme.of(context).dividerColor, size: 14.0),
+              child: Icon(Icons.clear,
+                  color: Theme.of(context).dividerColor, size: 14.0),
             ),
             onTap: () {
-              controller.text = '';
+              controller?.text = '';
             },
           ),
         ),
@@ -87,7 +92,7 @@ class SearchTextField extends StatelessWidget {
       maxLines: 1,
       autofocus: autofocus,
       style: TextStyle(
-        color: Theme.of(context).textTheme.bodyText1.color,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
       ),
       onSubmitted: onSubmitted,
       onChanged: onChanged,

@@ -52,13 +52,14 @@ List<TextSpan> _convert(String code) {
 }
 
 class CodeInputController extends TextEditingController {
-  CodeInputController({String text}) : super(text: text);
+  CodeInputController({super.text});
 
   TextSpan oldSpan = TextSpan();
-  Future<void> spanCall;
+  Future<void>? spanCall;
 
   @override
-  TextSpan buildTextSpan({ BuildContext context, TextStyle style, @required bool withComposing}) {
+  TextSpan buildTextSpan(
+      BuildContext context, TextStyle? style, bool withComposing) {
     String oldText = oldSpan.toPlainText();
     String newText = value.text;
     if (oldText == newText) return oldSpan;
@@ -92,7 +93,9 @@ class CodeInputController extends TextEditingController {
     oldSpan.children?.sublist(beforeSpans.length)?.lastIndexWhere((element) {
       String elementText = element.toPlainText();
       if (splitAt + end + elementText.length >= newText.length ||
-          !newText.substring(start, newText.length - end).endsWith(elementText)) {
+          !newText
+              .substring(start, newText.length - end)
+              .endsWith(elementText)) {
         rightSpan = element;
         return true;
       }
@@ -104,7 +107,9 @@ class CodeInputController extends TextEditingController {
     return TextSpan(style: style, children: [
       ...beforeSpans,
       TextSpan(
-          style: leftSpan != null && leftSpan == rightSpan ? leftSpan.style : style,
+          style: leftSpan != null && leftSpan == rightSpan
+              ? leftSpan.style
+              : style,
           text: newText.substring(start, max(start, newText.length - end))),
       ...endSpans.reversed
     ]);

@@ -34,7 +34,7 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   var isLargeScreen = false;
-  Widget detailPage;
+  Widget? detailPage;
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +113,8 @@ class AboutPage2 extends StatelessWidget {
                     ),
                     Divider(),
                     ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 16),
                       title: Text("刷新率设置"),
                       subtitle: Text(
                         "一加的部分机型可能需要",
@@ -179,8 +179,8 @@ class AboutPage2 extends StatelessWidget {
                             actions: <Widget>[
                               TextButton(
                                   child: Text('取消',
-                                      style:
-                                          TextStyle(color: Theme.of(context).hintColor)),
+                                      style: TextStyle(
+                                          color: Theme.of(context).hintColor)),
                                   onPressed: () => Navigator.pop(context)),
                               TextButton(
                                   child: Text('立即清理'),
@@ -266,7 +266,8 @@ class AboutPage2 extends StatelessWidget {
                     ListTile(
                       title: Text('规则获取'),
                       subtitle: Text('https://github.com/mabDc/eso_source/'),
-                      onTap: () => launch('https://github.com/mabDc/eso_source/'),
+                      onTap: () =>
+                          launch('https://github.com/mabDc/eso_source/'),
                     ),
                     ListTile(
                       title: Text('规则说明'),
@@ -345,12 +346,14 @@ class AboutPage2 extends StatelessWidget {
                     ListTile(
                       title: Text('问题反馈'),
                       subtitle: Text('https://github.com/mabDc/eso/issues'),
-                      onTap: () => launch('https://github.com/mabDc/eso/issues'),
+                      onTap: () =>
+                          launch('https://github.com/mabDc/eso/issues'),
                     ),
                     ListTile(
                       title: Text('${Global.appName} - ${Global.appVersion}'),
                       subtitle: Text('https://github.com/mabDc/eso/releases'),
-                      onTap: () => launch('https://github.com/mabDc/eso/releases'),
+                      onTap: () =>
+                          launch('https://github.com/mabDc/eso/releases'),
                     ),
                   ],
                 ),
@@ -358,7 +361,8 @@ class AboutPage2 extends StatelessWidget {
               Card(
                 child: Material(
                   color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0)),
                   child: InkWell(
                     onTap: () => showAbout(context),
                     child: SizedBox(
@@ -482,7 +486,8 @@ class _ConfigSettingPageState extends State<ConfigSettingPage> {
   }
 }
 
-Widget myConfigSettingBuilder(BuildContext context, TextCompositionConfig config) {
+Widget myConfigSettingBuilder(
+    BuildContext context, TextCompositionConfig config) {
   return configSettingBuilder(
     context,
     config,
@@ -519,7 +524,9 @@ Widget myConfigSettingBuilder(BuildContext context, TextCompositionConfig config
       //   fileTileSelectMode: FileTileSelectMode.wholeTile,
       //   requestPermission: CacheUtil.requestPermission,
       // );
-      String path = await Utils.pickFile(context, ['.jpg', '.png', '.webp'], dir, title: "选择背景");
+      String path = await Utils.pickFile(
+          context, ['.jpg', '.png', '.webp'], dir,
+          title: "选择背景");
       if (path == null) {
         Utils.toast("未选择文件");
         // onChange('');
@@ -546,7 +553,8 @@ Widget myConfigSettingBuilder(BuildContext context, TextCompositionConfig config
       //   fileTileSelectMode: FileTileSelectMode.wholeTile,
       //   requestPermission: CacheUtil.requestPermission,
       // );
-      final ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], dir, title: "选择字体");
+      final ttf = await Utils.pickFile(context, ['.ttf', '.ttc', '.otf'], dir,
+          title: "选择字体");
       if (ttf == null) {
         Utils.toast('未选取字体文件');
         // onChange('');

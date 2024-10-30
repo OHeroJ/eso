@@ -6,11 +6,11 @@ class ChapterItem {
   String url;
 
   ChapterItem({
-    this.contentUrl,
-    this.cover,
-    this.name,
-    this.time,
-    this.url,
+    required this.contentUrl,
+    required this.cover,
+    required this.name,
+    required this.time,
+    required this.url,
   });
 
   Map<String, dynamic> toJson() => {
@@ -21,12 +21,10 @@ class ChapterItem {
         "url": url,
       };
 
-  ChapterItem.fromJson(Map<String, dynamic> json) {
-    contentUrl = json["contentUrl"];
-    cover = json["cover"];
-    name = json["name"];
-    time = json["time"];
-    url = json["url"];
-  }
-
+  ChapterItem.fromJson(Map<String, dynamic> json)
+      : contentUrl = json["contentUrl"],
+        cover = json["cover"],
+        name = json["name"],
+        time = json["time"],
+        url = json["url"];
 }

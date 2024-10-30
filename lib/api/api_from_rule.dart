@@ -18,9 +18,9 @@ class APIFromRUle implements API {
   String _originTag = '';
   int _ruleContentType = 0;
 
-  static Map<String, String>? _nextUrl;
-  static Map<String, String>? get nextUrl => _nextUrl;
-  static void setNextUrl(String url, String next) {
+  static Map<String, String?>? _nextUrl;
+  static Map<String, String?>? get nextUrl => _nextUrl;
+  static void setNextUrl(String url, String? next) {
     if (_nextUrl == null) {
       _nextUrl = {url: next};
     } else {
@@ -195,12 +195,13 @@ class APIFromRUle implements API {
     return result;
   }
 
-  String checkString(String s) => s != null && s.isNotEmpty ? s : null;
-  static String chapterNextUrl;
+  String? checkString(String? s) => s != null && s.isNotEmpty ? s : null;
+  static String? chapterNextUrl;
 
   // page放进chapter里头
   @override
-  Future<List<ChapterItem>> chapter(final String lastResult, [int page]) async {
+  Future<List<ChapterItem>> chapter(final String lastResult,
+      [int? page]) async {
     if (rule.chapterUrl == "正文") {
       return [ChapterItem(url: lastResult, name: "正文")];
     }

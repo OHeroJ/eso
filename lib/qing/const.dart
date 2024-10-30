@@ -50,17 +50,17 @@ class AppData {
   TextEditingController cache;
   TextEditingController result;
   AppData({
-    @required this.url,
-    @required this.method,
-    @required this.ua,
-    @required this.cookies,
-    @required this.body,
-    @required this.encode,
-    @required this.headers,
-    @required this.html,
-    @required this.string,
-    @required this.rule,
-    @required this.cache,
-    @required this.result,
+    required this.url,
+    required this.method,
+    required this.ua,
+    required this.cookies,
+    required this.body,
+    required this.encode,
+    required this.headers,
+    required this.html,
+    required this.string,
+    required this.rule,
+    required this.cache,
+    required this.result,
   });
 }

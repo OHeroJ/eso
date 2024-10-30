@@ -4,9 +4,9 @@ import 'package:eso/model/chapter_page_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class SearchItem extends HiveObject{
-  String searchUrl;
-  String chapterUrl;
+class SearchItem extends HiveObject {
+  String? searchUrl;
+  String? chapterUrl;
 
   bool operator ==(Object other) =>
       other is SearchItem && runtimeType == other.runtimeType && id == other.id;
@@ -14,28 +14,28 @@ class SearchItem extends HiveObject{
   @override
   int get hashCode => id;
 
-  int id;
+  late int id;
 
   /// 源名
-  String origin;
+  String? origin;
 
   /// 源id
-  String originTag;
+  String? originTag;
 
   /// 封面
-  String cover;
+  String? cover;
 
   /// 名称
-  String name;
+  String? name;
 
   /// 作者
-  String author;
+  String? author;
 
   /// 最新章节
-  String chapter;
+  String? chapter;
 
   /// 简介
-  String description;
+  String? description;
 
   /// 分类
   List<String> tags;
@@ -43,38 +43,38 @@ class SearchItem extends HiveObject{
   /// 搜索结果
   String url;
   // Future<String> get absoloteUrl async => (await Global.ruleDao.findRuleById(originTag));
-  int ruleContentType;
-  int chapterListStyle;
-  String durChapter;
-  int durChapterIndex;
-  int durContentIndex;
-  int chaptersCount;
-  bool reverseChapter;
+  int? ruleContentType;
+  int? chapterListStyle;
+  String? durChapter;
+  int? durChapterIndex;
+  int? durContentIndex;
+  int? chaptersCount;
+  bool? reverseChapter;
   List<ChapterItem> chapters;
 
   /// 收藏时间
-  int createTime;
+  late int createTime;
 
   /// 更新时间
-  int updateTime;
+  late int updateTime;
 
   /// 最后阅读时间
-  int lastReadTime;
+  late int lastReadTime;
 
   SearchItem({
     this.searchUrl,
     this.chapterUrl,
-    @required this.cover,
-    @required this.name,
-    @required this.author,
-    @required this.chapter,
-    @required this.description,
-    @required this.url,
-    @required API api,
+    required this.cover,
+    required this.name,
+    required this.author,
+    required this.chapter,
+    required this.description,
+    required this.url,
+    required API? api,
     this.chaptersCount,
     this.reverseChapter,
-    this.chapters,
-    @required this.tags,
+    this.chapters = const [],
+    required this.tags,
   }) {
     if (chaptersCount == null) {
       chaptersCount = 0;
@@ -92,7 +92,7 @@ class SearchItem extends HiveObject{
     durChapter = "";
     durChapterIndex = 0;
     durContentIndex = 1;
-    chapters = null;
+    chapters = [];
     createTime ??= DateTime.now().microsecondsSinceEpoch;
     updateTime ??= DateTime.now().microsecondsSinceEpoch;
     lastReadTime ??= DateTime.now().microsecondsSinceEpoch;
@@ -168,33 +168,33 @@ class SearchItem extends HiveObject{
     this.chapters,
   );
 
-  SearchItem.fromJson(Map<String, dynamic> json) {
-    searchUrl = json["searchUrl"];
-    chapterUrl = json["chapterUrl"];
-    id = json["id"];
-    origin = json["origin"];
-    originTag = json["originTag"];
-    cover = json["cover"];
-    name = json["name"];
-    author = json["author"];
-    chapter = json["chapter"];
-    description = json["description"];
-    url = json["url"];
-    ruleContentType = json["ruleContentType"];
-    chapterListStyle = json["chapterListStyle"];
-    durChapter = json["durChapter"];
-    durChapterIndex = json["durChapterIndex"];
-    durContentIndex = json["durContentIndex"];
-    chaptersCount = json["chaptersCount"];
-    reverseChapter = json["reverseChapter"] ?? false;
-    //增加时间
-    createTime = json['createTime'] ?? DateTime.now().microsecondsSinceEpoch;
-    updateTime = json['updateTime'] ?? DateTime.now().microsecondsSinceEpoch;
-    lastReadTime = json['lastReadTime'] ?? DateTime.now().microsecondsSinceEpoch;
-
-    tags = json["tags"]?.split(", ") ?? <String>[];
-    chapters = <ChapterItem>[];
-  }
+  SearchItem.fromJson(Map<String, dynamic> json)
+      : searchUrl = json["searchUrl"],
+        chapterUrl = json["chapterUrl"],
+        id = json["id"],
+        origin = json["origin"],
+        originTag = json["originTag"],
+        cover = json["cover"],
+        name = json["name"],
+        author = json["author"],
+        chapter = json["chapter"],
+        description = json["description"],
+        url = json["url"],
+        ruleContentType = json["ruleContentType"],
+        chapterListStyle = json["chapterListStyle"],
+        durChapter = json["durChapter"],
+        durChapterIndex = json["durChapterIndex"],
+        durContentIndex = json["durContentIndex"],
+        chaptersCount = json["chaptersCount"],
+        reverseChapter = json["reverseChapter"] ?? false, //增加时间
+        createTime =
+            json['createTime'] ?? DateTime.now().microsecondsSinceEpoch,
+        updateTime =
+            json['updateTime'] ?? DateTime.now().microsecondsSinceEpoch,
+        lastReadTime =
+            json['lastReadTime'] ?? DateTime.now().microsecondsSinceEpoch,
+        tags = json["tags"]?.split(", ") ?? <String>[],
+        chapters = <ChapterItem>[];
 
   changeTo(SearchItem searchItem) {
     searchUrl = searchItem.searchUrl;
@@ -215,9 +215,10 @@ class SearchItem extends HiveObject{
   }
 
   localAddInfo(SearchItem searchItem) {
-    if (searchItem.author.isNotEmpty) author = searchItem.author;
-    if (searchItem.cover.isNotEmpty) cover = searchItem.cover;
+    if (searchItem.author?.isNotEmpty == true) author = searchItem.author;
+    if (searchItem.cover?.isNotEmpty == true) cover = searchItem.cover;
     if (searchItem.tags.isNotEmpty) tags = searchItem.tags;
-    if (searchItem.description.isNotEmpty) description = searchItem.description;
+    if (searchItem.description?.isNotEmpty == true)
+      description = searchItem.description;
   }
 }

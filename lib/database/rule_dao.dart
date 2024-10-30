@@ -5,7 +5,7 @@ import 'package:floor/floor.dart';
 @dao
 abstract class RuleDao {
   static String get order => "$sortName $sortOrder";
-  static String sortName = sortMap["置顶"];
+  static String sortName = sortMap["置顶"]!;
   static String sortOrder = desc;
   // 逆序
   static const String desc = "desc";
@@ -23,7 +23,7 @@ abstract class RuleDao {
   };
 
   @Query('SELECT * FROM rule WHERE id = :id')
-  Future<Rule> findRuleById(String id);
+  Future<Rule?> findRuleById(String id);
 
   @Query('SELECT * FROM rule ORDER BY \${RuleDao.order}')
   Future<List<Rule>> findAllRules();
@@ -57,7 +57,8 @@ abstract class RuleDao {
     }
   }
 
-  @Query('SELECT * FROM rule where enableDiscover = 1 ORDER BY \${RuleDao.order}')
+  @Query(
+      'SELECT * FROM rule where enableDiscover = 1 ORDER BY \${RuleDao.order}')
   Future<List<Rule>> findAllDiscoverRules();
 
   @Query('SELECT * FROM rule where enableUpload = 1')
@@ -76,7 +77,7 @@ abstract class RuleDao {
   Future<int> deleteRules(List<Rule> rules);
 
   @Query('SELECT * FROM rule order by sort desc limit 1')
-  Future<Rule> findMaxSort();
+  Future<Rule?> findMaxSort();
 
   @Query("DELETE FROM rule")
   Future<void> clearAllRules();

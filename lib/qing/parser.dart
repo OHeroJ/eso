@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'const.dart';
 
 class Parser extends StatelessWidget {
-  const Parser({Key key}) : super(key: key);
+  const Parser({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +34,24 @@ class Parser extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () async {
-                  final s =
-                      await AnalyzerManager(data.html.text).getElements(data.rule.text);
+                  final s = await AnalyzerManager(data.html.text)
+                      .getElements(data.rule.text);
                   data.result.text = "$s";
                 },
                 child: const Text("解析列表"),
               ),
               TextButton(
                 onPressed: () async {
-                  final s =
-                      await AnalyzerManager(data.html.text).getString(data.rule.text);
+                  final s = await AnalyzerManager(data.html.text)
+                      .getString(data.rule.text);
                   data.result.text = s;
                 },
                 child: const Text("解析字符串"),
               ),
               TextButton(
                 onPressed: () async {
-                  final s =
-                      await AnalyzerManager(data.html.text).getStringList(data.rule.text);
+                  final s = await AnalyzerManager(data.html.text)
+                      .getStringList(data.rule.text);
                   data.result.text = "$s";
                 },
                 child: const Text("解析字符串数组"),

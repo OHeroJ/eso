@@ -10,19 +10,19 @@ class LyricWidget extends StatefulWidget {
   final List<Lyric> lyrics;
   final List<Lyric> remarkLyrics;
   final Size size;
-  final LyricController controller;
+  final LyricController? controller;
   final TextStyle lyricStyle;
   final TextStyle remarkStyle;
   final TextStyle currLyricStyle;
-  final TextStyle _currRemarkLyricStyle;
-  final TextStyle _draggingLyricStyle;
-  final TextStyle _draggingRemarkLyricStyle;
+  final TextStyle? _currRemarkLyricStyle;
+  final TextStyle? _draggingLyricStyle;
+  final TextStyle? _draggingRemarkLyricStyle;
   final double lyricGap;
   final double remarkLyricGap;
   final bool enableDrag;
 
   //歌词画笔数组
-  final  List<TextPainter> lyricTextPaints = [];
+  final List<TextPainter> lyricTextPaints = [];
 
   //翻译/音译歌词画笔数组
   final List<TextPainter> subLyricTextPaints = [];
@@ -31,46 +31,38 @@ class LyricWidget extends StatefulWidget {
   final double lyricMaxWidth;
 
   LyricWidget(
-      {Key key,
-      @required this.lyrics,
-      this.remarkLyrics,
-      @required this.size,
+      {super.key,
+      required this.lyrics,
+      this.remarkLyrics = const [],
+      required this.size,
       this.controller,
       this.lyricStyle = const TextStyle(color: Colors.grey, fontSize: 14),
       this.remarkStyle = const TextStyle(color: Colors.black, fontSize: 14),
       this.currLyricStyle = const TextStyle(color: Colors.red, fontSize: 14),
-      this.lyricGap: 10,
-      this.remarkLyricGap: 20,
-      TextStyle draggingLyricStyle,
-      TextStyle draggingRemarkLyricStyle,
-      this.enableDrag: true,
-      this.lyricMaxWidth,
-      TextStyle currRemarkLyricStyle})
-      : assert(enableDrag != null),
-        assert(lyrics != null && lyrics.isNotEmpty),
-        assert(size != null),
-        this._currRemarkLyricStyle = currRemarkLyricStyle ?? currLyricStyle,
-        this._draggingLyricStyle = draggingLyricStyle ?? lyricStyle.copyWith(color: Colors.greenAccent),
-        this._draggingRemarkLyricStyle = draggingRemarkLyricStyle ?? remarkStyle.copyWith(color: Colors.greenAccent),
-        assert(controller != null)
-  {
-      //歌词转画笔
-      lyricTextPaints.addAll(lyrics
-          .map(
-            (l) => TextPainter(
-                text: TextSpan(text: l.lyric, style: lyricStyle),
-                textDirection: TextDirection.ltr),
-          )
-          .toList());
+      this.lyricGap = 10,
+      this.remarkLyricGap = 20,
+      TextStyle? draggingLyricStyle,
+      TextStyle? draggingRemarkLyricStyle,
+      this.enableDrag = true,
+      this.lyricMaxWidth = 0,
+      TextStyle? currRemarkLyricStyle}) {
+    //歌词转画笔
+    lyricTextPaints.addAll(lyrics
+        .map(
+          (l) => TextPainter(
+              text: TextSpan(text: l.lyric, style: lyricStyle),
+              textDirection: TextDirection.ltr),
+        )
+        .toList());
 
-      //翻译/音译歌词转画笔
-      if (remarkLyrics != null && remarkLyrics.isNotEmpty) {
-        subLyricTextPaints.addAll(remarkLyrics
-            .map((l) => TextPainter(
-                text: TextSpan(text: l.lyric, style: remarkStyle),
-                textDirection: TextDirection.ltr))
-            .toList());
-      }
+    //翻译/音译歌词转画笔
+    if (remarkLyrics.isNotEmpty) {
+      subLyricTextPaints.addAll(remarkLyrics
+          .map((l) => TextPainter(
+              text: TextSpan(text: l.lyric, style: remarkStyle),
+              textDirection: TextDirection.ltr))
+          .toList());
+    }
   }
 
   @override
@@ -93,8 +85,7 @@ class _LyricWidgetState extends State<LyricWidget> {
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: widget.controller.vsync,
-        duration: Duration(milliseconds: 500));
+        vsync: widget.controller.vsync, duration: Duration(milliseconds: 500));
     _animationController.addListener(_updateOffset);
 
     lyricMaxWidth = widget.lyricMaxWidth;
@@ -129,7 +120,8 @@ class _LyricWidgetState extends State<LyricWidget> {
 
   _updateOffset() {
     // print("$aniBegin, $aniEnd, ${_animationController.value}");
-    _lyricPainter.offset = -(aniBegin + (aniEnd - aniBegin) * _animationController.value);
+    _lyricPainter.offset =
+        -(aniBegin + (aniEnd - aniBegin) * _animationController.value);
     _lastOffset = _lyricPainter.offset;
   }
 
@@ -172,7 +164,7 @@ class _LyricWidgetState extends State<LyricWidget> {
               if (temOffset < 0 && temOffset >= -totalHeight) {
                 widget.controller.draggingOffset = temOffset;
                 widget.controller.draggingLine =
-                    getCurrentDraggingLine(temOffset+widget.lyricGap);
+                    getCurrentDraggingLine(temOffset + widget.lyricGap);
                 _lyricPainter.draggingLine = widget.controller.draggingLine;
                 widget.controller.draggingProgress =
                     widget.lyrics[widget.controller.draggingLine].startTime +
@@ -241,8 +233,7 @@ class _LyricWidgetState extends State<LyricWidget> {
     // 计算当前行偏移量
     var currentRowOffset = computeScrollY(currentLyricIndex);
     //如果偏移量相同不执行动画
-    if (currentRowOffset == widget.controller.previousRowOffset)
-      return;
+    if (currentRowOffset == widget.controller.previousRowOffset) return;
     // 起始为上一行，结束点为当前行
     _animationController.stop();
     aniBegin = widget.controller.previousRowOffset;

@@ -76,9 +76,9 @@ class DLNAUtil {
   /// 开始投屏
   start(BuildContext context,
       {String? title,
-      required String url,
+      String? url,
       String videoType = VideoObject.VIDEO_MP4,
-      VoidCallback onPlay}) async {
+      VoidCallback? onPlay}) async {
     if (url == null || url.isEmpty) return null;
 
     showDialog(
@@ -172,7 +172,7 @@ class DLNAUtil {
 
                 final _btnColor = curDevice == null
                     ? Colors.grey
-                    : Theme.of(context).accentColor;
+                    : Theme.of(context).colorScheme.secondary;
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,

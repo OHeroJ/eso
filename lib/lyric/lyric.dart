@@ -1,10 +1,15 @@
 class Lyric {
   String lyric;
-  Duration? startTime;
-  Duration? endTime;
+  Duration startTime;
+  Duration endTime;
   bool isRemark;
 
-  Lyric(this.lyric, {this.startTime, this.endTime, this.isRemark = false});
+  Lyric(
+    this.lyric, {
+    required this.startTime,
+    required this.endTime,
+    this.isRemark = false,
+  });
 
   @override
   String toString() {
