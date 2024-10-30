@@ -23,7 +23,7 @@ import 'login_rule_page.dart';
 import 'editor/highlight_code_editor.dart';
 
 class EditRulePage extends StatefulWidget {
-  final Rule rule;
+  final Rule? rule;
   const EditRulePage({
     this.rule,
     super.key,

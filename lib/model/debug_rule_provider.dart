@@ -300,7 +300,7 @@ class DebugRuleProvider with ChangeNotifier {
             _addContent("响应内容为空，终止解析！");
             return;
           }
-          discoverUrl = discoverResult.request.url.toString();
+          discoverUrl = discoverResult.request?.url.toString() ?? '';
           body = DecodeBody().decode(
               discoverResult.bodyBytes, discoverResult.headers["content-type"]);
           _addContent("地址", discoverUrl, true);
@@ -310,7 +310,7 @@ class DebugRuleProvider with ChangeNotifier {
       await JSEngine.setEnvironment(1, rule, "", discoverUrl, "", "");
       _addContent("初始化js");
       final analyzer = AnalyzerManager(body);
-      String next;
+      String? next;
       if (rule.discoverNextUrl != null && rule.discoverNextUrl.isNotEmpty) {
         next = await analyzer.getString(rule.discoverNextUrl);
       } else {
@@ -408,7 +408,7 @@ class DebugRuleProvider with ChangeNotifier {
             _addContent("响应内容为空，终止解析！");
             return;
           }
-          searchUrl = searchResult.request.url.toString();
+          searchUrl = searchResult.request?.url.toString() ?? '';
           _addContent("地址", searchUrl, true);
           body = DecodeBody().decode(
               searchResult.bodyBytes, searchResult.headers["content-type"]);
@@ -417,7 +417,7 @@ class DebugRuleProvider with ChangeNotifier {
       await JSEngine.setEnvironment(1, rule, "", searchUrl, value, "");
       _addContent("初始化js");
       final analyzer = AnalyzerManager(body);
-      String next;
+      String? next;
       if (rule.searchNextUrl != null && rule.searchNextUrl.isNotEmpty) {
         next = await analyzer.getString(rule.searchNextUrl);
       } else {
@@ -495,8 +495,8 @@ class DebugRuleProvider with ChangeNotifier {
     _beginEvent("目录");
     _addContent("如果有分页，只尝试加载两页作为测试");
     dynamic firstChapter;
-    String next;
-    String chapterUrlRule;
+    String? next;
+    String? chapterUrlRule;
     final hasNextUrlRule =
         rule.chapterNextUrl != null && rule.chapterNextUrl.isNotEmpty;
     for (var page = 1; page < 3; page++) {
@@ -539,7 +539,7 @@ class DebugRuleProvider with ChangeNotifier {
               _addContent("响应内容为空，终止解析！");
               break;
             }
-            chapterUrl = res.request.url.toString();
+            chapterUrl = res.request?.url.toString() ?? '';
             _addContent("地址", chapterUrl, true);
             body =
                 DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
@@ -661,8 +661,8 @@ class DebugRuleProvider with ChangeNotifier {
     final url = rule.contentUrl != null && rule.contentUrl.isNotEmpty
         ? rule.contentUrl
         : result;
-    String next;
-    String contentUrlRule;
+    String? next;
+    String? contentUrlRule;
     for (var page = 1;; page++) {
       if (disposeFlag) return;
       contentUrlRule = null;
@@ -704,7 +704,7 @@ class DebugRuleProvider with ChangeNotifier {
               _addContent("响应内容为空，终止解析！");
               return;
             }
-            contentUrl = res.request.url.toString();
+            contentUrl = res.request?.url.toString() ?? '';
             _addContent("地址", contentUrl, true);
             body =
                 DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);

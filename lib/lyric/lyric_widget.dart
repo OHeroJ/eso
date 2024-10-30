@@ -145,29 +145,29 @@ class _LyricWidgetState extends State<LyricWidget> {
         draggingLyricTextStyle: widget._draggingLyricStyle,
         draggingSubLyricTextStyle: widget._draggingRemarkLyricStyle,
         currSubLyricTextStyle: widget._currRemarkLyricStyle);
-    _lyricPainter.currentLyricIndex =
+    _lyricPainter?.currentLyricIndex =
         findLyricIndexByDuration(widget.controller.progress, widget.lyrics);
     if (widget.controller.isDragging) {
-      _lyricPainter.draggingLine = widget.controller.draggingLine;
-      _lyricPainter.offset = widget.controller.draggingOffset;
+      _lyricPainter?.draggingLine = widget.controller.draggingLine;
+      _lyricPainter?.offset = widget.controller.draggingOffset;
     } else {
-      _lyricPainter.offset = _lastOffset;
+      _lyricPainter?.offset = _lastOffset;
     }
     return widget.enableDrag
         ? GestureDetector(
             onVerticalDragUpdate: (e) {
               cancelTimer();
-              double temOffset = (_lyricPainter.offset + e.delta.dy);
+              double temOffset = (_lyricPainter!.offset + e.delta.dy);
               if (temOffset < 0 && temOffset >= -totalHeight) {
                 widget.controller.draggingOffset = temOffset;
                 widget.controller.draggingLine =
                     getCurrentDraggingLine(temOffset + widget.lyricGap);
-                _lyricPainter.draggingLine = widget.controller.draggingLine;
+                _lyricPainter?.draggingLine = widget.controller.draggingLine;
                 widget.controller.draggingProgress =
                     widget.lyrics[widget.controller.draggingLine].startTime +
                         Duration(milliseconds: 1);
                 widget.controller.isDragging = true;
-                _lyricPainter.offset = temOffset;
+                _lyricPainter?.offset = temOffset;
               }
             },
             onVerticalDragEnd: (e) {
@@ -191,12 +191,13 @@ class _LyricWidgetState extends State<LyricWidget> {
   }
 
   void resetDragging() {
-    _lyricPainter.currentLyricIndex =
+    _lyricPainter?.currentLyricIndex =
         findLyricIndexByDuration(widget.controller.progress, widget.lyrics);
 
-    widget.controller.previousRowOffset = -widget.controller.draggingOffset;
-    animationScrollY(_lyricPainter.currentLyricIndex, widget.controller.vsync);
-    _lyricPainter.draggingLine = null;
+    widget.controller.previousRowOffset = -widget.controller.draggingOffset!;
+    animationScrollY(
+        _lyricPainter?.currentLyricIndex, widget.controller.vsync!);
+    _lyricPainter?.draggingLine = null;
     widget.controller.isDragging = false;
   }
 
@@ -215,8 +216,8 @@ class _LyricWidgetState extends State<LyricWidget> {
 
   void cancelTimer() {
     if (widget.controller.draggingTimer != null) {
-      if (widget.controller.draggingTimer.isActive) {
-        widget.controller.draggingTimer.cancel();
+      if (widget.controller.draggingTimer?.isActive == true) {
+        widget.controller.draggingTimer?.cancel();
         widget.controller.draggingTimer = null;
       }
     }
@@ -232,11 +233,11 @@ class _LyricWidgetState extends State<LyricWidget> {
     //如果偏移量相同不执行动画
     if (currentRowOffset == widget.controller.previousRowOffset) return;
     // 起始为上一行，结束点为当前行
-    _animationController.stop();
+    _animationController?.stop();
     aniBegin = widget.controller.previousRowOffset;
     aniEnd = currentRowOffset;
     widget.controller.previousRowOffset = currentRowOffset;
-    _animationController.forward(from: 0);
+    _animationController?.forward(from: 0);
   }
 
   //根据当前时长获取歌词位置

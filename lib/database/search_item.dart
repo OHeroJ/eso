@@ -50,7 +50,7 @@ class SearchItem extends HiveObject {
   int? durContentIndex;
   int? chaptersCount;
   bool? reverseChapter;
-  List<ChapterItem> chapters;
+  List<ChapterItem>? chapters;
 
   /// 收藏时间
   late int createTime;
@@ -73,7 +73,7 @@ class SearchItem extends HiveObject {
     required API? api,
     this.chaptersCount,
     this.reverseChapter,
-    this.chapters = const [],
+    this.chapters,
     required this.tags,
   }) {
     if (chaptersCount == null) {

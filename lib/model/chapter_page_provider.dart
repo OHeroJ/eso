@@ -21,11 +21,11 @@ import '../utils.dart';
 class ChapterPageProvider with ChangeNotifier {
   final Size size;
   final SearchItem searchItem;
-  ScrollController _controller;
+  late ScrollController _controller;
   ScrollController get controller => _controller;
 
   bool get isLoading => _isLoading;
-  bool _isLoading;
+  late bool _isLoading;
 
   static const BigList = 0;
   static const SmallList = 1;
@@ -101,13 +101,13 @@ class ChapterPageProvider with ChangeNotifier {
 
   int _page = -1;
   int get page => _page;
-  String checkContent;
+  String? checkContent;
 
   Future loadChpaterWithPage(int page) async {
     if (_page == 1) {
       _page++;
       notifyListeners();
-      checkContent = buildCheck(searchItem.chapters);
+      checkContent = buildCheck(searchItem.chapters ?? []);
     }
 
     final endCheck = () {
@@ -130,9 +130,9 @@ class ChapterPageProvider with ChangeNotifier {
       endCheck();
       return;
     }
-    searchItem.chapters.addAll(durChapters);
+    searchItem.chapters?.addAll(durChapters);
     searchItem.chaptersCount = searchItem.chapters?.length ?? 0;
-    searchItem.chapter = searchItem.chapters?.last?.name;
+    searchItem.chapter = searchItem.chapters?.last.name;
     _page++;
     notifyListeners();
     loadChpaterWithPage(_page);
@@ -149,7 +149,7 @@ class ChapterPageProvider with ChangeNotifier {
     searchItem.chapterUrl = API.chapterUrl;
     searchItem.durChapterIndex = 0;
     searchItem.durContentIndex = 1;
-    if (searchItem.chapters.isEmpty) {
+    if (searchItem.chapters?.isEmpty == true) {
       searchItem.durChapter = '';
       searchItem.chaptersCount = 0;
       searchItem.chapter = '';
@@ -173,9 +173,9 @@ class ChapterPageProvider with ChangeNotifier {
         await APIManager.getChapter(searchItem.originTag, searchItem.url);
     searchItem.chapterUrl = API.chapterUrl;
 
-    searchItem.chaptersCount = searchItem.chapters.length;
-    if (searchItem.chaptersCount > 0) {
-      searchItem.chapter = searchItem.chapters.last?.name;
+    searchItem.chaptersCount = searchItem.chapters?.length;
+    if (searchItem.chaptersCount != null && searchItem.chaptersCount! > 0) {
+      searchItem.chapter = searchItem.chapters?.last.name;
       _page = 1;
       loadChpaterWithPage(_page);
     } else {
@@ -194,7 +194,7 @@ class ChapterPageProvider with ChangeNotifier {
     HistoryItemManager.insertOrUpdateHistoryItem(searchItem);
     if (searchItem.durChapterIndex != index) {
       searchItem.durChapterIndex = index;
-      searchItem.durChapter = searchItem.chapters[index].name;
+      searchItem.durChapter = searchItem.chapters?[index].name;
       searchItem.durContentIndex = 1;
       // await SearchItemManager.saveSearchItem();
       await searchItem.save();
@@ -212,7 +212,8 @@ class ChapterPageProvider with ChangeNotifier {
     if (value == null) return;
     switch (value) {
       case MenuChapter.copy_dec:
-        await Clipboard.setData(ClipboardData(text: searchItem.description));
+        await Clipboard.setData(
+            ClipboardData(text: searchItem.description ?? ''));
         Utils.toast("已复制");
         break;
       case MenuChapter.refresh:
@@ -229,7 +230,8 @@ class ChapterPageProvider with ChangeNotifier {
         Utils.toast("请等待下个版本");
         break;
       case MenuChapter.edit_rule:
-        final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
+        final rule =
+            await Global.ruleDao.findRuleById(searchItem.originTag ?? '');
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => EditRulePage(rule: rule)));
         break;
@@ -244,9 +246,10 @@ class ChapterPageProvider with ChangeNotifier {
         }
         break;
       case MenuChapter.open_host_url:
-        final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
-        if (rule.host != null) {
-          launch(rule.host);
+        final rule =
+            await Global.ruleDao.findRuleById(searchItem.originTag ?? '');
+        if (rule?.host != null) {
+          launch(rule!.host);
         } else {
           Utils.toast("错误 地址为空");
         }
@@ -260,9 +263,10 @@ class ChapterPageProvider with ChangeNotifier {
         }
         break;
       case MenuChapter.open_chapter_url:
-        final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
+        final rule =
+            await Global.ruleDao.findRuleById(searchItem.originTag ?? '');
         final url =
-            searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
+            searchItem.chapterUrl ?? Utils.getUrl(rule!.host, searchItem.url);
         if (url != null) {
           launch(url);
         } else {
@@ -276,7 +280,7 @@ class ChapterPageProvider with ChangeNotifier {
         //   chooserTitle: '选择分享的应用',
         // );
         Share.share(
-            '${searchItem.name.trim()}\n${searchItem.author.trim()}\n\n${searchItem.description}\n${searchItem.chapterUrl}');
+            '${searchItem.name?.trim()}\n${searchItem.author?.trim()}\n\n${searchItem.description}\n${searchItem.chapterUrl}');
         break;
       default:
         Utils.toast("该选项功能未实现${value}");
@@ -292,7 +296,7 @@ class ChapterPageProvider with ChangeNotifier {
   }
 
   void toggleReverse() {
-    searchItem.reverseChapter = !searchItem.reverseChapter;
+    searchItem.reverseChapter = !(searchItem.reverseChapter ?? false);
     notifyListeners();
   }
 

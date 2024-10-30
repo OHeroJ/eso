@@ -39,7 +39,7 @@ import 'source/edit_rule_page.dart';
 
 class DiscoverFuture extends StatelessWidget {
   final Rule rule;
-  const DiscoverFuture({super.key, this.rule});
+  const DiscoverFuture({super.key, required this.rule});
 
   @override
   Widget build(BuildContext context) {
