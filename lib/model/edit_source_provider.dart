@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class EditSourceProvider with ChangeNotifier {
-  List<Rule> _rulesFilter;
-  List<Rule> _rules;
+  List<Rule>? _rulesFilter;
+  List<Rule>? _rules;
   final int type;
 
   final Map<String, bool> checkSelectMap = {};
-  void toggleSelect(String id, [bool value]) {
+  void toggleSelect(String id, [bool? value]) {
     if (value == null) {
       checkSelectMap[id] = !(checkSelectMap[id] == true);
       notifyListeners();
@@ -25,11 +25,11 @@ class EditSourceProvider with ChangeNotifier {
     }
   }
 
-  List<Rule> get rules => _ruleContentType < 0 ? _rules : _rulesFilter;
-  bool _isLoading;
+  List<Rule> get rules => _ruleContentType < 0 ? _rules! : _rulesFilter!;
+  late bool _isLoading;
   bool get isLoading => _isLoading;
 
-  bool _isLoadingUrl;
+  late bool _isLoadingUrl;
   bool get isLoadingUrl => _isLoadingUrl;
 
   /// 内容类型
@@ -51,8 +51,8 @@ class EditSourceProvider with ChangeNotifier {
     }
     _rulesFilter = [];
     if (_rules == null) return;
-    _rules.forEach((element) {
-      if (element.contentType == value) _rulesFilter.add(element);
+    _rules?.forEach((element) {
+      if (element.contentType == value) _rulesFilter!.add(element);
     });
   }
 
@@ -80,86 +80,87 @@ class EditSourceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void handleSelect(List<Rule> rules, MenuEditSource type,
-      {int index, String group}) async {
+  void handleSelect(List<Rule>? rules, MenuEditSource type,
+      {int? index, String? group}) async {
     if (_isLoading) return;
     if (type != MenuEditSource.all && (rules == null || rules.isEmpty)) return;
     bool updateFlag = false;
     switch (type) {
       case MenuEditSource.enable_upload:
-        rules.forEach((rule) => rule.enableUpload = true);
+        rules?.forEach((rule) => rule.enableUpload = true);
         updateFlag = true;
         break;
       case MenuEditSource.disable_upload:
-        rules.forEach((rule) => rule.enableUpload = false);
+        rules?.forEach((rule) => rule.enableUpload = false);
         updateFlag = true;
         break;
       case MenuEditSource.all:
-        _rules.forEach((rule) => checkSelectMap[rule.id] = true);
+        _rules?.forEach((rule) => checkSelectMap[rule.id] = true);
         updateFlag = true;
         break;
       case MenuEditSource.revert:
         final ids = _rules
-            .where((rule) => checkSelectMap[rule.id] != true)
+            ?.where((rule) => checkSelectMap[rule.id] != true)
             .map((rule) => rule.id)
             .toList();
         checkSelectMap.clear();
-        ids.forEach((id) => checkSelectMap[id] = true);
+        ids?.forEach((id) => checkSelectMap[id] = true);
         break;
       case MenuEditSource.top:
-        int maxSort = (await Global.ruleDao.findMaxSort()).sort + 1;
-        rules.reversed.forEach((rule) => rule.sort = maxSort++);
-        rules.addAll(_rules.where((rule) => checkSelectMap[rule.id] != true));
-        _rules.clear();
+        int maxSort = ((await Global.ruleDao.findMaxSort())?.sort ?? 0) + 1;
+        rules?.reversed.forEach((rule) => rule.sort = maxSort++);
+        rules?.addAll(_rules!.where((rule) => checkSelectMap[rule.id] != true));
+        _rules?.clear();
         _rules = rules;
         updateFlag = true;
         break;
       case MenuEditSource.enable_search:
-        rules.forEach((rule) => rule.enableSearch = true);
+        rules!.forEach((rule) => rule.enableSearch = true);
         updateFlag = true;
         break;
       case MenuEditSource.disable_search:
-        rules.forEach((rule) => rule.enableSearch = false);
+        rules!.forEach((rule) => rule.enableSearch = false);
         updateFlag = true;
         break;
       case MenuEditSource.enable_discover:
-        rules.forEach((rule) => rule.enableDiscover = true);
+        rules!.forEach((rule) => rule.enableDiscover = true);
         updateFlag = true;
         break;
       case MenuEditSource.disable_discover:
-        rules.forEach((rule) => rule.enableDiscover = false);
+        rules!.forEach((rule) => rule.enableDiscover = false);
         updateFlag = true;
         break;
       case MenuEditSource.add_group:
-        if (group.trim().isEmpty) return;
-        rules.forEach((rule) => rule.group += " " + group);
+        if (group!.trim().isEmpty) return;
+        rules!.forEach((rule) => rule.group += " " + group);
         updateFlag = true;
         break;
       case MenuEditSource.delete_group:
-        if (group.trim().isEmpty) return;
-        rules.forEach((rule) => rule.group = rule.group.replaceFirst(group, ""));
+        if (group!.trim().isEmpty) return;
+        rules?.forEach(
+            (rule) => rule.group = rule.group.replaceFirst(group, ""));
         updateFlag = true;
         break;
       case MenuEditSource.delete:
-        _rules.removeWhere((rule) => checkSelectMap[rule.id] == true);
+        _rules?.removeWhere((rule) => checkSelectMap[rule.id] == true);
         _isLoading = true;
-        await Global.ruleDao.deleteRules(rules);
+        await Global.ruleDao.deleteRules(rules!);
         _isLoading = false;
         notifyListeners();
         return;
       case MenuEditSource.delete_this:
-        final rule = rules.first;
-        _rules.remove(rule);
+        final rule = rules?.first;
+        _rules?.remove(rule);
         _isLoading = true;
-        await Global.ruleDao.deleteRule(rule);
+        await Global.ruleDao.deleteRule(rule!);
         _isLoading = false;
         notifyListeners();
         return;
       case MenuEditSource.replica:
-        final rule = rules.first.replica();
-        _rules.insert(index + 1, rule);
+        final rule = rules?.first.replica();
+        _rules?.insert(index! + 1, rule!);
         _isLoading = true;
-        await Global.ruleDao.insertOrUpdateRule(rule);
+        await Global.ruleDao.insertOrUpdateRule(rule!);
         _isLoading = false;
         notifyListeners();
         return;
@@ -170,11 +171,11 @@ class EditSourceProvider with ChangeNotifier {
       if (updateFlag) {
         _isLoading = true;
         print('edit source update database');
-        await Global.ruleDao.insertOrUpdateRules(rules);
+        await Global.ruleDao.insertOrUpdateRules(rules!);
         _isLoading = false;
       }
-      if (type != MenuEditSource.add_group && type != MenuEditSource.delete_group)
-        notifyListeners();
+      if (type != MenuEditSource.add_group &&
+          type != MenuEditSource.delete_group) notifyListeners();
     } catch (e) {
       _isLoading = false;
       Utils.toast(e);
@@ -182,7 +183,7 @@ class EditSourceProvider with ChangeNotifier {
   }
 
   DateTime _loadKey = DateTime.now();
-  String _searchName;
+  String? _searchName;
   void getRuleListByNameDebounce(String name) {
     _loadKey = DateTime.now();
     _searchName = name;
@@ -190,7 +191,7 @@ class EditSourceProvider with ChangeNotifier {
     (DateTime loadKey) {
       Future.delayed(const Duration(milliseconds: 200), () async {
         if (loadKey == _loadKey) {
-          await getRuleListByName(_searchName);
+          await getRuleListByName(_searchName!);
         }
       });
     }(_loadKey);
