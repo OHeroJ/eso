@@ -57,7 +57,7 @@ class APIFromRUle implements API {
     if (page == 1) {
       discoverRule = url;
     } else if (hasNextUrlRule && page > 1) {
-      final next = _nextUrl[url];
+      final next = _nextUrl?[url];
       if (next != null && next.isNotEmpty) {
         discoverRule = next;
       }
@@ -67,7 +67,7 @@ class APIFromRUle implements API {
     if (discoverRule == null) {
       return <SearchItem>[];
     }
-    var discoverUrl = '';
+    String discoverUrl = '';
     var body = '';
     if (discoverRule != 'null') {
       final res = await AnalyzeUrl.urlRuleParser(
@@ -80,8 +80,9 @@ class APIFromRUle implements API {
         if (res.contentLength == 0) {
           return <SearchItem>[];
         }
-        discoverUrl = res.request.url.toString();
-        body = DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
+        discoverUrl = res.request?.url.toString() ?? '';
+        body = DecodeBody()
+            .decode(res.bodyBytes, res.headers["content-type"] ?? '');
       }
     }
     await JSEngine.setEnvironment(page, rule, "", discoverUrl, "", "");
@@ -120,9 +121,8 @@ class APIFromRUle implements API {
 
   @override
   Future<List<SearchItem>> search(String query, int page, int pageSize) async {
-    final hasNextUrlRule =
-        rule.searchNextUrl != null && rule.searchNextUrl.isNotEmpty;
-    String searchRule;
+    final hasNextUrlRule = rule.searchNextUrl.isNotEmpty;
+    String? searchRule;
     var url = rule.searchUrl;
     final re = RegExp("url@.+@url", dotAll: true).stringMatch(query);
     if (re != null && re.isNotEmpty) {
@@ -132,7 +132,7 @@ class APIFromRUle implements API {
     if (page == 1) {
       searchRule = url;
     } else if (hasNextUrlRule) {
-      final next = _nextUrl[url];
+      final next = _nextUrl?[url];
       if (next != null && next.isNotEmpty) {
         searchRule = next;
       }
@@ -157,8 +157,9 @@ class APIFromRUle implements API {
         if (res.contentLength == 0) {
           return <SearchItem>[];
         }
-        searchUrl = res.request.url.toString();
-        body = DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
+        searchUrl = res.request?.url.toString() ?? '';
+        body = DecodeBody()
+            .decode(res.bodyBytes, res.headers["content-type"] ?? '');
       }
     }
     await JSEngine.setEnvironment(page, rule, "", searchUrl, query, "");
@@ -174,7 +175,7 @@ class APIFromRUle implements API {
       final analyzer = AnalyzerManager(item);
       final tag = await analyzer.getString(rule.searchTags);
       List<String> tags = <String>[];
-      if (tag != null && tag.trim().isNotEmpty) {
+      if (tag.trim().isNotEmpty) {
         tags = tag.split(APIConst.tagsSplitRegExp)
           ..removeWhere((tag) => tag.isEmpty);
       }
@@ -231,7 +232,7 @@ class APIFromRUle implements API {
             if (res.contentLength == 0) {
               return result;
             }
-            chapterUrl = res.request.url.toString();
+            chapterUrl = res.request?.url.toString() ?? '';
             API.chapterUrl = chapterUrl;
             body =
                 DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
@@ -245,7 +246,7 @@ class APIFromRUle implements API {
               "baseUrl = ${jsonEncode(chapterUrl)}; page = ${jsonEncode(page)};");
         }
         final bodyAnalyzer = AnalyzerManager(body);
-        if (rule.chapterNextUrl != null && rule.chapterNextUrl.isNotEmpty) {
+        if (rule.chapterNextUrl.isNotEmpty) {
           chapterNextUrl = await bodyAnalyzer.getString(rule.chapterNextUrl);
         }
         if (rule.enableMultiRoads) {
@@ -304,8 +305,7 @@ class APIFromRUle implements API {
             // if (unLock != null && unLock.isNotEmpty && unLock != "undefined" && unLock != "false") {
             //   name = "🔓" + name;
             // }else
-            if (lock != null &&
-                lock.isNotEmpty &&
+            if (lock.isNotEmpty &&
                 lock != "undefined" &&
                 lock != "false" &&
                 lock != "0") {
@@ -329,8 +329,8 @@ class APIFromRUle implements API {
     final url = rule.chapterUrl != null && rule.chapterUrl.isNotEmpty
         ? rule.chapterUrl
         : lastResult;
-    String next;
-    String chapterUrlRule;
+    String? next;
+    String? chapterUrlRule;
     for (var page = 1;; page++) {
       chapterUrlRule = null;
       if (page == 1) {
@@ -360,7 +360,7 @@ class APIFromRUle implements API {
             if (res.contentLength == 0) {
               break;
             }
-            chapterUrl = res.request.url.toString();
+            chapterUrl = res.request?.url.toString() ?? '';
             body =
                 DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
           }
@@ -462,13 +462,10 @@ class APIFromRUle implements API {
   Future<List<String>> content(final String lastResult) async {
     API.contentUrl = null;
     final result = <String>[];
-    final hasNextUrlRule =
-        rule.contentNextUrl != null && rule.contentNextUrl.isNotEmpty;
-    final url = rule.contentUrl != null && rule.contentUrl.isNotEmpty
-        ? rule.contentUrl
-        : lastResult;
-    String next;
-    String contentUrlRule;
+    final hasNextUrlRule = rule.contentNextUrl.isNotEmpty;
+    final url = rule.contentUrl.isNotEmpty ? rule.contentUrl : lastResult;
+    String? next;
+    String? contentUrlRule;
     for (var page = 1;; page++) {
       contentUrlRule = null;
       if (page == 1) {
@@ -497,7 +494,7 @@ class APIFromRUle implements API {
             if (res.contentLength == 0) {
               break;
             }
-            contentUrl = res.request.url.toString();
+            contentUrl = res.request?.url.toString() ?? '';
             body =
                 DecodeBody().decode(res.bodyBytes, res.headers["content-type"]);
           }
@@ -517,7 +514,7 @@ class APIFromRUle implements API {
           next = null;
         }
         final list = await bodyAnalyzer.getStringList(rule.contentItems);
-        if (list == null || list.isEmpty || list.join().trim().isEmpty) {
+        if (list.isEmpty || list.join().trim().isEmpty) {
           break;
         }
         result.addAll(list);
@@ -565,8 +562,8 @@ class APIFromRUle implements API {
         if (url.trim().isEmpty) continue;
         final d = url.split("::");
         final rule = d.last.trim();
-        String tab;
-        String className;
+        String tab = '';
+        String className = '';
         if (d.length == 1) {
           tab = "全部";
           className = "全部";
@@ -583,7 +580,7 @@ class APIFromRUle implements API {
             DiscoverPair(className, rule),
           ]));
         } else {
-          map[table[tab]].pairs.add(DiscoverPair(className, rule));
+          map[table[tab]!].pairs.add(DiscoverPair(className, rule));
         }
       }
     } catch (e) {}

@@ -32,14 +32,14 @@ class APIConst {
 }
 
 class JSEngine {
-  static IsolateQjs _engine;
-  static Rule _rule;
+  static late IsolateQjs? _engine;
+  static late Rule _rule;
   static Rule get rule => _rule;
   static Future<void> initEngine() async {
     if (_engine != null) return;
     final cryptoJS = await rootBundle.loadString(Global.cryptoJSFile);
     _engine = IsolateQjs(stackSize: 1024 * 1024);
-    final setToGlobalObject = await _engine.evaluate(";window = globalThis;" +
+    final setToGlobalObject = await _engine!.evaluate(";window = globalThis;" +
         cryptoJS +
         ";1+1;" +
         "(key, val) => { this[key] = val; }");
@@ -64,13 +64,13 @@ class JSEngine {
         final module = url.toString();
         if (module.startsWith("http")) {
           final res = await http.get(Uri.parse(module));
-          return await _engine.evaluate(res.body + ";0;");
+          return await _engine!.evaluate(res.body + ";0;");
         } else {
           try {
             final js = await rootBundle.loadString("lib/assets/" +
                 module.replaceFirst(new RegExp(r".js$"), "") +
                 ".js");
-            return await _engine.evaluate(js + ";0;");
+            return await _engine!.evaluate(js + ";0;");
           } catch (e) {
             return null;
           }
@@ -96,7 +96,7 @@ class JSEngine {
       }),
     ]);
     setToGlobalObject.free();
-    await _engine.evaluate("""
+    await _engine!.evaluate("""
     var http = (url) => __http__(url);
     var httpByte = (url) => __http_byte__(url);
     http.get = (url) => http(url);
@@ -154,7 +154,7 @@ class JSEngine {
   static Future<void> setFunction(String name, IsolateFunction fun) async {
     await initEngine();
     final setToGlobalObject =
-        await _engine.evaluate("(key, val) => { this[key] = val; }");
+        await _engine!.evaluate("(key, val) => { this[key] = val; }");
     await setToGlobalObject.invoke([name, fun]);
     setToGlobalObject.free();
   }
@@ -199,7 +199,7 @@ lastResult = ${jsonEncode(lastResult)};""";
 
   static Future<dynamic> evaluate(String command) async {
     await initEngine();
-    return _engine.evaluate(command.replaceAll("let ", "var "));
+    return _engine!.evaluate(command.replaceAll("let ", "var "));
   }
 
   // static void close() {

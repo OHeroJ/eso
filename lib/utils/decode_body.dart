@@ -5,7 +5,7 @@ class DecodeBody {
   final charsetPattern = RegExp("charset", caseSensitive: false);
   final charsetValuePattern =
       RegExp(r"""charset\s*\=[\s"']*([^"';\s]+)""", caseSensitive: false);
-  String decode(Uint8List bodyBytes, String contentType) {
+  String decode(Uint8List? bodyBytes, String? contentType) {
     if (bodyBytes == null || bodyBytes.isEmpty) return '';
     if (contentType != null) {
       if (contentType.contains(charsetPattern)) {

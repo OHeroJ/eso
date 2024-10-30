@@ -6,7 +6,9 @@ import 'api.dart';
 
 class APIManager {
   static Future<APIFromRUle?> chooseAPI(String originTag) async {
-    return APIFromRUle(await Global.ruleDao.findRuleById(originTag));
+    final rule = await Global.ruleDao.findRuleById(originTag);
+    if (rule == null) return null;
+    return APIFromRUle(rule);
   }
 
   static Future<List<SearchItem>> discover(
