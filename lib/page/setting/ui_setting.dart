@@ -84,14 +84,14 @@ class UISetting extends StatelessWidget {
                             value: 2,
                             groupValue: profile.bottomCount,
                             onChanged: (int? value) =>
-                                profile.bottomCount = value,
+                                profile.bottomCount = value!,
                           ),
                           RadioListTile<int>(
                             title: Text('收藏-发现-历史-关于'),
                             value: 4,
                             groupValue: profile.bottomCount,
                             onChanged: (int? value) =>
-                                profile.bottomCount = value,
+                                profile.bottomCount = value!,
                           ),
                           Divider(),
                           ListTile(
@@ -103,21 +103,21 @@ class UISetting extends StatelessWidget {
                             value: ESOTheme.searchDocker,
                             groupValue: profile.searchPostion,
                             onChanged: (int? value) =>
-                                profile.searchPostion = value,
+                                profile.searchPostion = value!,
                           ),
                           RadioListTile<int>(
                             title: Text('浮动'),
                             value: ESOTheme.searchFloat,
                             groupValue: profile.searchPostion,
                             onChanged: (int? value) =>
-                                profile.searchPostion = value,
+                                profile.searchPostion = value!,
                           ),
                           RadioListTile<int>(
                             title: Text('顶部'),
                             value: ESOTheme.searchAction,
                             groupValue: profile.searchPostion,
                             onChanged: (int? value) =>
-                                profile.searchPostion = value,
+                                profile.searchPostion = value!,
                           ),
                           Divider(),
                           SwitchListTile(

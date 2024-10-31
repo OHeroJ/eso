@@ -54,7 +54,7 @@ class ThemePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pick(String title, String key, int dColor) => ListTile(
+    pick(String title, String key, int? dColor) => ListTile(
           title: Text(title),
           trailing: ValueListenableBuilder<Box>(
             valueListenable: themeBox.listenable(keys: <String>[key]),
@@ -243,8 +243,9 @@ class ThemePage extends StatelessWidget {
                             title: const Text("调色板"),
                           ),
                           pick('主题色', primaryColorKey,
-                              tomatoCat[primaryColorKey]),
-                          pick('图标色', iconColorKey, tomatoCat[iconColorKey]),
+                              tomatoCat[primaryColorKey] as int),
+                          pick('图标色', iconColorKey,
+                              tomatoCat[iconColorKey] as int),
                         ],
                       ),
                     ),
@@ -273,13 +274,13 @@ class ThemePage extends StatelessWidget {
                                     : null,
                               ),
                               pick('顶栏前景色', appBarForegroundColorKey,
-                                  tomatoCat[appBarForegroundColorKey]),
+                                  tomatoCat[appBarForegroundColorKey] as int),
                               pick('顶栏背景色', appBarBackgroundColorKey,
-                                  tomatoCat[appBarBackgroundColorKey]),
+                                  tomatoCat[appBarBackgroundColorKey] as int),
                               pick('页面背景色', scaffoldBackgroundColorKey,
-                                  tomatoCat[scaffoldBackgroundColorKey]),
+                                  tomatoCat[scaffoldBackgroundColorKey] as int),
                               pick('卡片背景色', cardBackgroundColorKey,
-                                  tomatoCat[cardBackgroundColorKey]),
+                                  tomatoCat[cardBackgroundColorKey] as int),
                               ListTile(
                                 leading: const Icon(Icons.dark_mode_outlined),
                                 title: Text("黑夜模式"),

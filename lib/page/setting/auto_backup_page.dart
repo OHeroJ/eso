@@ -11,17 +11,18 @@ import 'package:eso/eso_theme.dart';
 import 'package:eso/main.dart';
 import 'package:eso/utils.dart';
 import 'package:eso/utils/cache_util.dart';
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webdav_client/webdav_client.dart' as wc;
+
 import 'package:intl/intl.dart' as intl;
 import 'package:path/path.dart';
+import 'package:webdav/webdav.dart';
 
 import '../../global.dart';
 
 class AutoBackupPage extends StatelessWidget {
+  //
   const AutoBackupPage({super.key});
 
   AlertDialog showTextDialog(BuildContext context, String title, String s,
@@ -310,10 +311,10 @@ class AutoBackupPage extends StatelessWidget {
       final bytes = ZipEncoder().encode(archive);
 
       try {
-        wc.Client client = wc.Client(
+        Client client = Client(
             myWebdavServer, myWebdavAccount, myWebdavPassword,
             path: "ESO");
-        await client.upload(bytes, "$fileName");
+        await client.upload(Uint8List.fromList(bytes!), "$fileName");
         profile.autoRuleUploadLastDay = today;
         Utils.toast("上传分享规则（共${rules.length}条）至webdav成功");
       } catch (e, st) {
@@ -358,7 +359,7 @@ class AutoBackupPage extends StatelessWidget {
     final today = intl.DateFormat('yyyy-MM-dd').format(DateTime.now());
     // final fileName = '$today.${Platform.operatingSystem}.${Platform.operatingSystemVersion}.zip';
     final fileName = '$today.${Platform.operatingSystem}.zip';
-    final dir = join(await CacheUtil(backup: true).cacheDir(), fileName);
+    final dir = join((await CacheUtil(backup: true).cacheDir())!, fileName);
     if (autoBackup) {
       if (today == profile.autoBackupLastDay ||
           profile.autoBackRate != ESOTheme.autoBackupDay) return;
@@ -384,7 +385,7 @@ class AutoBackupPage extends StatelessWidget {
       try {
         File(dir)
           ..create(recursive: true)
-          ..writeAsBytes(bytes);
+          ..writeAsBytes(bytes!);
         Utils.toast("$dir 文件写入成功");
       } catch (e) {
         Utils.toast("文件写入失败 $e");
@@ -397,7 +398,7 @@ class AutoBackupPage extends StatelessWidget {
               profile.webdavPassword,
               path: "ESO");
           await client.mkdir("");
-          await client.upload(bytes, "$fileName");
+          await client.upload(Uint8List.fromList(bytes!), "$fileName");
           Utils.toast("备份至webdav成功");
         } catch (e, st) {
           print("备份至webdav错误 e:$e, st: $st");
@@ -470,7 +471,7 @@ class AutoBackupPage extends StatelessWidget {
     //   requestPermission: CacheUtil.requestPermission,
     // );
     final path = await Utils.pickFile(
-        context, ['.zip', '.txt', '.json'], dir + "backup.zip",
+        context, ['.zip', '.txt', '.json'], dir! + "backup.zip",
         title: title);
     if (path == null) {
       Utils.toast("未选择文件");
@@ -519,7 +520,7 @@ class AutoBackupPage extends StatelessWidget {
           ..addAll(value)
           ..addAll(element));
         if (download) {
-          final dir = join(await CacheUtil(backup: true).cacheDir(),
+          final dir = join((await CacheUtil(backup: true).cacheDir())!,
               decodeShareRuleName(value));
           File(dir)
             ..create(recursive: true)
