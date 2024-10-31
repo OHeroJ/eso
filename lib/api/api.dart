@@ -14,7 +14,7 @@ abstract class API {
   static const RSS = 4;
   static const NOVELMORE = 5;
 
-  static String getRuleContentTypeName(int ruleContentType) {
+  static String getRuleContentTypeName(int? ruleContentType) {
     switch (ruleContentType) {
       case MANGA:
         return "图片";

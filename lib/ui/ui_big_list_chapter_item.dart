@@ -8,8 +8,8 @@ class UIBigListChapterItem extends StatelessWidget {
   final int chapterNum;
 
   const UIBigListChapterItem({
-    this.chapter,
-    this.chapterNum,
+    required this.chapter,
+    required this.chapterNum,
     super.key,
   });
 
@@ -27,12 +27,12 @@ class UIBigListChapterItem extends StatelessWidget {
 class _UIBigListChapterItem extends StatelessWidget {
   final int index;
   final String title;
-  final String subtitle;
-  final String thumbnail;
+  final String? subtitle;
+  final String? thumbnail;
 
   const _UIBigListChapterItem({
-    this.index,
-    this.title,
+    required this.index,
+    required this.title,
     this.subtitle,
     this.thumbnail,
     super.key,

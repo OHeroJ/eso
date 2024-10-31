@@ -34,14 +34,14 @@ class UiSearchItem extends StatelessWidget {
 }
 
 class _UiSearchItem extends StatelessWidget {
-  final int id;
-  final String origin;
-  final String cover;
-  final String name;
-  final String author;
-  final String chapter;
-  final String description;
-  final String contentTypeName;
+  final int? id;
+  final String? origin;
+  final String? cover;
+  final String? name;
+  final String? author;
+  final String? chapter;
+  final String? description;
+  final String? contentTypeName;
 
   const _UiSearchItem({
     this.id,
@@ -60,7 +60,7 @@ class _UiSearchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _txtStyle = TextStyle(
-        color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
+        color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
         fontFamily: ESOTheme.staticFontFamily,
         fontSize: 13);
     return Container(
@@ -101,11 +101,11 @@ class _UiSearchItem extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               fontFamily: ESOTheme.staticFontFamily,
                               color:
-                                  Theme.of(context).textTheme.bodyText1.color,
+                                  Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 15),
                         ),
                       ),
-                      contentTypeName != null && contentTypeName.isNotEmpty
+                      contentTypeName != null && contentTypeName!.isNotEmpty
                           ? Container(
                               decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
@@ -116,7 +116,7 @@ class _UiSearchItem extends StatelessWidget {
                                   horizontal: 3, vertical: 0),
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                contentTypeName,
+                                contentTypeName!,
                                 style: TextStyle(
                                   fontSize: 11,
                                   height: 1.4,
@@ -132,7 +132,7 @@ class _UiSearchItem extends StatelessWidget {
                   Utils.empty(chapter?.trim())
                       ? SizedBox()
                       : IconText(
-                          "${chapter.trim()}",
+                          "${chapter!.trim()}",
                           icon: Icon(FIcons.clock),
                           maxLines: 1,
                           padding: _padding,
@@ -142,7 +142,7 @@ class _UiSearchItem extends StatelessWidget {
                   Utils.empty(description?.trim())
                       ? SizedBox()
                       : Text(
-                          description.trim(),
+                          description!.trim(),
                           maxLines: 2,
                           style: TextStyle(fontSize: 12),
                         ),

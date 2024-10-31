@@ -422,15 +422,15 @@ class _FlutterSliderState extends State<FlutterSlider>
     }
 
     if (__isInitCall) {
-      _rightTooltipOpacity = (_tooltipData.alwaysShowTooltip == true) ? 1 : 0;
-      _leftTooltipOpacity = (_tooltipData.alwaysShowTooltip == true) ? 1 : 0;
+      _rightTooltipOpacity = (_tooltipData?.alwaysShowTooltip == true) ? 1 : 0;
+      _leftTooltipOpacity = (_tooltipData?.alwaysShowTooltip == true) ? 1 : 0;
 
       _leftTooltipAnimationController = AnimationController(
           duration: Duration(milliseconds: 200), vsync: this);
       _rightTooltipAnimationController = AnimationController(
           duration: Duration(milliseconds: 200), vsync: this);
     } else {
-      if (_tooltipData.alwaysShowTooltip) {
+      if (_tooltipData?.alwaysShowTooltip == true) {
         _rightTooltipOpacity = _leftTooltipOpacity = 1;
       }
     }

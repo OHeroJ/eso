@@ -9,14 +9,14 @@ import 'ui_dash.dart';
 /// 章节列表
 class UIChapterSelect extends StatefulWidget {
   final SearchItem searchItem;
-  final Function(int index) loadChapter;
-  final Color color;
-  final Color fontColor;
+  final Function(int index)? loadChapter;
+  final Color? color;
+  final Color? fontColor;
   final double heightScale;
-  final BorderSide border;
+  final BorderSide? border;
   const UIChapterSelect({
     this.loadChapter,
-    this.searchItem,
+    required this.searchItem,
     this.color,
     this.fontColor,
     this.heightScale = 0.55,
@@ -29,7 +29,7 @@ class UIChapterSelect extends StatefulWidget {
 }
 
 class _UIChapterSelectState extends State<UIChapterSelect> {
-  ScrollController _controller;
+  late ScrollController _controller;
   final itemHeight = 46.0;
 
   @override
@@ -49,8 +49,8 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
     final size = _theme.size;
     final screenHeight =
         size.height - _theme.padding.top - _theme.padding.bottom - 50;
-    final _height = widget.searchItem.chapters.length * itemHeight;
-    final durHeight = widget.searchItem.durChapterIndex * itemHeight;
+    final _height = widget.searchItem.chapters!.length * itemHeight;
+    final durHeight = widget.searchItem.durChapterIndex! * itemHeight;
     double offset;
     if (_height <= screenHeight) {
       offset = 1.0;
@@ -67,7 +67,7 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
         height: Global.lineSize,
         dashWidth: 4,
         color: Theme.of(context).dividerColor);
-    final _count = widget.searchItem.chapters.length;
+    final _count = widget.searchItem.chapters!.length;
 
     final _listView = ListView.builder(
       itemExtent: itemHeight,
@@ -99,7 +99,7 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
             child: DefaultTextStyle(
               style: TextStyle(
                   color: widget.fontColor ??
-                      Theme.of(context).textTheme.bodyText1.color,
+                      Theme.of(context).textTheme.bodyLarge?.color,
                   fontSize: 16,
                   fontFamily: ESOTheme.staticFontFamily),
               child: _count > 64
@@ -118,7 +118,7 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
   Column _buildChapter(int index, Color primaryColor, Widget _divider) {
     final _selected = widget.searchItem.durChapterIndex == index;
     final _txt = Text(
-      '${widget.searchItem.chapters[index].name}',
+      '${widget.searchItem.chapters![index].name}',
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: _selected ? TextStyle(fontWeight: FontWeight.bold) : null,
@@ -128,7 +128,7 @@ class _UIChapterSelectState extends State<UIChapterSelect> {
       children: <Widget>[
         Expanded(
           child: InkWell(
-            onTap: () => widget.loadChapter(index),
+            onTap: () => widget.loadChapter!(index),
             child: _selected
                 ? Row(
                     children: <Widget>[

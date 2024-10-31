@@ -16,7 +16,7 @@ class UIFavoriteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final count = searchItem.chaptersCount.toString();
-    final currentCount = searchItem.durChapterIndex + 1;
+    final currentCount = searchItem.durChapterIndex! + 1;
     final suffix = {
       API.NOVEL: "章",
       API.MANGA: "话",

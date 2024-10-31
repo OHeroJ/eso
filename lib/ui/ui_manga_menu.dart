@@ -12,7 +12,7 @@ import '../global.dart';
 import '../page/manga_page.dart';
 
 class UIMangaMenu extends StatelessWidget {
-  final SearchItem searchItem;
+  final SearchItem? searchItem;
   const UIMangaMenu({
     this.searchItem,
     super.key,
@@ -22,7 +22,7 @@ class UIMangaMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final bgColor = Theme.of(context).canvasColor.withOpacity(0.96);
-    final color = Theme.of(context).textTheme.bodyText1.color;
+    final color = Theme.of(context).textTheme.bodyLarge?.color;
     final provider = Provider.of<MangaPageProvider>(context, listen: false);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,8 +34,8 @@ class UIMangaMenu extends StatelessWidget {
           child: _buildTopRow(context, bgColor, color),
         ),
         provider.showSetting
-            ? _buildSetting(context, bgColor, color)
-            : _buildBottomRow(context, bgColor, color),
+            ? _buildSetting(context, bgColor, color!)
+            : _buildBottomRow(context, bgColor, color!),
       ],
     );
   }
@@ -209,10 +209,10 @@ class UIMangaMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildTopRow(BuildContext context, Color bgColor, Color color) {
+  Widget _buildTopRow(BuildContext context, Color bgColor, Color? color) {
     return AppBar(
       titleSpacing: 0,
-      title: Text(searchItem.name),
+      title: Text(searchItem!.name!),
       actions: [
         IconButton(
             icon: Icon(FIcons.share_2),
@@ -224,7 +224,7 @@ class UIMangaMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildPopupmenu(BuildContext context, Color bgColor, Color color) {
+  Widget _buildPopupmenu(BuildContext context, Color? bgColor, Color? color) {
     const TO_CLICPBOARD = 0;
     const LAUCH = 1;
     const ADD_ITEM = 2;
@@ -239,7 +239,7 @@ class UIMangaMenu extends StatelessWidget {
       onSelected: (int value) async {
         switch (value) {
           case TO_CLICPBOARD:
-            final chapter = searchItem.chapters[searchItem.durChapterIndex];
+            final chapter = searchItem!.chapters![searchItem!.durChapterIndex!];
             final url = chapter.contentUrl ?? chapter.url;
             if (url != null) {
               Clipboard.setData(ClipboardData(text: url));
@@ -250,10 +250,10 @@ class UIMangaMenu extends StatelessWidget {
             break;
           case LAUCH:
             final rule =
-                await Global.ruleDao.findRuleById(searchItem.originTag);
-            final chapter = searchItem.chapters[searchItem.durChapterIndex];
+                await Global.ruleDao.findRuleById(searchItem!.originTag!);
+            final chapter = searchItem!.chapters![searchItem!.durChapterIndex!];
             final url =
-                chapter.contentUrl ?? Utils.getUrl(rule.host, chapter.url);
+                chapter.contentUrl ?? Utils.getUrl(rule!.host, chapter.url!);
             if (url != null) {
               launch(url);
             } else {
@@ -363,13 +363,13 @@ class UIMangaMenu extends StatelessWidget {
                     style: TextStyle(color: color),
                   ),
                   onTap: () =>
-                      provider.loadChapter(searchItem.durChapterIndex - 1),
+                      provider.loadChapter(searchItem!.durChapterIndex! - 1),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   child: FlutterSlider(
-                    values: [(searchItem.durChapterIndex + 1).toDouble()],
-                    max: searchItem.chaptersCount.toDouble(),
+                    values: [(searchItem!.durChapterIndex! + 1).toDouble()],
+                    max: searchItem!.chaptersCount!.toDouble(),
                     min: 1,
                     step: FlutterSliderStep(step: 1),
                     onDragCompleted: (handlerIndex, lowerValue, upperValue) {
@@ -421,7 +421,7 @@ class UIMangaMenu extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  searchItem.chapters[index - 1].name,
+                                  searchItem!.chapters![index - 1].name,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -431,7 +431,7 @@ class UIMangaMenu extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "$index / ${searchItem.chaptersCount}",
+                                "$index / ${searchItem!.chaptersCount}",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -450,11 +450,11 @@ class UIMangaMenu extends StatelessWidget {
                 SizedBox(width: 10),
                 InkWell(
                   child: Text(
-                    '共${searchItem.chaptersCount}话',
+                    '共${searchItem!.chaptersCount}话',
                     style: TextStyle(color: color),
                   ),
                   onTap: () =>
-                      provider.loadChapter(searchItem.durChapterIndex + 1),
+                      provider.loadChapter(searchItem!.durChapterIndex! + 1),
                 ),
               ],
             ),
@@ -474,7 +474,7 @@ class UIMangaMenu extends StatelessWidget {
                       ],
                     ),
                     onTap: () =>
-                        provider.loadChapter(searchItem.durChapterIndex - 1),
+                        provider.loadChapter(searchItem!.durChapterIndex! - 1),
                   ),
                   InkWell(
                     child: Column(
@@ -506,7 +506,7 @@ class UIMangaMenu extends StatelessWidget {
                       ],
                     ),
                     onTap: () =>
-                        provider.loadChapter(searchItem.durChapterIndex + 1),
+                        provider.loadChapter(searchItem!.durChapterIndex! + 1),
                   ),
                 ],
               ),

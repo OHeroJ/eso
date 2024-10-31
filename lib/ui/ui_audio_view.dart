@@ -41,8 +41,9 @@ class _AudioViewState extends State<AudioView> {
             },
             onPanUpdate: (details) {
               setState(() {
-                _offsetX += details.delta.dx;
-                _offsetY += details.delta.dy;
+                _offsetX = _offsetX ?? 0 + details.delta.dx;
+
+                _offsetY = _offsetY ?? 0 + details.delta.dy;
               });
             },
             child: _buildAudioView(widget.context),
@@ -68,11 +69,11 @@ class _AudioViewState extends State<AudioView> {
     // if (!MyAudioService.audioHandler.playing ?? false) return SizedBox();
 
     return StreamBuilder<PlaybackState>(
-      stream: audioHandler.playbackState.map((state) => state).distinct(),
+      stream: audioHandler!.playbackState.map((state) => state).distinct(),
       initialData: null,
       builder: (context, snapshot) {
         // final playbackState = snapshot.data;
-        if (audioHandler.chapter == null || audioHandler.close) {
+        if (audioHandler?.chapter == null || audioHandler!.close) {
           return Container();
         }
         final _view = Container(
@@ -95,17 +96,17 @@ class _AudioViewState extends State<AudioView> {
                     color: Colors.transparent,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.deepOrange),
-                    image: audioHandler.emptyCover
+                    image: audioHandler!.emptyCover
                         ? null
                         : DecorationImage(
                             image: NetworkImage(
-                              audioHandler.cover,
-                              headers: audioHandler.headers,
+                              audioHandler!.cover,
+                              headers: audioHandler!.headers,
                             ),
                             fit: BoxFit.cover,
                           ),
                   ),
-                  child: audioHandler.emptyCover
+                  child: audioHandler!.emptyCover
                       ? Padding(
                           padding: EdgeInsets.all(10),
                           child: Icon(Icons.audiotrack,
@@ -116,21 +117,21 @@ class _AudioViewState extends State<AudioView> {
               ),
               IconButton(
                 color: Colors.white.withOpacity(0.5),
-                onPressed: audioHandler.playOrPause,
-                icon: audioHandler.playing
+                onPressed: audioHandler!.playOrPause,
+                icon: audioHandler!.playing
                     ? Icon(Icons.pause)
                     : Icon(Icons.play_arrow),
               ),
               IconButton(
                 color: Colors.white.withOpacity(0.5),
-                onPressed: audioHandler.skipToNext,
+                onPressed: audioHandler!.skipToNext,
                 icon: Icon(Icons.skip_next_rounded),
               ),
               IconButton(
                 color: Colors.white.withOpacity(0.5),
                 onPressed: () {
-                  audioHandler.close = true;
-                  audioHandler.stop();
+                  audioHandler!.close = true;
+                  audioHandler!.stop();
                 },
                 icon: Icon(Icons.close),
               ),
@@ -141,11 +142,11 @@ class _AudioViewState extends State<AudioView> {
         return InkWell(
           child: Tooltip(
             child: _view,
-            message: '正在播放: ' + audioHandler.chapter?.name ?? '',
+            message: '正在播放: ' + audioHandler!.chapter!.name ?? '',
           ),
           onTap: () {
             Utils.startPageWait(
-                context, AudioPage(searchItem: audioHandler.searchItem));
+                context, AudioPage(searchItem: audioHandler!.searchItem));
           },
         );
       },

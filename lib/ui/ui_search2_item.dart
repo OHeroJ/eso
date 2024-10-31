@@ -33,14 +33,14 @@ class UiSearch2Item extends StatelessWidget {
 }
 
 class _UiSearchItem extends StatelessWidget {
-  final int id;
-  final String origin;
-  final String cover;
-  final String name;
-  final String author;
-  final String chapter;
-  final String description;
-  final String contentTypeName;
+  final int? id;
+  final String? origin;
+  final String? cover;
+  final String? name;
+  final String? author;
+  final String? chapter;
+  final String? description;
+  final String? contentTypeName;
 
   const _UiSearchItem({
     this.id,
@@ -61,7 +61,7 @@ class _UiSearchItem extends StatelessWidget {
     final _description = description?.trim();
     final _origin = origin?.trim();
     final _txtColor =
-        Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7);
+        Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7);
     final _textStyle = TextStyle(
         color: _txtColor,
         fontFamily: ESOTheme.staticFontFamily,
@@ -69,13 +69,13 @@ class _UiSearchItem extends StatelessWidget {
         fontSize: 13);
     final _chapterText = Utils.empty(_chapter)
         ? null
-        : Text(_chapter, maxLines: 1, style: _textStyle);
+        : Text(_chapter!, maxLines: 1, style: _textStyle);
     final _originText = Utils.empty(_origin)
         ? null
-        : Text(_origin, maxLines: 1, style: _textStyle);
+        : Text(_origin!, maxLines: 1, style: _textStyle);
     final _authorText = Utils.empty(_author)
         ? null
-        : Text(_author,
+        : Text(_author!,
             maxLines: 1,
             // icon: Icon(FIcons.user),
             // iconSize: 13,
@@ -96,11 +96,11 @@ class _UiSearchItem extends StatelessWidget {
             style: TextStyle(
                 fontFamily: ESOTheme.staticFontFamily,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.bodyText1.color,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 16),
           ),
         ),
-        contentTypeName != null && contentTypeName.isNotEmpty
+        contentTypeName != null && contentTypeName!.isNotEmpty
             ? Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
@@ -110,7 +110,7 @@ class _UiSearchItem extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 3, vertical: 0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  contentTypeName,
+                  contentTypeName!,
                   style: TextStyle(
                     fontSize: 11,
                     height: 1.4,
@@ -140,7 +140,7 @@ class _UiSearchItem extends StatelessWidget {
         SizedBox(height: 6),
         Padding(
           padding: const EdgeInsets.only(left: 8, right: 8),
-          child: Text(_description, maxLines: 3),
+          child: Text(_description!, maxLines: 3),
         )
       ]);
     }
