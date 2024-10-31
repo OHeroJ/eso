@@ -78,15 +78,15 @@ class DiscoverPage extends StatefulWidget {
   _DiscoverPageState createState() => _DiscoverPageState();
 }
 
-EditSourceProvider editSourceProviderTemp;
+EditSourceProvider? editSourceProviderTemp;
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  Widget _page;
-  EditSourceProvider __provider;
+  Widget? _page;
+  EditSourceProvider? __provider;
   TextEditingController _searchEdit = TextEditingController();
 
   var isLargeScreen = false;
-  Widget detailPage;
+  Widget? detailPage;
 
   void invokeTap(Widget detailPage) {
     if (isLargeScreen) {
@@ -124,7 +124,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
       return Row(children: <Widget>[
         Expanded(
-          child: _page,
+          child: _page!,
         ),
         SizedBox(
           height: double.infinity,
@@ -255,9 +255,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
               title: SearchTextField(
                 controller: _searchEdit,
                 hintText: "搜索发现站点(共${provider.rules?.length ?? 0}条)",
-                onSubmitted: (value) => __provider.getRuleListByName(value),
+                onSubmitted: (value) => __provider!.getRuleListByName(value),
                 onChanged: (value) =>
-                    __provider.getRuleListByNameDebounce(value),
+                    __provider!.getRuleListByNameDebounce(value),
               ),
               actions: [
                 IconButton(
@@ -410,7 +410,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               fontSize: 11,
               color: selected
                   ? Theme.of(context).cardColor
-                  : Theme.of(context).textTheme.bodyText1.color,
+                  : Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
         ),
@@ -470,7 +470,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 border: _leadBorder,
               ),
               child: CircleAvatar(
-                foregroundImage: CachedNetworkImageProvider(iconUrl),
+                foregroundImage: CachedNetworkImageProvider(iconUrl!),
                 foregroundColor: Colors.transparent,
                 backgroundColor: Colors.transparent,
                 // backgroundImage: AssetImage(Global.waitingPath),

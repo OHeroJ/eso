@@ -30,16 +30,16 @@ import 'chapter_page.dart';
 import 'langding_page.dart';
 
 class DiscoverSearchPage extends StatefulWidget {
-  final String originTag;
-  final String origin;
-  final Rule rule;
+  final String? originTag;
+  final String? origin;
+  final Rule? rule;
   final List<DiscoverMap> discoverMap;
 
   const DiscoverSearchPage({
     this.rule,
     this.originTag,
     this.origin,
-    this.discoverMap,
+    this.discoverMap = const [],
     super.key,
   });
 
@@ -48,25 +48,25 @@ class DiscoverSearchPage extends StatefulWidget {
 
   int get viewStyle => rule == null
       ? 0
-      : rule.viewStyle == null
+      : rule!.viewStyle == null
           ? 0
-          : rule.viewStyle;
+          : rule!.viewStyle;
 
   /// 切换显示样式
   switchViewStyle() async {
     if (rule == null) return;
     var _style = viewStyle + 1;
     if (_style > 4) _style = 0;
-    rule.viewStyle = _style;
-    await Global.ruleDao.insertOrUpdateRule(rule);
+    rule!.viewStyle = _style;
+    await Global.ruleDao.insertOrUpdateRule(rule!);
   }
 }
 
 class _DiscoverSearchPageState extends State<DiscoverSearchPage>
     with SingleTickerProviderStateMixin {
-  Widget _discover;
-  DiscoverPageController __pageController;
-  TabController _tabController;
+  Widget? _discover;
+  DiscoverPageController? __pageController;
+  TabController? _tabController;
 
   List<DiscoverMap> map = <DiscoverMap>[];
   List<DiscoverPair> pairs = <DiscoverPair>[];
@@ -95,23 +95,23 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
     if (_discover == null) {
       _discover = _buildDiscover();
     }
-    return _discover;
+    return _discover!;
   }
 
   Widget _buildDiscover() {
     return ChangeNotifierProvider<DiscoverPageController>.value(
       value: DiscoverPageController(
-        originTag: widget.originTag,
-        origin: widget.origin,
+        originTag: widget.originTag!,
+        origin: widget.origin!,
         discoverMap: widget.discoverMap,
-        searchUrl: widget.rule.searchUrl,
+        searchUrl: widget.rule!.searchUrl,
       ),
       child: Consumer<DiscoverPageController>(
         builder:
             (BuildContext context, DiscoverPageController pageController, _) {
           final _iconTheme = Theme.of(context).primaryIconTheme;
           final _textTheme = Theme.of(context).textTheme;
-          final _color = _textTheme.bodyText1.color.withOpacity(0.4);
+          final _color = _textTheme.bodyLarge?.color?.withOpacity(0.4);
 
           List<Widget> children = [];
           if (pageController.showSearchField) {
@@ -139,7 +139,8 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
                         icon: Icon(Icons.close),
                         onPressed: () => pageController.toggleSearching(),
                       ),
-                      backgroundColor: Theme.of(context).appBarTheme.color,
+                      backgroundColor:
+                          Theme.of(context).appBarTheme.backgroundColor!,
                       iconTheme: _iconTheme.copyWith(color: _color),
                       actionsIconTheme: _iconTheme.copyWith(color: _color),
                       actions: <Widget>[
@@ -182,7 +183,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
 
   Widget buildPairButton(DiscoverPair pair, Color color, Color bgColor,
       DiscoverPageController pageController, int index,
-      {VoidCallback onTap}) {
+      {VoidCallback? onTap}) {
     return Container(
       height: 24,
       width: 20 +
@@ -273,7 +274,8 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
               if (map?.pairs != null) {
                 var _v = v.toLowerCase();
                 map.pairs.forEach((pair) {
-                  if (pair.name.toLowerCase().indexOf(_v) >= 0) pairs.add(pair);
+                  if (pair.name.toLowerCase().indexOf(_v) >= 0)
+                    pairs!.add(pair);
                 });
               }
             }
@@ -304,15 +306,15 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
                         final discoverPair =
                             pageController.discoverParams[map.name];
                         return Wrap(
-                          children: pairs
+                          children: pairs!
                               .map((pair) => buildPairButton(
                                       pair,
-                                      pair == discoverPair
+                                      pair == discoverPair!
                                           ? Theme.of(context).cardColor
                                           : Theme.of(context)
                                               .textTheme
-                                              .bodyLarge
-                                              .color,
+                                              .bodyLarge!
+                                              .color!,
                                       pair == discoverPair
                                           ? primaryColor
                                           : Theme.of(context).cardColor,
@@ -337,7 +339,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
 
   Widget _buildListView(BuildContext context,
       DiscoverPageController pageController, ListDataItem item,
-      [DiscoverMap map, int index]) {
+      [DiscoverMap? map, int? index]) {
     final pairs = map?.pairs;
     if (pairs == null || pairs.isEmpty || pairs.length == 1) {
       if (pageController.showSearchField &&
@@ -356,7 +358,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
                     children: pageController.searchItems.keys.map((option) {
                       final color = option == pageController.selectOption
                           ? Theme.of(context).cardColor
-                          : Theme.of(context).textTheme.bodyLarge.color;
+                          : Theme.of(context).textTheme.bodyLarge?.color;
                       final bgColor = option == pageController.selectOption
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).cardColor;
@@ -401,7 +403,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
             Expanded(
               child: item.isLoading
                   ? LandingPage()
-                  : _buildBodyView(pageController, item, index),
+                  : _buildBodyView(pageController, item, index!),
             )
           ],
         );
@@ -411,27 +413,27 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
         return LandingPage();
       }
 
-      return _buildBodyView(pageController, item, index);
+      return _buildBodyView(pageController, item, index!);
     }
 
     final Widget _pairs = StatefulBuilder(
       builder: (context, _state) {
-        final discoverPair = pageController.discoverParams[map.name];
+        final discoverPair = pageController.discoverParams[map!.name];
         final _showPairs = _showAllPairs[index] ?? false;
         final _pairsViews = pairs
             .map((pair) => buildPairButton(
                 pair,
                 pair == discoverPair
                     ? Theme.of(context).cardColor
-                    : Theme.of(context).textTheme.bodyLarge.color,
+                    : Theme.of(context).textTheme.bodyLarge!.color!,
                 pair == discoverPair
                     ? Theme.of(context).primaryColor
                     : Theme.of(context).cardColor,
                 pageController,
-                index))
+                index!))
             .toList();
         if (_pairsViews.length > 1)
-          _pairsViews.add(_buildMorePairIconButton(index, _showPairs, map,
+          _pairsViews.add(_buildMorePairIconButton(index!, _showPairs, map,
               pageController, () => _state(() => null)));
 
         return Container(
@@ -462,20 +464,20 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
       children: [
         _pairs,
         Expanded(
-          child: _buildBodyView(pageController, item, index),
+          child: _buildBodyView(pageController, item, index!),
         )
       ],
     );
   }
 
-  PreferredSizeWidget _buildAppBarBottom(
-      BuildContext context, DiscoverPageController pageController) {
+  PreferredSizeWidget? _buildAppBarBottom(
+      BuildContext context, DiscoverPageController? pageController) {
     if (pageController == null || pageController.showSearchField) return null;
     if (map == null || map.isEmpty || map.length <= 1) return null;
     if (_tabController == null) {
       _tabController = TabController(length: map.length, vsync: this);
-      _tabController.addListener(() {
-        _select(pageController, _tabController.index);
+      _tabController!.addListener(() {
+        _select(pageController, _tabController!.index);
       });
     }
     return SizedBar(
@@ -489,7 +491,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
             borderSide:
                 BorderSide(width: 3.0, color: Theme.of(context).primaryColor)),
         labelColor: Theme.of(context).primaryColor,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyLarge?.color,
         onTap: (index) {
           _select(pageController, index);
         },
@@ -505,23 +507,23 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
       builder: (context) {
         switch (widget.viewStyle) {
           case 0:
-            return buildDiscoverResultList(item.items, pageController, item);
+            return buildDiscoverResultList(item.items!, pageController, item);
           case 1:
-            return buildDiscoverResultList(item.items, pageController, item,
+            return buildDiscoverResultList(item.items!, pageController, item,
                 builderItem: (v) => UiSearch2Item(item: v));
           case 2:
-            return buildDiscoverResultGrid(item.items, pageController, item);
+            return buildDiscoverResultGrid(item.items!, pageController, item);
           case 3:
-            return buildDiscoverResultGrid(item.items, pageController, item,
+            return buildDiscoverResultGrid(item.items!, pageController, item,
                 crossAxisCount: 2,
                 builderItem: (v) => UIDiscoverItem(searchItem: v));
           case 4:
-            return buildDiscoverResultGrid(item.items, pageController, item,
+            return buildDiscoverResultGrid(item.items!, pageController, item,
                 crossAxisCount: 2,
                 childAspectRatio: 1.45,
                 builderItem: (v) => UIDiscoverItem(searchItem: v));
           default:
-            return buildDiscoverResultGrid(item.items, pageController, item);
+            return buildDiscoverResultGrid(item.items!, pageController, item);
         }
       },
     );
@@ -543,7 +545,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
 
   Widget buildDiscoverResultList(List<SearchItem> items,
       DiscoverPageController pageController, ListDataItem item,
-      {Widget Function(SearchItem searchItem) builderItem}) {
+      {Widget Function(SearchItem searchItem)? builderItem}) {
     return Stack(
       children: [
         RefreshIndicator(
@@ -585,9 +587,9 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
 
   Widget buildDiscoverResultGrid(List<SearchItem> items,
       DiscoverPageController pageController, ListDataItem item,
-      {Widget Function(SearchItem searchItem) builderItem,
-      double childAspectRatio,
-      int crossAxisCount}) {
+      {Widget Function(SearchItem searchItem)? builderItem,
+      double? childAspectRatio,
+      int? crossAxisCount}) {
     final _size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -693,7 +695,7 @@ class _DiscoverSearchPageState extends State<DiscoverSearchPage>
 
   /// 切换到指定分类
   _select(DiscoverPageController pageController, int index,
-      [DiscoverPair pair]) {
+      [DiscoverPair? pair]) {
     pageController.selectDiscoverPair(map[index].name, pair);
   }
 }
@@ -709,11 +711,11 @@ class _FlowDelegate extends FlowDelegate {
     double padding = 3; //间距
     double x = padding; //x坐标
     double y = padding; //y坐标
-    double lastW = context.getChildSize(lastIndex).width + padding;
+    double lastW = context.getChildSize(lastIndex)!.width + padding;
 
     for (int i = 0; i < context.childCount - 1; i++) {
       final size = context.getChildSize(i);
-      final w = size.width + x + padding;
+      final w = size!.width + x + padding;
       if (w <= screenW - lastW) {
         context.paintChild(i, transform: Matrix4.translationValues(x, y, 0));
         x = w;

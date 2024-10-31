@@ -15,7 +15,7 @@ import 'langding_page.dart';
 
 class DiscoverNewPage extends StatefulWidget {
   final Rule rule;
-  DiscoverNewPage({super.key, this.rule});
+  DiscoverNewPage({super.key, required this.rule});
 
   @override
   State<DiscoverNewPage> createState() => _DiscoverNewPageState();
@@ -44,16 +44,17 @@ T cast<T>(x, T v) => x is T ? x : v;
 
 class DiscoverRule {
   String js;
-  List<Rules> rules;
+  List<Rules>? rules;
 
-  DiscoverRule({this.js, this.rules});
+  DiscoverRule({required this.js, required this.rules});
 
-  DiscoverRule.fromJson(Map<String, dynamic> json) {
-    js = json['js'];
+  DiscoverRule.fromJson(Map<String, dynamic> json)
+      : js = json['js'],
+        rules = [] {
     if (json['rules'] != null) {
-      rules = new List<Rules>();
+      rules = <Rules>[];
       json['rules'].forEach((v) {
-        rules.add(new Rules.fromJson(v));
+        rules!.add(new Rules.fromJson(v));
       });
     }
   }
@@ -62,7 +63,7 @@ class DiscoverRule {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['js'] = this.js;
     if (this.rules != null) {
-      data['rules'] = this.rules.map((v) => v.toJson()).toList();
+      data['rules'] = this.rules!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -72,18 +73,23 @@ class Rules {
   String name;
   String option;
   String value;
-  List<Options> options;
+  List<Options>? options;
 
-  Rules({this.name, this.option, this.value, this.options});
+  Rules(
+      {required this.name,
+      required this.option,
+      required this.value,
+      required this.options});
 
-  Rules.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    option = json['option'];
-    value = json['value'];
+  Rules.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        option = json['option'],
+        value = json['value'],
+        options = [] {
     if (json['options'] != null) {
-      options = new List<Options>();
+      options = <Options>[];
       json['options'].forEach((v) {
-        options.add(new Options.fromJson(v));
+        options?.add(new Options.fromJson(v));
       });
     }
   }
@@ -94,7 +100,7 @@ class Rules {
     data['option'] = this.option;
     data['value'] = this.value;
     if (this.options != null) {
-      data['options'] = this.options.map((v) => v.toJson()).toList();
+      data['options'] = this.options!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -104,12 +110,11 @@ class Options {
   String option;
   String value;
 
-  Options({this.option, this.value});
+  Options({required this.option, required this.value});
 
-  Options.fromJson(Map<String, dynamic> json) {
-    option = json['option'];
-    value = json['value'];
-  }
+  Options.fromJson(Map<String, dynamic> json)
+      : option = json['option'],
+        value = json['value'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -120,8 +125,8 @@ class Options {
 }
 
 class _DiscoverNewPageState extends State<DiscoverNewPage> {
-  DiscoverRule _discoverRule;
-  String discoverUrl;
+  DiscoverRule? _discoverRule;
+  late String discoverUrl;
 
   @override
   void initState() {
@@ -134,14 +139,14 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
   parseRule() async {
     JSEngine.setEnvironment(1, widget.rule, "", widget.rule.host, "", "");
     discoverUrl = await JSEngine.evaluate(
-        "${JSEngine.environment};;1+1;rules = ${jsonEncode(_discoverRule.rules)};;1+1;" +
-            _discoverRule.js);
+        "${JSEngine.environment};;1+1;rules = ${jsonEncode(_discoverRule!.rules)};;1+1;" +
+            _discoverRule!.js);
     setState(() {});
   }
 
   @override
   void dispose() {
-    _discoverRule.rules.clear();
+    _discoverRule?.rules?.clear();
     super.dispose();
   }
 
@@ -174,13 +179,14 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
   Widget _buildBanner() {
     if (_discoverRule == null)
       return SliverToBoxAdapter(child: Text("加载分类中。。。"));
-    final nomal = TextStyle(color: Theme.of(context).textTheme.bodyText1.color);
+    final nomal =
+        TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color);
     final primary = TextStyle(color: Theme.of(context).primaryColor);
 
     return SliverFixedExtentList(
       itemExtent: 35,
       delegate: SliverChildListDelegate([
-        for (var rule in _discoverRule.rules)
+        for (var rule in _discoverRule!.rules!)
           SizedBox(
             height: 35,
             child: Row(
@@ -189,9 +195,9 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: rule.options.length,
+                    itemCount: rule.options!.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final option = rule.options[index];
+                      final option = rule.options![index];
                       return TextButton(
                         onPressed: () {
                           rule.option = option.option;
@@ -226,7 +232,7 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
-            for (var rule in _discoverRule.rules
+            for (var rule in _discoverRule!.rules!
                 .where((element) => element.option.isNotEmpty))
               Card(
                 child: Center(
@@ -258,7 +264,7 @@ class _DiscoverNewPageState extends State<DiscoverNewPage> {
         return SliverList(
           delegate: SliverChildListDelegate(
             [
-              for (var item in snapshot.data)
+              for (var item in snapshot.data!)
                 InkWell(
                     onTap: () => Utils.startPageWait(
                         context,
