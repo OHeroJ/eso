@@ -92,12 +92,12 @@ class WebInAppAndroid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Completer<WebViewController> _controller =
-        Completer<WebViewController>();
+    final controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(url!));
 
     return WillPopScope(
       onWillPop: () async {
-        final controller = await _controller.future;
         if (await controller.canGoBack()) {
           controller.goBack();
           return false;
@@ -138,7 +138,6 @@ class WebInAppAndroid extends StatelessWidget {
                 ),
                 tooltip: "后退",
                 onPressed: () async {
-                  final controller = await _controller.future;
                   if (await controller.canGoBack()) {
                     controller.goBack();
                   }
@@ -151,7 +150,6 @@ class WebInAppAndroid extends StatelessWidget {
                 ),
                 tooltip: "前进",
                 onPressed: () async {
-                  final controller = await _controller.future;
                   if (await controller.canGoForward()) {
                     controller.goForward();
                   }
@@ -159,18 +157,14 @@ class WebInAppAndroid extends StatelessWidget {
               ),
               IconButton(
                   onPressed: () {
-                    launchUrl(Uri.parse(url));
+                    launchUrl(Uri.parse(url!));
                   },
                   tooltip: "在浏览器打开",
                   icon: Icon(Icons.open_in_browser))
             ],
           ),
-          body: WebViewWidget
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-            },
-            initialUrl: url,
+          body: WebViewWidget(
+            controller: controller,
           ),
         ),
       ),
