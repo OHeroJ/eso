@@ -59,7 +59,9 @@ class CodeInputController extends TextEditingController {
 
   @override
   TextSpan buildTextSpan(
-      BuildContext context, TextStyle? style, bool withComposing) {
+      {required BuildContext context,
+      TextStyle? style,
+      required bool withComposing}) {
     String oldText = oldSpan.toPlainText();
     String newText = value.text;
     if (oldText == newText) return oldSpan;
@@ -75,7 +77,7 @@ class CodeInputController extends TextEditingController {
     int splitAt = value.selection.start;
     if (splitAt < 0) splitAt = newText.length ~/ 2;
     int start = 0;
-    InlineSpan leftSpan;
+    InlineSpan? leftSpan;
     oldSpan.children?.indexWhere((element) {
       String elementText = element.toPlainText();
       if (start + elementText.length > splitAt ||
@@ -89,8 +91,8 @@ class CodeInputController extends TextEditingController {
     });
     List<InlineSpan> endSpans = [];
     int end = 0;
-    InlineSpan rightSpan;
-    oldSpan.children?.sublist(beforeSpans.length)?.lastIndexWhere((element) {
+    InlineSpan? rightSpan;
+    oldSpan.children?.sublist(beforeSpans.length).lastIndexWhere((element) {
       String elementText = element.toPlainText();
       if (splitAt + end + elementText.length >= newText.length ||
           !newText
@@ -108,7 +110,7 @@ class CodeInputController extends TextEditingController {
       ...beforeSpans,
       TextSpan(
           style: leftSpan != null && leftSpan == rightSpan
-              ? leftSpan.style
+              ? leftSpan!.style
               : style,
           text: newText.substring(start, max(start, newText.length - end))),
       ...endSpans.reversed
