@@ -22,7 +22,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   var isLargeScreen = false;
-  Widget detailPage;
+  Widget? detailPage;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _FavoritePageState extends State<FavoritePage> {
 }
 
 class FavoritePage2 extends StatelessWidget {
-  final void Function(Widget) invokeTap;
+  final void Function(Widget)? invokeTap;
   const FavoritePage2({super.key, this.invokeTap});
 
   static const tabs = [
@@ -96,7 +96,8 @@ class FavoritePage2 extends StatelessWidget {
               isScrollable: true,
               indicatorSize: TabBarIndicatorSize.label,
               labelColor: Theme.of(context).primaryColor,
-              unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
+              unselectedLabelColor:
+                  Theme.of(context).textTheme.bodyLarge?.color,
               indicator: RoundTabIndicator(
                   insets: EdgeInsets.only(left: 5, right: 5),
                   borderSide: BorderSide(
@@ -106,7 +107,7 @@ class FavoritePage2 extends StatelessWidget {
                       height: 30,
                       alignment: Alignment.center,
                       child: Text(
-                        tab[0],
+                        tab[0].toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontFamily: ESOTheme.staticFontFamily),
@@ -159,7 +160,7 @@ class FavoritePage2 extends StatelessWidget {
           body: TabBarView(
             children: tabs
                 .map((tab) =>
-                    FavoriteListPage(type: tab[1], invokeTap: invokeTap))
+                    FavoriteListPage(type: tab[1] as int, invokeTap: invokeTap))
                 .toList(),
           ),
         ),

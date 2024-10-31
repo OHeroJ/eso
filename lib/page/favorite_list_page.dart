@@ -14,9 +14,9 @@ import 'chapter_page.dart';
 
 /// 收藏夹列表页
 class FavoriteListPage extends StatelessWidget {
-  final void Function(Widget) invokeTap;
+  final void Function(Widget)? invokeTap;
   final int type;
-  const FavoriteListPage({this.type, super.key, this.invokeTap});
+  const FavoriteListPage({required this.type, super.key, this.invokeTap});
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +225,10 @@ class FavoriteListPage extends StatelessWidget {
                               fontSize: 11,
                               color: _isSelect
                                   ? Theme.of(context).cardColor
-                                  : Theme.of(context).textTheme.bodyText1.color,
+                                  : Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color,
                             ),
                           ),
                         ),
@@ -279,7 +282,7 @@ class FavoriteListPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final searchItem = searchItems[index];
             final longPress = _size.width > 600 || ESOTheme().switchLongPress;
-            VoidCallback openChapter = () => invokeTap(ChapterPage(
+            VoidCallback openChapter = () => invokeTap!(ChapterPage(
                   searchItem: searchItem,
                   key: Key(searchItem.id.toString()),
                 ));

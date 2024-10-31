@@ -30,7 +30,7 @@ class SharePage extends HookWidget {
     final share = useTextEditingController(text: text);
     share.text = text;
     final netcut = useTextEditingController(text: Uuid().v4());
-    String id;
+    String? id;
     return Container(
       decoration: globalDecoration,
       child: Scaffold(
@@ -108,7 +108,7 @@ class SharePage extends HookWidget {
                         Utils.toast("错误 名称至少六个字符");
                         return;
                       }
-                      if (id == null || id.isEmpty) {
+                      if (id == null || id!.isEmpty) {
                         final u = "https://netcut.cn/${netcut.text}";
                         final res = await http.get(Uri.parse(u));
                         final ids = AnalyzerHtml()

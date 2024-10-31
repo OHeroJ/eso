@@ -57,7 +57,7 @@ class NovelMorePage extends StatelessWidget {
               if (event.runtimeType.toString() == 'RawKeyUpEvent') return;
 
               if (event.data is RawKeyEventDataMacOs) {
-                RawKeyEventDataMacOs data = event.data;
+                RawKeyEventDataMacOs data = event.data as RawKeyEventDataMacOs;
                 print(data.keyCode);
                 switch (data.keyCode) {
                   case 123: // 方向键左
@@ -75,7 +75,8 @@ class NovelMorePage extends StatelessWidget {
                     break;
                 }
               } else if (event.data is RawKeyEventDataWindows) {
-                RawKeyEventDataWindows data = event.data;
+                RawKeyEventDataWindows data =
+                    event.data as RawKeyEventDataWindows;
                 print(data.keyCode);
                 switch (data.keyCode) {
                   // case 123: // 方向键左
@@ -163,7 +164,7 @@ List<List<TextSpan>> buildSpans(List<String>? content, String? chapter) {
   tp.maxLines = 1;
   bool firstLine = true;
   final indentation = Global.fullSpace * __profile.novelIndentation;
-  for (var paragraph in content) {
+  for (var paragraph in content!) {
     if (paragraph.startsWith("@img")) {
       print("------img--------");
       if (currentSpans.isNotEmpty) {
@@ -193,7 +194,7 @@ List<List<TextSpan>> buildSpans(List<String>? content, String? chapter) {
         currentSpans = <TextSpan>[];
       }
       final img = RegExp(r"""(src|data\-original)[^'"]*('|")([^'"]*)""")
-          .firstMatch(paragraph)
+          .firstMatch(paragraph)!
           .group(3);
       spanss.add([
         TextSpan(

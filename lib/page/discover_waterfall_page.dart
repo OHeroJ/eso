@@ -13,7 +13,7 @@ import '../database/rule.dart';
 
 class DiscoverWaterfallPage extends StatefulWidget {
   final Rule rule;
-  DiscoverWaterfallPage({super.key, this.rule});
+  DiscoverWaterfallPage({super.key, required this.rule});
 
   @override
   State<DiscoverWaterfallPage> createState() => _DiscoverWaterfallPageState();
@@ -61,17 +61,17 @@ class DiscoverWaterfallPage extends StatefulWidget {
 T cast<T>(x, T v) => x is T ? x : v;
 
 class DiscoverRule {
-  String js;
-  List<Rules> rules;
+  String? js;
+  List<Rules>? rules;
 
-  DiscoverRule({this.js, this.rules});
+  DiscoverRule({this.js, this.rules = const []});
 
-  DiscoverRule.fromJson(Map<String, dynamic> json, [String js]) {
+  DiscoverRule.fromJson(Map<String, dynamic> json, [String? js]) {
     this.js = js == null ? json['js'] : js;
     if (json['rules'] != null) {
-      rules = new List<Rules>();
+      rules = <Rules>[];
       json['rules'].forEach((v) {
-        rules.add(new Rules.fromJson(v));
+        rules?.add(new Rules.fromJson(v));
       });
     }
   }
@@ -80,18 +80,18 @@ class DiscoverRule {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['js'] = this.js;
     if (this.rules != null) {
-      data['rules'] = this.rules.map((v) => v.toJson()).toList();
+      data['rules'] = this.rules!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Rules {
-  String name;
-  String option;
-  String value;
-  String key;
-  List<Options> options;
+  String? name;
+  String? option;
+  String? value;
+  String? key;
+  List<Options>? options;
 
   Rules({this.name, this.option, this.value, this.options, this.key});
 
@@ -101,9 +101,9 @@ class Rules {
     value = json['value'];
     key = json['key'];
     if (json['options'] != null) {
-      options = new List<Options>();
+      options = <Options>[];
       json['options'].forEach((v) {
-        options.add(new Options.fromJson(v));
+        options!.add(new Options.fromJson(v));
       });
     }
   }
@@ -115,15 +115,15 @@ class Rules {
     data['value'] = this.value;
     data['key'] = this.key;
     if (this.options != null) {
-      data['options'] = this.options.map((v) => v.toJson()).toList();
+      data['options'] = this.options?.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Options {
-  String option;
-  String value;
+  String? option;
+  String? value;
 
   Options({this.option, this.value});
 
@@ -141,8 +141,8 @@ class Options {
 }
 
 class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
-  DiscoverRule _discoverRule;
-  String discoverUrl;
+  late DiscoverRule _discoverRule;
+  String? discoverUrl;
 
   @override
   void initState() {
@@ -168,13 +168,13 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
     JSEngine.setEnvironment(1, widget.rule, "", widget.rule.host, "", "");
     discoverUrl = await JSEngine.evaluate(
         "${JSEngine.environment};;1+1;rules = ${jsonEncode(_discoverRule.rules)};;1+1;" +
-            _discoverRule.js);
+            _discoverRule.js!);
     setState(() {});
   }
 
   @override
   void dispose() {
-    _discoverRule.rules.clear();
+    _discoverRule.rules?.clear();
     super.dispose();
   }
 
@@ -207,24 +207,25 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
   Widget _buildBanner() {
     if (_discoverRule == null)
       return SliverToBoxAdapter(child: Text("加载分类中。。。"));
-    final nomal = TextStyle(color: Theme.of(context).textTheme.bodyText1.color);
+    final nomal =
+        TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color);
     final primary = TextStyle(color: Theme.of(context).primaryColor);
 
     return SliverFixedExtentList(
       itemExtent: 35,
       delegate: SliverChildListDelegate([
-        for (var rule in _discoverRule.rules)
+        for (var rule in _discoverRule.rules!)
           SizedBox(
             height: 35,
             child: Row(
               children: [
-                Text(" " + rule.name),
+                Text(" " + rule.name!),
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: rule.options.length,
+                    itemCount: rule.options!.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final option = rule.options[index];
+                      final option = rule.options![index];
                       return TextButton(
                         onPressed: () {
                           rule.option = option.option;
@@ -232,7 +233,7 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
                           parseRule();
                         },
                         child: Text(
-                          option.option,
+                          option.option!,
                           style: rule.value == option.value ? primary : nomal,
                         ),
                       );
@@ -259,8 +260,8 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
-            for (var rule in _discoverRule.rules
-                .where((element) => element.option.isNotEmpty))
+            for (var rule in _discoverRule.rules!
+                .where((element) => element.option!.isNotEmpty))
               Card(
                 child: Center(
                   child: Text(
@@ -279,7 +280,7 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
       return SliverToBoxAdapter(child: Text("加载地址中。。。"));
     return FutureBuilder<List<SearchItem>>(
       future: APIManager.discover(
-          widget.rule.id, {"": DiscoverPair("", discoverUrl)}, 1),
+          widget.rule.id, {"": DiscoverPair("", discoverUrl!)}, 1),
       builder:
           (BuildContext context, AsyncSnapshot<List<SearchItem>> snapshot) {
         if (snapshot.hasError) {
@@ -291,7 +292,7 @@ class _DiscoverWaterfallPageState extends State<DiscoverWaterfallPage> {
         return SliverList(
           delegate: SliverChildListDelegate(
             [
-              for (var item in snapshot.data)
+              for (var item in snapshot.data!)
                 InkWell(
                     onTap: () => Utils.startPageWait(
                         context,

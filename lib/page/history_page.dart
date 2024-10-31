@@ -21,7 +21,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   var isLargeScreen = false;
-  Widget detailPage;
+  Widget? detailPage;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
 }
 
 class HistoryPage2 extends StatelessWidget {
-  final void Function(Widget) invokeTap;
+  final void Function(Widget)? invokeTap;
   const HistoryPage2({super.key, this.invokeTap});
   void alert(BuildContext context, Widget title, Widget content,
           VoidCallback handle) =>
@@ -162,7 +162,7 @@ class HistoryPage2 extends StatelessWidget {
                         API.AUDIO,
                         API.VIDEO,
                       ])
-                        buildButton(context, contentType)
+                        buildButton(context, contentType!)
                     ],
                   ),
                 ),
@@ -194,10 +194,10 @@ class HistoryPage2 extends StatelessWidget {
   ) {
     return InkWell(
       onTap: () {
-        if (item.chapters != null && item.chapters.isEmpty) {
+        if (item.chapters != null && item.chapters!.isEmpty) {
           item.chapters = null;
         }
-        invokeTap(ChapterPage(
+        invokeTap!(ChapterPage(
             searchItem: item, fromHistory: true, key: Key(item.id.toString())));
       },
       onLongPress: () => provider.checkOne(item.id),
@@ -252,7 +252,7 @@ class HistoryPage2 extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.name,
+                    item.name!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -270,7 +270,7 @@ class HistoryPage2 extends StatelessWidget {
                     style: TextStyle(fontSize: 10),
                   ),
                   Text(
-                    item.origin,
+                    item.origin!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12),
@@ -312,7 +312,7 @@ class HistoryPage2 extends StatelessWidget {
               fontSize: 11,
               color: selected
                   ? Theme.of(context).cardColor
-                  : Theme.of(context).textTheme.bodyLarge.color,
+                  : Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
         ),
@@ -376,7 +376,7 @@ class HistoryPageProvider with ChangeNotifier {
     getRuleListByName(_editingController.text);
   }
 
-  int _contentType;
+  late int _contentType;
   int get contentType => _contentType;
   set contentType(int value) {
     if (value != _contentType) {
@@ -385,11 +385,11 @@ class HistoryPageProvider with ChangeNotifier {
     }
   }
 
-  List<SearchItem> _historyItem;
+  late List<SearchItem> _historyItem;
   List<SearchItem> get historyItem => _historyItem;
-  TextEditingController _editingController;
+  late TextEditingController _editingController;
   TextEditingController get editingController => _editingController;
-  DateTime _loadTime;
+  late DateTime _loadTime;
   bool _lockDataBase = false;
   void getRuleListByNameDebounce(String name) {
     if (_lockDataBase) return;
