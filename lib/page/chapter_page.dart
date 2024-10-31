@@ -169,9 +169,9 @@ class _ChapterPageState extends State<ChapterPage> {
     return AppBar(
       elevation: 0.0,
       backgroundColor:
-          Theme.of(context).appBarTheme.backgroundColor.withOpacity(opacity),
+          Theme.of(context).appBarTheme.backgroundColor?.withOpacity(opacity),
       title: Text(
-        searchItem.origin,
+        searchItem.origin!,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -189,7 +189,7 @@ class _ChapterPageState extends State<ChapterPage> {
         ),
         Menu<MenuChapter>(
           items: chapterMenus,
-          onSelect: (value) => provider.onSelect(value, context),
+          onSelect: (value) => provider.onSelect(value!, context),
         ),
       ],
     );
@@ -214,7 +214,7 @@ class _ChapterPageState extends State<ChapterPage> {
         [
           Stack(
             children: [
-              ArcBannerImage(searchItem.cover),
+              ArcBannerImage(searchItem.cover!),
               SizedBox(
                 height: 300 + _top,
                 width: double.infinity,
@@ -234,8 +234,8 @@ class _ChapterPageState extends State<ChapterPage> {
                                 Utils.startPageWait(
                                     context,
                                     PhotoViewPage(items: [
-                                      PhotoItem.parse(searchItem.cover)
-                                    ], heroTag: _hero));
+                                      PhotoItem.parse(searchItem.cover!)
+                                    ], heroTag: _hero!));
                               },
                             ),
                             decoration: BoxDecoration(boxShadow: [
@@ -245,9 +245,9 @@ class _ChapterPageState extends State<ChapterPage> {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          searchItem.name,
+                          searchItem.name!,
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontWeight: FontWeight.w700,
                             fontFamily: ESOTheme.staticFontFamily,
                             fontSize: 18,
@@ -258,11 +258,11 @@ class _ChapterPageState extends State<ChapterPage> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          searchItem.author,
+                          searchItem.author!,
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: ESOTheme.staticFontFamily,
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -307,7 +307,7 @@ class _ChapterPageState extends State<ChapterPage> {
                   ),
                 )
               : Container(),
-          _buildDescription(context, searchItem.description),
+          _buildDescription(context, searchItem.description!),
           _sortWidget(context),
         ],
       ),
@@ -324,8 +324,8 @@ class _ChapterPageState extends State<ChapterPage> {
         config: TextCompositionConfig(
           fontSize: 12,
           paragraphPadding: 8,
-          fontFamily: ESOTheme.staticFontFamily,
-          fontColor: Theme.of(context).textTheme.headline6.color,
+          fontFamily: ESOTheme.staticFontFamily!,
+          fontColor: Theme.of(context).textTheme.titleLarge!.color!,
         ),
         width: constrains.maxWidth,
       );
@@ -341,7 +341,7 @@ class _ChapterPageState extends State<ChapterPage> {
             .push(ContentPageRoute().route(searchItem))
             .whenComplete(provider.adjustScroll);
       };
-      if (searchItem.chapters == null || searchItem.chapters.isEmpty) {
+      if (searchItem.chapters == null || searchItem.chapters!.isEmpty) {
         return Container();
       }
       return Padding(
@@ -352,24 +352,24 @@ class _ChapterPageState extends State<ChapterPage> {
             Card(
               child: TextButton(
                   onPressed: () {
-                    if (searchItem.chapters.isNotEmpty)
-                      onTap(searchItem.chapters.length - 1);
+                    if (searchItem.chapters!.isNotEmpty)
+                      onTap(searchItem.chapters!.length - 1);
                   },
                   child: Text(
-                    "更至（${searchItem.chapters.length}）${searchItem.chapters.isNotEmpty ? searchItem.chapters.last.name : "无"}",
+                    "更至（${searchItem.chapters!.length}）${searchItem.chapters!.isNotEmpty ? searchItem.chapters!.last.name : "无"}",
                     style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color),
+                        color: Theme.of(context).textTheme.bodyLarge?.color),
                   )),
             ),
             Card(
               child: TextButton(
                   onPressed: () {
-                    onTap(searchItem.durChapterIndex);
+                    onTap(searchItem.durChapterIndex!);
                   },
                   child: Text(
                     "阅至（${searchItem.durChapterIndex}）${searchItem.durChapter}",
                     style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color),
+                        color: Theme.of(context).textTheme.bodyLarge?.color),
                   )),
             ),
             Divider(),
@@ -425,8 +425,8 @@ class _ChapterPageState extends State<ChapterPage> {
     var startIndex = 1;
     for (var i = 1, len = chapters.length; i < len; i++) {
       if (chapters[i].name.startsWith('@线路')) {
-        if (searchItem.durChapterIndex >= startIndex &&
-            searchItem.durChapterIndex < i) {
+        if (searchItem.durChapterIndex! >= startIndex &&
+            searchItem.durChapterIndex! < i) {
           currentRoad = roads.length;
         }
         // 上一个线路
@@ -441,8 +441,8 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   Widget buildChapterButton(int chapterIndex, void Function(int) onTap) {
-    final chapter = searchItem.chapters[chapterIndex];
-    if (chapter.url == null || chapter.url.isEmpty) {
+    final chapter = searchItem.chapters![chapterIndex];
+    if (chapter.url == null || chapter.url!.isEmpty) {
       return ListTile(
         title: Text(
           chapter.name,
@@ -466,22 +466,22 @@ class _ChapterPageState extends State<ChapterPage> {
           style: TextStyle(
             color: chapterIndex == searchItem.durChapterIndex
                 ? Theme.of(context).primaryColor
-                : Theme.of(context).textTheme.bodyText1.color,
+                : Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
-        subtitle: chapter.time == null || chapter.time.isEmpty
+        subtitle: chapter.time == null || chapter.time!.isEmpty
             ? null
             : Text(
-                chapter.time,
+                chapter.time!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: chapterIndex == searchItem.durChapterIndex
                       ? Theme.of(context).primaryColor
-                      : Theme.of(context).textTheme.bodyText1.color,
+                      : Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
-        trailing: chapter.cover == null || chapter.cover.isEmpty
+        trailing: chapter.cover == null || chapter.cover!.isEmpty
             ? null
             : UIImageItem(
                 cover: chapter.cover,
@@ -519,7 +519,7 @@ class _ChapterPageState extends State<ChapterPage> {
               .whenComplete(provider.adjustScroll);
         };
 
-        final roads = parseChapers(searchItem.chapters);
+        final roads = parseChapers(searchItem.chapters!);
         if (roads.isEmpty) {
           return SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -528,7 +528,7 @@ class _ChapterPageState extends State<ChapterPage> {
                 (BuildContext context, int index) {
                   return buildChapterButton(index, onTap);
                 },
-                childCount: searchItem.chapters.length,
+                childCount: searchItem.chapters!.length,
               ),
             ),
           );
@@ -562,8 +562,8 @@ class _ChapterPageState extends State<ChapterPage> {
                                       ? Theme.of(context).primaryColor
                                       : Theme.of(context)
                                           .textTheme
-                                          .bodyText1
-                                          .color,
+                                          .bodyLarge
+                                          ?.color,
                                 ),
                               ),
                             ),
@@ -599,13 +599,15 @@ class ArcBannerImage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: height,
-            child:
-                UIImageItem(cover: imageUrl, radius: null, fit: BoxFit.cover),
+            child: UIImageItem(cover: imageUrl, fit: BoxFit.cover),
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
-              color: Theme.of(context).bottomAppBarColor.withOpacity(0.8),
+              color: Theme.of(context)
+                  .appBarTheme
+                  .backgroundColor
+                  ?.withOpacity(0.8),
               height: height,
             ),
           ),

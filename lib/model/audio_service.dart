@@ -64,10 +64,9 @@
 //     }
 //   }
 
-
 //   ConcatenatingAudioSource s ;
 
-//   String get durChapter => _searchItem.durChapter;
+//   String get durChapter => _searchItem!.durChapter;
 
 //   Future seek(Duration duration) => _player.seek(duration);
 
@@ -105,18 +104,18 @@
 //   }
 
 //   void playNext([bool allFavorite = false]) {
-//     if (_searchItem.durChapterIndex == (_searchItem.chapters.length - 1)) {
+//     if (_searchItem!.durChapterIndex == (_searchItem!.chapters.length - 1)) {
 //       if (allFavorite != true) {
 //         playChapter(0);
 //       }
 //     } else {
-//       playChapter(_searchItem.durChapterIndex + 1);
+//       playChapter(_searchItem!.durChapterIndex + 1);
 //     }
 //   }
 
-//   void playPrev() => playChapter(_searchItem.durChapterIndex == 0
-//       ? _searchItem.chapters.length - 1
-//       : _searchItem.durChapterIndex - 1);
+//   void playPrev() => playChapter(_searchItem!.durChapterIndex == 0
+//       ? _searchItem!.chapters.length - 1
+//       : _searchItem!.durChapterIndex - 1);
 
 //   List<Lyric> _lyrics;
 //   List<Lyric> get lyrics => _lyrics;
@@ -124,8 +123,8 @@
 //   Future<void> playChapter(int chapterIndex,
 //       {SearchItem searchItem, bool tryNext = false}) async {
 //     if (searchItem == null) {
-//       if (chapterIndex < 0 || chapterIndex >= _searchItem.chapters.length) return;
-//       if (_url != null && _searchItem.durChapterIndex == chapterIndex) {
+//       if (chapterIndex < 0 || chapterIndex >= _searchItem!.chapters.length) return;
+//       if (_url != null && _searchItem!.durChapterIndex == chapterIndex) {
 //         replay();
 //         return;
 //       }
@@ -141,15 +140,15 @@
 //     } catch (e) {}
 //     _player.stop();
 //     _durChapterIndex = chapterIndex;
-//     if (_searchItem.chapters == null || _searchItem.chapters.isEmpty) return;
+//     if (_searchItem!.chapters == null || _searchItem!.chapters.isEmpty) return;
 //     final content = await APIManager.getContent(
-//         _searchItem.originTag, _searchItem.chapters[chapterIndex].url);
+//         _searchItem!.originTag, _searchItem!.chapters[chapterIndex].url);
 //     if (content == null || content.length == 0) return;
 //     _url = content[0];
 //     _lyrics.clear();
 //     for (final c in content.skip(1)) {
 //       if (c.startsWith('@cover')) {
-//         _searchItem.chapters[chapterIndex].cover = c.substring(6);
+//         _searchItem!.chapters[chapterIndex].cover = c.substring(6);
 //       }
 //       if (c.startsWith('@lrc')) {
 //         // 一行一行解析
@@ -205,16 +204,16 @@
 //         ),
 //       ];
 //     }
-//     _searchItem.durChapterIndex = chapterIndex;
-//     _searchItem.durChapter = _searchItem.chapters[chapterIndex].name;
-//     _searchItem.durContentIndex = 1;
+//     _searchItem!.durChapterIndex = chapterIndex;
+//     _searchItem!.durChapter = _searchItem!.chapters[chapterIndex].name;
+//     _searchItem!.durContentIndex = 1;
 //     try {
-//       await _searchItem.save();
+//       await _searchItem!.save();
 //       HistoryItemManager.insertOrUpdateHistoryItem(searchItem);
 //     } catch (e) {}
 //     // await SearchItemManager.saveSearchItem();
 //     print(_url);
-//     var _cover = _searchItem.chapters[_searchItem.durChapterIndex].cover;
+//     var _cover = _searchItem!.chapters[_searchItem!.durChapterIndex].cover;
 //     if (_cover.isEmpty) {
 //       _cover = searchItem.cover;
 //     }
@@ -226,10 +225,10 @@
 //       _aHeaders = h;
 //     }
 //     final m = MediaItem(
-//       id: "${_searchItem.id}z${chapterIndex}",
-//       album: _searchItem.chapters[_searchItem.durChapterIndex].name,
-//       title: _searchItem.name,
-//       artist: _searchItem.author,
+//       id: "${_searchItem!.id}z${chapterIndex}",
+//       album: _searchItem!.chapters[_searchItem!.durChapterIndex].name,
+//       title: _searchItem!.name,
+//       artist: _searchItem!.author,
 //       artHeaders: _aHeaders,
 //       artUri: Uri.parse(_cover),
 //     );
@@ -283,7 +282,7 @@
 //   ChapterItem get curChapter =>
 //       _durChapterIndex < 0 || _durChapterIndex >= (_searchItem?.chapters?.length ?? 0)
 //           ? null
-//           : _searchItem.chapters[_durChapterIndex];
+//           : _searchItem!.chapters[_durChapterIndex];
 
 //   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
 

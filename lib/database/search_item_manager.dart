@@ -22,7 +22,7 @@ class SearchItemManager {
       tag = null;
     }
     final searchItem = <SearchItem>[];
-    _searchItem.forEach((element) {
+    _searchItem!.forEach((element) {
       if (element.ruleContentType == contentType &&
           (tag == null || tag.isEmpty || element.tags.contains(tag)))
         searchItem.add(element);
@@ -61,8 +61,8 @@ class SearchItemManager {
   }
 
   static Future<bool> addSearchItem(SearchItem searchItem) async {
-    _searchItem.removeWhere((element) => element.id == searchItem.id);
-    _searchItem.add(searchItem);
+    _searchItem!.removeWhere((element) => element.id == searchItem.id);
+    _searchItem!.add(searchItem);
     final sbox = Hive.box<SearchItem>(key);
     sbox.put(searchItem.id.toString(), searchItem);
     return true;
@@ -91,7 +91,7 @@ class SearchItemManager {
   //   sbox.
   //   return true;
   //   return await Global.prefs.setStringList(
-  //       key, _searchItem.map((item) => jsonEncode(item.toJson())).toList());
+  //       key, _searchItem!.map((item) => jsonEncode(item.toJson())).toList());
   // }
 
   // static Future<bool> removeChapter(int id) {
@@ -104,8 +104,8 @@ class SearchItemManager {
   // }
 
   static String backupItems() {
-    if (_searchItem == null || _searchItem.isEmpty) initSearchItem();
-    return json.encode(_searchItem.map((item) {
+    if (_searchItem == null || _searchItem!.isEmpty) initSearchItem();
+    return json.encode(_searchItem!.map((item) {
       Map<String, dynamic> json = item.toJson();
       json["chapters"] = item.chapters!
           .map((chapter) => jsonEncode(chapter.toJson()))
@@ -124,7 +124,7 @@ class SearchItemManager {
             .map((chapter) => ChapterItem.fromJson(chapter))
             .toList();
         // if(searchItem.chapters == null) searchItem.chapters = <ChapterItem>[];
-        _searchItem.add(searchItem);
+        _searchItem!.add(searchItem);
         sbox.put(searchItem.id.toString(), searchItem);
       }
     });

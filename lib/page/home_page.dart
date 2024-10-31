@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         create: (BuildContext context) => PageSwitch(Global.currentHomePage),
         child: Consumer<PageSwitch>(
           builder:
-              (BuildContext context, PageSwitch pageSwitch, Widget widget) {
+              (BuildContext context, PageSwitch pageSwitch, Widget? widget) {
             Global.currentHomePage = pageSwitch.currentIndex;
             pageSwitch.updatePageController();
             final _pageView = PageView(
@@ -96,7 +96,9 @@ class _HomePageState extends State<HomePage> {
                 body: Stack(
                   children: [
                     _pageView,
-                    AudioView(),
+                    AudioView(
+                      context: context,
+                    ),
                     // StatefulBuilder(builder: (context, state) {
                     //   return _buildAudioView(context);
                     // }),
@@ -230,7 +232,7 @@ class _HomePageState extends State<HomePage> {
   Color getColor(PageSwitch pageSwitch, BuildContext context, int value) {
     return pageSwitch.currentIndex == value
         ? Theme.of(context).primaryColor
-        : Theme.of(context).textTheme.bodyText1.color;
+        : Theme.of(context).textTheme.bodyLarge!.color!;
   }
 
   // Widget _buildAudioView(BuildContext context) {

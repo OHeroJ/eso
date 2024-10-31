@@ -192,7 +192,7 @@
 //   ChapterItem get curChapter =>
 //       _durChapterIndex < 0 || _durChapterIndex >= (_searchItem?.chapters?.length ?? 0)
 //           ? null
-//           : _searchItem.chapters[_durChapterIndex];
+//           : _searchItem!.chapters[_durChapterIndex];
 
 //   @override
 //   Future<void> readySongUrl(int chapterIndex,
@@ -200,13 +200,13 @@
 //     print("playChapter");
 
 //     if (searchItem == null) {
-//       if (chapterIndex < 0 || chapterIndex >= _searchItem.chapters.length) return;
-//       if (_playUrl != null && _searchItem.durChapterIndex == chapterIndex) {
+//       if (chapterIndex < 0 || chapterIndex >= _searchItem!.chapters.length) return;
+//       if (_playUrl != null && _searchItem!.durChapterIndex == chapterIndex) {
 //         // 重新播放
 //         // replay();
 //         return;
 //       }
-//     } else if (_searchItem == null || (_searchItem.chapterUrl != searchItem.chapterUrl)) {
+//     } else if (_searchItem == null || (_searchItem!.chapterUrl != searchItem.chapterUrl)) {
 //       print("_searchItem != searchItem");
 //       _searchItem = searchItem;
 //     } else if (_durChapterIndex == chapterIndex) {
@@ -222,9 +222,9 @@
 //     _durChapterIndex = chapterIndex;
 //     print("_durChapterIndex:${_durChapterIndex} == chapterIndex:${chapterIndex}");
 
-//     if (_searchItem.chapters == null || _searchItem.chapters.isEmpty) return;
+//     if (_searchItem!.chapters == null || _searchItem!.chapters.isEmpty) return;
 //     final content = await APIManager.getContent(
-//         _searchItem.originTag, _searchItem.chapters[chapterIndex].url);
+//         _searchItem!.originTag, _searchItem!.chapters[chapterIndex].url);
 //     if (content == null || content.length == 0) return;
 //     _playUrl = content[0];
 
@@ -232,26 +232,26 @@
 
 //     for (final c in content.skip(1)) {
 //       if (c.startsWith('@cover')) {
-//         _searchItem.chapters[chapterIndex].cover = c.substring(6);
+//         _searchItem!.chapters[chapterIndex].cover = c.substring(6);
 //       }
 //       if (c.startsWith('@lrc')) {
 //         _lyricModel.reset();
 //         _lyricModel = _lyricModel.bindLyricToMain(c.substring(4));
 //       }
 //     }
-//     if (_searchItem.chapters[chapterIndex].cover.isEmpty) {
-//       _searchItem.chapters[chapterIndex].cover = _searchItem.cover;
+//     if (_searchItem!.chapters[chapterIndex].cover.isEmpty) {
+//       _searchItem!.chapters[chapterIndex].cover = _searchItem!.cover;
 //     }
-//     // print("cover:${_searchItem.chapters[chapterIndex].cover}");
+//     // print("cover:${_searchItem!.chapters[chapterIndex].cover}");
 
-//     _searchItem.durChapterIndex = chapterIndex;
-//     _searchItem.durChapter = _searchItem.chapters[chapterIndex].name;
-//     _searchItem.durContentIndex = 1;
-//     _searchItem.lastReadTime = DateTime.now().microsecondsSinceEpoch;
+//     _searchItem!.durChapterIndex = chapterIndex;
+//     _searchItem!.durChapter = _searchItem!.chapters[chapterIndex].name;
+//     _searchItem!.durContentIndex = 1;
+//     _searchItem!.lastReadTime = DateTime.now().microsecondsSinceEpoch;
 //     // print(
-//     //     "lastReadTime:${_searchItem.lastReadTime},${DateTime.fromMillisecondsSinceEpoch(_searchItem.lastReadTime)}");
+//     //     "lastReadTime:${_searchItem!.lastReadTime},${DateTime.fromMillisecondsSinceEpoch(_searchItem!.lastReadTime)}");
 //     try {
-//       await _searchItem.save();
+//       await _searchItem!.save();
 //     // await SearchItemManager.saveSearchItem();
 //       HistoryItemManager.insertOrUpdateHistoryItem(searchItem);
 //     } catch (e) {}
@@ -275,10 +275,10 @@
 //         _dur = await _player.setAudioSource(AudioSource.uri(Uri.parse(_playUrl)));
 //       }
 
-//       String _cover = _searchItem.chapters[_searchItem.durChapterIndex].cover;
+//       String _cover = _searchItem!.chapters[_searchItem!.durChapterIndex].cover;
 //       // print("_cover:${_cover}");
 //       if (_cover.isEmpty) {
-//         _cover = _searchItem.cover;
+//         _cover = _searchItem!.cover;
 //       }
 //       String _coverUrl = _cover;
 //       Map<String, String> _aHeaders = null;
@@ -292,10 +292,10 @@
 //       // print("_cover:${_cover},\n${_coverUrl},\n_aHeaders:${_aHeaders}");
 
 //       mediaItem.add(MediaItem(
-//         id: _searchItem.chapterUrl,
-//         album: _searchItem.chapters[_searchItem.durChapterIndex].name,
-//         title: _searchItem.name,
-//         artist: _searchItem.author,
+//         id: _searchItem!.chapterUrl,
+//         album: _searchItem!.chapters[_searchItem!.durChapterIndex].name,
+//         title: _searchItem!.name,
+//         artist: _searchItem!.author,
 //         duration: _dur,
 //         artHeaders: _aHeaders,
 //         artUri: Uri.parse(_coverUrl),
@@ -315,12 +315,12 @@
 
 //   @override
 //   void playNext([bool allFavorite = false]) {
-//     if (_searchItem.durChapterIndex == (_searchItem.chapters.length - 1)) {
+//     if (_searchItem!.durChapterIndex == (_searchItem!.chapters.length - 1)) {
 //       if (allFavorite != true) {
 //         readySongUrl(0);
 //       }
 //     } else {
-//       readySongUrl(_searchItem.durChapterIndex + 1);
+//       readySongUrl(_searchItem!.durChapterIndex + 1);
 //     }
 //   }
 
@@ -380,9 +380,9 @@
 //   }
 
 //   @override
-//   void playPrev() => readySongUrl(_searchItem.durChapterIndex == 0
-//       ? _searchItem.chapters.length - 1
-//       : _searchItem.durChapterIndex - 1);
+//   void playPrev() => readySongUrl(_searchItem!.durChapterIndex == 0
+//       ? _searchItem!.chapters.length - 1
+//       : _searchItem!.durChapterIndex - 1);
 
 //   @override
 //   void forward10s() async {

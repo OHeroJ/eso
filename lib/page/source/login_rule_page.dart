@@ -11,9 +11,9 @@ import '../../fonticons_icons.dart';
 
 class LoginRulePage extends StatelessWidget {
   final Rule rule;
-  const LoginRulePage({this.rule, Key key});
+  const LoginRulePage({required this.rule, super.key});
 
-  Future<bool> setCookies() async {
+  Future<bool?> setCookies() async {
     return await MethodChannel('plugins.flutter.io/cookie_manager')
         .invokeMethod<bool>(
       'setCookies',
@@ -24,7 +24,7 @@ class LoginRulePage extends StatelessWidget {
     );
   }
 
-  Future<String> getCookies() async {
+  Future<String?> getCookies() async {
     return await MethodChannel('plugins.flutter.io/cookie_manager')
         .invokeMethod<String>(
       'getCookies',
@@ -36,14 +36,19 @@ class LoginRulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Completer<WebViewController> _controller =
-        Completer<WebViewController>();
+    final controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setUserAgent(
+        rule.userAgent.isNotEmpty
+            ? rule.userAgent
+            : 'Mozilla/5.0 (Linux; Android 9; MIX 2 Build/PKQ1.190118.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.99 Mobile Safari/537.36',
+      )
+      ..loadRequest(Uri.parse(rule.loginUrl));
     if (rule.cookies != null && rule.cookies.isNotEmpty) {
       setCookies();
     }
     return WillPopScope(
       onWillPop: () async {
-        final controller = await _controller.future;
         if (await controller.canGoBack()) {
           controller.goBack();
           return false;
@@ -76,7 +81,6 @@ class LoginRulePage extends StatelessWidget {
                   size: 20,
                 ),
                 onPressed: () async {
-                  final controller = await _controller.future;
                   if (await controller.canGoBack()) {
                     controller.goBack();
                   }
@@ -88,7 +92,6 @@ class LoginRulePage extends StatelessWidget {
                   size: 20,
                 ),
                 onPressed: () async {
-                  final controller = await _controller.future;
                   if (await controller.canGoForward()) {
                     controller.goForward();
                   }
@@ -101,21 +104,14 @@ class LoginRulePage extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final cookies = await getCookies();
-                  rule.cookies = cookies;
+                  rule.cookies = cookies!;
                   Navigator.of(context).pop(cookies);
                 },
               ),
             ],
           ),
-          body: WebView(
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-            },
-            initialUrl: rule.loginUrl,
-            userAgent: rule.userAgent.isNotEmpty
-                ? rule.userAgent
-                : 'Mozilla/5.0 (Linux; Android 9; MIX 2 Build/PKQ1.190118.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.99 Mobile Safari/537.36',
+          body: WebViewWidget(
+            controller: controller,
           ),
         ),
       ),

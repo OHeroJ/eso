@@ -23,7 +23,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../fonticons_icons.dart';
 import '../../global.dart';
@@ -39,7 +38,7 @@ class EditSourcePage extends StatefulWidget {
 
 class _EditSourcePageState extends State<EditSourcePage> {
   TextEditingController _searchEdit = TextEditingController();
-  String group;
+  late String group;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditSourceProvider>(
@@ -483,12 +482,12 @@ class _EditSourcePageState extends State<EditSourcePage> {
                 alert(
                   Text("警告(不可恢复)"),
                   Text("删除选中${rule.name}条规则"),
-                  () => provider.handleSelect([rule], value, index: index),
+                  () => provider.handleSelect([rule], value!, index: index),
                 );
               } else if (value == MenuEditSource.preview) {
                 preview(rule);
               } else {
-                provider.handleSelect([rule], value, index: index);
+                provider.handleSelect([rule], value!, index: index);
               }
             },
           ),

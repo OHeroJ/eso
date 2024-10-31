@@ -48,7 +48,8 @@ class ContentPageRoute {
               // case API.RSS:
               //   return RSSPage(searchItem: searchItem);
               case API.VIDEO:
-                if (Global.isDesktop) return VideoPageDesktop(searchItem: searchItem);
+                if (Global.isDesktop)
+                  return VideoPageDesktop(searchItem: searchItem);
                 return VideoPage(searchItem: searchItem);
               case API.AUDIO:
                 return AudioPage(searchItem: searchItem);
@@ -66,14 +67,14 @@ class ContentPageRoute {
 class ContentProvider with ChangeNotifier {
   final SearchItem searchItem;
 
-  String _info;
+  late String _info;
   String get info => _info;
-  bool _showInfo;
+  late bool _showInfo;
   bool get showInfo => _showInfo != false;
 
-  CacheUtil _cache;
+  late CacheUtil _cache;
   CacheUtil get cache => _cache;
-  bool _canUseCache;
+  late bool _canUseCache;
   bool get canUseCache => _canUseCache == true;
 
   final MemoryCache<int, List<String>> _memoryCache;
@@ -92,7 +93,7 @@ class ContentProvider with ChangeNotifier {
 
   Future<void> init() async {
     try {
-      if (searchItem.chapters == null || searchItem.chapters.isEmpty) {
+      if (searchItem.chapters == null || searchItem.chapters!.isEmpty) {
         _addInfo("目录为空 重新获取目录");
         // if (SearchItemManager.isFavorite(searchItem.originTag, searchItem.url)) {
         //   searchItem.chapters = SearchItemManager.getChapter(searchItem.id);
@@ -100,30 +101,34 @@ class ContentProvider with ChangeNotifier {
         searchItem.chapters =
             await APIManager.getChapter(searchItem.originTag, searchItem.url);
         // }
-        _addInfo("结束 得到${searchItem.chapters.length}个章节");
+        _addInfo("结束 得到${searchItem.chapters!.length}个章节");
       }
-      _cache = CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
+      _cache =
+          CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
       _canUseCache = await CacheUtil.requestPermission();
       if (_canUseCache != true) _addInfo("权限检查失败 本地缓存需要存储权限");
       _showInfo = false;
       notifyListeners();
     } catch (e, st) {
-      _addInfo(e);
+      _addInfo(e.toString());
       _addInfo("$st");
     }
   }
 
   Future<void> retryUseCache() async {
-    _cache = CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
+    _cache =
+        CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
     _canUseCache = await CacheUtil.requestPermission();
   }
 
   Future<List<String>> refresh() {
-    return loadChapter(searchItem.durChapterIndex, false, false);
+    return loadChapter(searchItem.durChapterIndex!, false, false);
   }
 
   Future<List<String>> loadChapter(int chapterIndex,
-      [bool useCache = true, bool loadNext = true, bool shouldChangeIndex = true]) {
+      [bool useCache = true,
+      bool loadNext = true,
+      bool shouldChangeIndex = true]) {
     final r = _memoryCache.getValueOrSet(chapterIndex, () async {
       if (useCache) {
         if (canUseCache) {
@@ -136,8 +141,9 @@ class ContentProvider with ChangeNotifier {
           await retryUseCache();
         }
       }
-      final chapter = searchItem.chapters[chapterIndex];
-      final content = await APIManager.getContent(searchItem.originTag, chapter.url);
+      final chapter = searchItem.chapters![chapterIndex];
+      final content =
+          await APIManager.getContent(searchItem.originTag, chapter.url!);
       chapter.contentUrl = API.contentUrl;
       final resp = content.join("\n").split(RegExp(r"\n\s*|\s{2,}"));
       if (canUseCache && resp.isNotEmpty) {
@@ -151,12 +157,12 @@ class ContentProvider with ChangeNotifier {
 
     () async {
       if (loadNext) {
-        if (chapterIndex + 2 < searchItem.chapters.length &&
+        if (chapterIndex + 2 < searchItem.chapters!.length &&
             !_memoryCache.containsKey(chapterIndex + 1)) {
           await Future.delayed(Duration(milliseconds: 100));
           await loadChapter(chapterIndex + 1, useCache, false, false);
         }
-        if (chapterIndex + 3 < searchItem.chapters.length &&
+        if (chapterIndex + 3 < searchItem.chapters!.length &&
             !_memoryCache.containsKey(chapterIndex + 2)) {
           await Future.delayed(Duration(milliseconds: 100));
           await loadChapter(chapterIndex + 2, useCache, false, false);

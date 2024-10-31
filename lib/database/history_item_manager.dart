@@ -39,8 +39,8 @@ class HistoryItemManager {
   }
 
   // static String backupItems() {
-  //   if (_searchItem == null || _searchItem.isEmpty) initSearchItem();
-  //   return json.encode(_searchItem.map((item) {
+  //   if (_searchItem == null || _searchItem!.isEmpty) initSearchItem();
+  //   return json.encode(_searchItem!.map((item) {
   //     Map<String, dynamic> json = item.toJson();
   //     json["chapters"] =
   //         getChapter(item.id).map((chapter) => jsonEncode(chapter.toJson())).toList();
