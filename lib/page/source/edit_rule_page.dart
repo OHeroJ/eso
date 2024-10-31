@@ -35,17 +35,17 @@ class EditRulePage extends StatefulWidget {
 class _EditRulePageState extends State<EditRulePage>
     with WidgetsBindingObserver {
   var isLoading = false;
-  Color primaryColor;
-  Rule rule;
+  late Color primaryColor;
+  late Rule rule;
   bool _infoExpanded = true;
   bool _discoverExpanded = true;
   bool _searchExpanded = true;
   bool _chapterExpanded = true;
   bool _contentExpanded = true;
-  ScrollController _controller;
+  late ScrollController _controller;
 
   var isLargeScreen = false;
-  Widget detailPage;
+  late Widget detailPage;
   void invokeTap(Widget detailPage) {
     if (isLargeScreen) {
       this.detailPage = detailPage;
@@ -63,15 +63,16 @@ class _EditRulePageState extends State<EditRulePage>
   String s = "";
   bool isNotCollapsed = false;
   String code = "";
-  FocusNode codeFocusNode;
-  Widget editView;
+  late FocusNode codeFocusNode;
+  late Widget editView;
 
   @override
   void initState() {
     _controller = ScrollController();
     codeFocusNode = FocusNode()
       ..addListener(() {
-        currentController = codeKey.currentState?.codeTextController;
+        currentController =
+            codeKey.currentState?.codeTextController as TextEditingController;
         currentOnChanged = onchangeCode;
       });
     super.initState();
@@ -463,7 +464,7 @@ class _EditRulePageState extends State<EditRulePage>
                 textSelection.end,
                 fastText,
               );
-              currentOnChanged(currentController.text);
+              currentOnChanged!(currentController.text);
               currentController.selection = textSelection.copyWith(
                 baseOffset: textSelection.end + fastText.length,
                 extentOffset: textSelection.end + fastText.length,
@@ -490,8 +491,8 @@ class _EditRulePageState extends State<EditRulePage>
     );
   }
 
-  TextEditingController currentController;
-  void Function(String text) currentOnChanged;
+  late TextEditingController currentController;
+  void Function(String text)? currentOnChanged;
   // UndoHistoryController currentController;
 
   Widget _buildEditText(
@@ -499,7 +500,7 @@ class _EditRulePageState extends State<EditRulePage>
     String labelText,
     void Function(String text) onChanged, {
     int minLines = 1,
-    int maxLines,
+    int? maxLines,
   }) {
     final controller = TextEditingController(text: text);
     return Padding(
@@ -550,7 +551,7 @@ class _EditRulePageState extends State<EditRulePage>
                 isDense: true,
                 value: rule.contentType,
                 onChanged: (value) {
-                  rule.contentType = value;
+                  rule.contentType = value!;
                   rebuildEditView();
                   setState(() {});
                 },
@@ -892,12 +893,12 @@ class _EditRulePageState extends State<EditRulePage>
   Future<bool> _loadFromClipBoard(BuildContext context, bool isYICIYUAN) async {
     if (isLoading) return false;
     isLoading = true;
-    final text = (await Clipboard.getData(Clipboard.kTextPlain)).text;
+    final text = (await Clipboard.getData(Clipboard.kTextPlain))!.text;
     isLoading = false;
     try {
       rule = isYICIYUAN
-          ? Rule.fromYiCiYuan(jsonDecode(text), rule)
-          : text.startsWith(RuleCompress.tag)
+          ? Rule.fromYiCiYuan(jsonDecode(text!), rule)
+          : text!.startsWith(RuleCompress.tag)
               ? RuleCompress.decompass(text, rule)
               : Rule.fromJson(jsonDecode(text), rule);
       rebuildEditView();
