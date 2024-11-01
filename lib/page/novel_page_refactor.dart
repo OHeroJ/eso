@@ -144,7 +144,7 @@ class SpeakService {
     final spVoice = SpVoice(ptr);
     final pwcs = s.toNativeUtf16();
     try {
-      return spVoice.Speak(pwcs,
+      return spVoice.speak(pwcs,
           SPEAKFLAGS.SPF_PURGEBEFORESPEAK | SPEAKFLAGS.SPF_IS_NOT_XML, nullptr);
     } finally {
       free(pwcs);
@@ -155,13 +155,13 @@ class SpeakService {
     if (!Platform.isWindows) return tts.speak(text);
     freeSpVoice();
     spVoice = SpVoice.createInstance();
-    spVoice?.SetRate(rate);
+    spVoice?.setRate(rate);
     return 0 == await compute(speakStatic, [spVoice!.ptr.address, text]);
   }
 
   stop() async {
     if (!Platform.isWindows) return tts.stop();
-    return 0 == spVoice?.Pause();
+    return 0 == spVoice?.pause();
   }
 
   addRate() {
@@ -170,7 +170,7 @@ class SpeakService {
       if (!Platform.isWindows)
         return tts.setSpeechRate(
             range.min + (range.max - range.min) * (_rate + 5) / 10);
-      return 0 == spVoice?.SetRate(rate);
+      return 0 == spVoice?.setRate(rate);
     }
     return false;
   }
@@ -181,7 +181,7 @@ class SpeakService {
       if (!Platform.isWindows)
         return tts.setSpeechRate(
             range.min + (range.max - range.min) * (_rate + 5) / 10);
-      return 0 == spVoice?.SetRate(rate);
+      return 0 == spVoice?.setRate(rate);
     }
     return false;
   }
@@ -190,14 +190,14 @@ class SpeakService {
     if (rate != 0) {
       _rate = 0;
       if (!Platform.isWindows) return tts.setSpeechRate(range.normal);
-      return 0 == spVoice?.SetRate(rate);
+      return 0 == spVoice?.setRate(rate);
     }
     return false;
   }
 
   freeSpVoice() {
     if (spVoice != null) {
-      spVoice!.Pause();
+      spVoice!.pause();
       free(spVoice!.ptr);
       CoUninitialize();
       spVoice = null;
