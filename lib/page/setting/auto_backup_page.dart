@@ -336,7 +336,8 @@ class AutoBackupPage extends StatelessWidget {
     final dir = join((await CacheUtil(backup: true).cacheDir())!,
         "$today.${Platform.operatingSystem}.zip");
     // FlutterShare.shareFile(title: "$today.zip", filePath: dir, text: "$today.zip");
-    Share.shareFiles(<String>[dir], text: "$today.zip");
+    Share.shareXFiles(<String>[dir].map((dir) => XFile(dir)).toList(),
+        text: "$today.zip");
   }
 
   /// type: 0->s, 1->getString, 2-> getStringList

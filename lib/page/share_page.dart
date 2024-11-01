@@ -73,7 +73,7 @@ class SharePage extends HookWidget {
                       final file = Utils.join(temp.path, fileName + ".json");
                       File(file).writeAsStringSync(text);
                       // 分享文件
-                      Share.shareFiles([file]);
+                      Share.shareXFiles([file].map((e) => XFile(e)).toList());
                     },
                     child: Text("分享文件"),
                     style: ButtonStyle(

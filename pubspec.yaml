@@ -6,7 +6,8 @@ homepage: https://github.com/mabdc/eso
 author: mabdc
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.5.2 <4.0.0"
+  flutter: ">=3.12.0"
 
 dependencies:
   about: ^2.0.0
@@ -39,7 +40,7 @@ dependencies:
   flutter_tts: ^4.0.2
   flutter_webview_pro: 3.0.1+4
   html: ^0.15.0
-  http: ^0.13.1
+  http: ^1.2.2
   image_gallery_saver: ^2.0.3
 
   json_path: ^0.7.4
@@ -53,7 +54,7 @@ dependencies:
   provider: ^6.1.2
   device_display_brightness: ^0.0.6
   scrollable_positioned_list: ^0.3.8
-  share_plus: ^4.0.2
+  share_plus: ^10.1.1
   shared_preferences: ^2.0.13
   sqflite_common_ffi: ^2.0.0
   text_composition:

@@ -106,7 +106,10 @@ class NovelCacheService {
       await File(filePath).writeAsString(export.join("\n"));
       Utils.toast("成功导出到 $filePath");
       // if (isShare) await FlutterShare.shareFile(title: name, filePath: filePath);
-      if (isShare) await Share.shareFiles(<String>[filePath], text: name);
+      if (isShare)
+        await Share.shareXFiles(
+            <String>[filePath].map((e) => XFile(e)).toList(),
+            text: name);
     } catch (e) {
       Utils.toast("失败 $e");
     }

@@ -15,7 +15,7 @@ import just_audio
 import package_info_plus
 import path_provider_foundation
 import screen_retriever_macos
-import share_plus_macos
+import share_plus
 import shared_preferences_foundation
 import sqflite_darwin
 import url_launcher_macos
