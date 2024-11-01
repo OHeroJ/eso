@@ -18,11 +18,11 @@ class PhotoItem {
   /// 文件URL或文件Path
   final String url;
 
-  final Map<String, String> headers;
+  final Map<String, String>? headers;
 
   const PhotoItem(this.url, this.headers);
 
-  static PhotoItem parse(String urlWithHeaders) {
+  static PhotoItem? parse(String? urlWithHeaders) {
     if (urlWithHeaders == null) return null;
     final index = urlWithHeaders.indexOf("@headers");
     if (index == -1) return PhotoItem(urlWithHeaders, null);
@@ -45,10 +45,10 @@ class PhotoViewPage extends StatefulWidget {
   final bool enableRotation;
 
   /// hero
-  final String heroTag;
+  final String? heroTag;
 
   /// 长按事件
-  final ValueChanged<int> onLongPress;
+  final ValueChanged<int>? onLongPress;
 
   const PhotoViewPage(
       {super.key,
@@ -63,7 +63,7 @@ class PhotoViewPage extends StatefulWidget {
 }
 
 class _PhotoViewPageState extends State<PhotoViewPage> {
-  PageController controller;
+  late PageController controller;
   int currentIndex = 0;
 
   @override
@@ -90,14 +90,10 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
                     final startIndex = item.url.indexOf(";base64,");
                     return PhotoViewGalleryPageOptions(
                       //imageProvider: NetworkImage(item.url),
-                      imageProvider: startIndex == -1
-                          ? CachedNetworkImageProvider(item.url,
-                              headers: item.headers)
-                          : MemoryImage(
-                              base64Decode(item.url.substring(startIndex + 8))),
+                      imageProvider: imageProvider(startIndex, item),
                       heroAttributes:
                           widget.heroTag != null && widget.index == index
-                              ? PhotoViewHeroAttributes(tag: widget.heroTag)
+                              ? PhotoViewHeroAttributes(tag: widget.heroTag!)
                               : null,
                     );
                   },
@@ -207,6 +203,21 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
     );
   }
 
+  ImageProvider imageProvider(int startIndex, PhotoItem item) {
+    if (startIndex == -1) {
+      return CachedNetworkImageProvider(
+        item.url,
+        headers: item.headers,
+      );
+    } else {
+      return MemoryImage(
+        base64Decode(
+          item.url.substring(startIndex + 8),
+        ),
+      );
+    }
+  }
+
   int get count => widget.items == null ? 0 : widget.items.length;
 
   void doLongPress() {
@@ -259,8 +270,9 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
                             context,
                             Text("取消",
                                 style: TextStyle(
-                                    color: Theme.of(context).errorColor)),
-                            onTap: () {
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .error)), onTap: () {
                           Navigator.of(context).pop();
                         })
                       ],
@@ -286,9 +298,9 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
       // 获取文件或图片
       final provider =
           CachedNetworkImageProvider(item.url, headers: item.headers);
-      DefaultCacheManager mgr = provider.cacheManager ?? DefaultCacheManager();
+      final mgr = provider.cacheManager ?? DefaultCacheManager();
       String url = provider.url;
-      Map<String, String> headers = provider.headers;
+      Map<String, String> headers = provider.headers ?? {};
       File file = await mgr.getSingleFile(url, headers: headers);
       result = Platform.isWindows || Platform.isLinux
           ? await CacheUtil(basePath: "download")
@@ -326,7 +338,7 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
       {bool isFirst = true,
       bool isLast = true,
       double circular = 10,
-      VoidCallback onTap}) {
+      VoidCallback? onTap}) {
     var borderSide = BorderSide(color: Colors.black12, width: 0.5);
     var borderRadius;
     var margin;

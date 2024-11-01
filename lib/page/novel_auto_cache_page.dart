@@ -25,9 +25,9 @@ class NovelCacheService {
     return _instance;
   }
 
-  String exportDir;
+  String? exportDir;
 
-  final List<Function()> _listeners;
+  late final List<Function()> _listeners;
   addListener(Function() listener) {
     _listeners.add(listener);
   }
@@ -40,15 +40,15 @@ class NovelCacheService {
 
   final Map<int, Set<String>> _startTable;
 
-  Set<String> getCachedIndex(int id) =>
+  Set<String>? getCachedIndex(int id) =>
       _startTable.containsKey(id) ? _startTable[id] : Set<String>();
 
   bool isCached(int id, int index) =>
-      _startTable.containsKey(id) && _startTable[id].contains(index);
+      _startTable.containsKey(id) && _startTable[id]!.contains(index);
 
   bool isCaching(int id) => _startTable.containsKey(id);
 
-  bool _exportLoading;
+  late bool _exportLoading;
 
   void exportCache(
       SearchItem searchItem, String exportChapterName, bool isShare) async {
@@ -58,9 +58,9 @@ class NovelCacheService {
     }
     _exportLoading = true;
     Utils.toast("开始导出已缓存章节");
-    final rule = await Global.ruleDao.findRuleById(searchItem.originTag);
+    final rule = await Global.ruleDao.findRuleById(searchItem.originTag!);
     final chapterUrl =
-        searchItem.chapterUrl ?? Utils.getUrl(rule.host, searchItem.url);
+        searchItem.chapterUrl ?? Utils.getUrl(rule!.host, searchItem.url);
     try {
       final chapters = searchItem.chapters;
       final export = <String>[
@@ -72,12 +72,12 @@ class NovelCacheService {
       ];
       final _fileCache =
           CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
-      final cacheChapterIndex = Directory(await _fileCache.cacheDir())
+      final cacheChapterIndex = Directory((await _fileCache.cacheDir())!)
           .listSync()
           .map((d) => Utils.getFileName(d.path))
           .toSet();
-      for (final index in List.generate(chapters.length, (index) => index)) {
-        String temp;
+      for (final index in List.generate(chapters!.length, (index) => index)) {
+        String? temp;
         if (cacheChapterIndex.contains(index.toString())) {
           temp = await _fileCache.getData("$index.txt",
               shouldDecode: false, hashCodeKey: false);
@@ -101,8 +101,8 @@ class NovelCacheService {
           hashCodeKey: false, shouldEncode: false);
 
       final filePath = exportDir == null
-          ? await cache.cacheDir() + name
-          : Utils.join(exportDir, name);
+          ? (await cache.cacheDir())! + name
+          : Utils.join(exportDir!, name);
       // final download = await path.getApplicationDocumentsDirectory();
       // final filePath = Utils.join(download.path, "eso", name);
       await File(filePath).writeAsString(export.join("\n"));
@@ -125,25 +125,25 @@ class NovelCacheService {
     final originTag = searchItem.originTag;
     final _fileCache =
         CacheUtil(basePath: "cache${Platform.pathSeparator}${searchItem.id}");
-    _startTable[id] = Directory(await _fileCache.cacheDir())
+    _startTable[id] = Directory((await _fileCache.cacheDir())!)
         .listSync()
         .map((d) => Utils.getFileName(d.path))
         .toSet();
     notifyListeners();
     await CacheUtil.requestPermission();
-    for (var index = 0; index < chapters.length; index++) {
+    for (var index = 0; index < chapters!.length; index++) {
       if (!_startTable.containsKey(id)) return;
-      if (_startTable[id].contains(index.toString())) continue;
+      if (_startTable[id]!.contains(index.toString())) continue;
       try {
         final chapter = chapters[index];
-        final content = await APIManager.getContent(originTag, chapter.url);
+        final content = await APIManager.getContent(originTag, chapter.url!);
         if (!_startTable.containsKey(id)) return;
         chapter.contentUrl = API.contentUrl;
         final c = content.join("\n").split(RegExp(r"\n\s*|\s{2,}")).join("\n");
         await _fileCache.putData('$index.txt', c,
             hashCodeKey: false, shouldEncode: false);
         if (!_startTable.containsKey(id)) return;
-        _startTable[id].add(index.toString());
+        _startTable[id]!.add(index.toString());
         notifyListeners();
       } catch (e) {}
     }
@@ -163,7 +163,7 @@ class NovelAutoCachePage extends StatefulWidget {
   final SearchItem searchItem;
   const NovelAutoCachePage({
     super.key,
-    this.searchItem,
+    required this.searchItem,
   });
 
   @override
@@ -171,11 +171,11 @@ class NovelAutoCachePage extends StatefulWidget {
 }
 
 class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
-  TextEditingController exportChapterName;
-  ScrollController scrollController;
+  late TextEditingController exportChapterName;
+  late ScrollController scrollController;
   Set<String> cacheIndex = new Set<String>();
   String exportDir = "未选择，使用默认路径";
-  Box<String> novel_cache_export_dir_box;
+  late Box<String> novel_cache_export_dir_box;
   @override
   void initState() {
     init();
@@ -189,10 +189,10 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
     NovelCacheService().start(widget.searchItem);
     novel_cache_export_dir_box =
         await Hive.openBox<String>('novel_cache_export_dir');
-    exportDir = novel_cache_export_dir_box.get(0);
+    exportDir = novel_cache_export_dir_box.get(0)!;
     if (exportDir == null) {
       final cache = CacheUtil(basePath: "txt");
-      exportDir = await cache.cacheDir();
+      exportDir = (await cache.cacheDir())!;
     } else {
       NovelCacheService().exportDir = exportDir;
     }
@@ -214,7 +214,7 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
     final chapters = searchItem.chapters;
     final service = NovelCacheService();
     final cacheIndexA = service.getCachedIndex(searchItem.id);
-    if (cacheIndexA.isNotEmpty) cacheIndex = cacheIndexA;
+    if (cacheIndexA!.isNotEmpty) cacheIndex = cacheIndexA;
     const cacheText = const Text("已缓存", style: TextStyle(color: Colors.green));
     const noCacheText = const Text("未缓存", style: TextStyle(color: Colors.grey));
     final isCaching = service.isCaching(searchItem.id);
@@ -259,7 +259,7 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
             controller: scrollController,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             cacheExtent: 30,
-            itemCount: searchItem.chaptersCount + 2,
+            itemCount: searchItem.chaptersCount! + 2,
             itemBuilder: (BuildContext context, int i) {
               if (i == 0) {
                 return ListTile(
@@ -325,7 +325,7 @@ class _NovelAutoCachePageState extends State<NovelAutoCachePage> {
                   children: [
                     Expanded(
                       child: Text(
-                        chapters[index].name ?? 0,
+                        chapters![index].name,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),

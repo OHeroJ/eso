@@ -37,7 +37,7 @@ class UIImageItem extends StatelessWidget {
           ? BorderRadius.zero
           : BorderRadius.circular(radius),
       child: UIFadeInImage(
-        item: PhotoItem.parse(cover!),
+        item: PhotoItem.parse(cover!)!,
         fit: fit,
         placeHolderWidth: initWidth,
         placeHolderHeight: initHeight,

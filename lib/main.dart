@@ -73,7 +73,7 @@ Future<void> onLink(String? linkPath) async {
       context: navigatorKey.currentState!.context,
       builder: (context) => UIAddRuleDialog(
           refresh: () {
-            editSourceProviderTemp.refreshData();
+            editSourceProviderTemp!.refreshData();
           },
           fileContent: fileContent,
           fileName: name),

@@ -28,7 +28,7 @@ import 'content_page_manager.dart';
 
 class VideoPage extends StatelessWidget {
   final SearchItem searchItem;
-  const VideoPage({this.searchItem, Key key});
+  const VideoPage({required this.searchItem, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +131,10 @@ class VideoPage extends StatelessWidget {
           alignment: Alignment.center,
           child: aspectRatio == VideoAspectRatio.full ||
                   provider.getAspectRatio() == 0
-              ? VideoPlayer(controller)
+              ? VideoPlayer(controller!)
               : AspectRatio(
                   aspectRatio: provider.getAspectRatio(),
-                  child: VideoPlayer(controller),
+                  child: VideoPlayer(controller!),
                 ),
         ),
         onDoubleTap: provider.playOrPause,
@@ -241,7 +241,7 @@ class VideoPage extends StatelessWidget {
             padding: EdgeInsets.zero,
             icon: Icon(Icons.open_in_browser),
             onPressed: () => launch(
-                searchItem.chapters[searchItem.durChapterIndex].contentUrl),
+                searchItem.chapters![searchItem.durChapterIndex!].contentUrl!),
             tooltip: "查看原网页",
           ),
         ),
@@ -270,7 +270,7 @@ class VideoPage extends StatelessWidget {
                           (speed - value).abs() < 0.1 ? primaryColor : null,
                     ))
                 .toList(),
-            onSelect: (double value) async {
+            onSelect: (double? value) async {
               provider.changeSpeed(value);
             },
           ),
@@ -310,7 +310,7 @@ class VideoPage extends StatelessWidget {
   Widget _buildBottomBar(BuildContext context) {
     return Consumer<VideoPageProvider>(
       builder: (context, provider, child) {
-        final value =
+        final double value =
             provider.isLoading ? 0 : provider.position.inSeconds.toDouble();
         return SafeArea(
           top: false,
@@ -334,8 +334,8 @@ class VideoPage extends StatelessWidget {
                                 Utils.formatDuration(Duration(
                                     seconds: (lowerValue as double).toInt())),
                             true);
-                        provider.controller.seekTo(
-                            Duration(seconds: (lowerValue as double).toInt()));
+                        provider.controller!
+                            .seekTo(Duration(seconds: (lowerValue).toInt()));
                       },
                       handlerHeight: 12,
                       handlerWidth: 12,
@@ -399,7 +399,7 @@ class VideoPage extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.skip_previous),
                     onPressed: () =>
-                        provider.parseContent(searchItem.durChapterIndex - 1),
+                        provider.parseContent(searchItem.durChapterIndex! - 1),
                     tooltip: "上一集",
                   ),
                   IconButton(
@@ -419,7 +419,7 @@ class VideoPage extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.skip_next),
                     onPressed: () =>
-                        provider.parseContent(searchItem.durChapterIndex + 1),
+                        provider.parseContent(searchItem.durChapterIndex! + 1),
                     tooltip: "下一集",
                   ),
                   if (provider.screenAxis == Axis.horizontal)
@@ -450,9 +450,9 @@ class VideoPage extends StatelessWidget {
 }
 
 class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
-  bool _allowPlaybackground;
+  bool? _allowPlaybackground;
   bool get allowPlaybackground => _allowPlaybackground == true;
-  set allowPlaybackground(bool value) {
+  set allowPlaybackground(bool? value) {
     if (_allowPlaybackground != value) {
       _allowPlaybackground = value;
       notifyListeners();
@@ -480,21 +480,23 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   }
 
   final SearchItem searchItem;
-  String _titleText;
+  late String _titleText;
   String get titleText => _titleText;
-  List<String> _content;
-  List<String> get content => _content;
+  List<String>? _content;
+  List<String>? get content => _content;
 
   final loadingText = <String>[];
-  bool _disposed;
+  late bool _disposed;
 
-  VideoPlayerController _controller;
-  VideoPlayerController get controller => _controller;
-  bool get isPlaying => _controller.value.isPlaying;
-  Duration get position => _controller.value.position;
-  String get positionString => Utils.formatDuration(_controller.value.position);
-  Duration get duration => _controller.value.duration;
-  String get durationString => Utils.formatDuration(_controller.value.duration);
+  VideoPlayerController? _controller;
+  VideoPlayerController? get controller => _controller;
+  bool get isPlaying => _controller!.value.isPlaying;
+  Duration get position => _controller!.value.position;
+  String get positionString =>
+      Utils.formatDuration(_controller!.value.position);
+  Duration get duration => _controller!.value.duration;
+  String get durationString =>
+      Utils.formatDuration(_controller!.value.duration);
 
   final ContentProvider contentProvider;
   VideoPageProvider({required this.searchItem, required this.contentProvider}) {
@@ -511,13 +513,13 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     parseContent(null);
   }
 
-  bool _isLoading;
+  bool? _isLoading;
   bool get isLoading => _isLoading != false;
-  void parseContent(int chapterIndex) async {
+  void parseContent(int? chapterIndex) async {
     if (chapterIndex != null &&
         (_isLoading == true ||
             chapterIndex < 0 ||
-            chapterIndex >= searchItem.chaptersCount ||
+            chapterIndex >= searchItem.chaptersCount! ||
             chapterIndex == searchItem.durChapterIndex)) {
       return;
     }
@@ -527,7 +529,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     loadingText.clear();
     if (chapterIndex != null) {
       searchItem.durChapterIndex = chapterIndex;
-      searchItem.durChapter = searchItem.chapters[chapterIndex].name;
+      searchItem.durChapter = searchItem.chapters![chapterIndex].name;
       searchItem.durContentIndex = 1;
       _titleText = "${searchItem.name} - ${searchItem.durChapter}";
     }
@@ -543,8 +545,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     if (_disposed) return;
     try {
       _content = await contentProvider
-          .loadChapter(chapterIndex ?? searchItem.durChapterIndex);
-      if (_content.isEmpty || _content.first.isEmpty) {
+          .loadChapter(chapterIndex ?? searchItem.durChapterIndex!);
+      if (_content!.isEmpty || _content!.first.isEmpty) {
         _content = null;
         _isLoading = null;
         loadingText.add("错误 内容为空！");
@@ -553,32 +555,32 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
         return;
       }
       if (_disposed) return;
-      loadingText.add("播放地址 ${_content[0].split("").join("\u200B")}");
+      loadingText.add("播放地址 ${_content![0].split("").join("\u200B")}");
       loadingText.add("获取视频信息...");
       notifyListeners();
       (VideoPlayerController controller) {
         Future.delayed(Duration(microseconds: 120))
             .then((value) => controller.dispose());
-      }(_controller);
+      }(_controller!);
       _controller?.dispose();
       if (_disposed) return;
-      if (_content[0].contains("@headers")) {
-        final u = _content[0].split("@headers");
+      if (_content![0].contains("@headers")) {
+        final u = _content![0].split("@headers");
         final h = (jsonDecode(u[1]) as Map).map((k, v) => MapEntry('$k', '$v'));
         _controller = VideoPlayerController.network(u[0], httpHeaders: h);
       } else {
-        _controller = VideoPlayerController.network(_content[0]);
+        _controller = VideoPlayerController.network(_content![0]);
       }
       if (_aspectRatio == VideoAspectRatio.uninit) {
         _aspectRatio = VideoAspectRatio.auto;
       }
       notifyListeners();
       audioHandler?.stop();
-      await _controller.initialize();
-      _controller.seekTo(Duration(milliseconds: searchItem.durContentIndex));
-      _controller.play();
+      await _controller!.initialize();
+      _controller!.seekTo(Duration(milliseconds: searchItem.durContentIndex!));
+      _controller!.play();
       DeviceDisplayBrightness.keepOn(enabled: true);
-      _controller.addListener(_listener);
+      _controller!.addListener(_listener);
       _controllerTime = DateTime.now();
       _isLoading = false;
       if (_disposed) _controller?.dispose();
@@ -593,20 +595,20 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     }
   }
 
-  DateTime _lastNotifyTime;
+  DateTime? _lastNotifyTime;
   _listener() {
     if (_lastNotifyTime == null ||
-        DateTime.now().difference(_lastNotifyTime).inMicroseconds > 1000) {
+        DateTime.now().difference(_lastNotifyTime!).inMicroseconds > 1000) {
       _lastNotifyTime = DateTime.now();
       if (showController &&
           DateTime.now()
-                  .difference(_controllerTime)
+                  .difference(_controllerTime!)
                   .compareTo(_controllerDelay) >=
               0) {
         hideController();
         _showChapter = false;
       }
-      searchItem.durContentIndex = _controller.value.position.inMilliseconds;
+      searchItem.durContentIndex = _controller!.value.position.inMilliseconds;
       searchItem.save();
       notifyListeners();
     }
@@ -621,10 +623,10 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     resetRotation();
     _disposed = true;
     if (controller != null) {
-      searchItem.durContentIndex = _controller.value.position.inMilliseconds;
-      controller.removeListener(_listener);
-      controller.pause();
-      controller.dispose();
+      searchItem.durContentIndex = _controller!.value.position.inMilliseconds;
+      controller!.removeListener(_listener);
+      controller!.pause();
+      controller!.dispose();
     }
     () async {
       await searchItem.save();
@@ -682,7 +684,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     DLNAUtil.instance.start(
       context,
       title: _titleText,
-      url: _content[0],
+      url: _content![0],
       videoType: VideoObject.VIDEO_MP4,
       onPlay: playOrPause,
     );
@@ -691,17 +693,17 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   void openInNew() {
     if (_disposed || _content == null) return;
     _controllerTime = DateTime.now();
-    launch(_content[0]);
+    launch(_content![0]);
   }
 
-  Widget _hint;
-  Widget get hint => _hint;
-  DateTime _hintTime;
+  Widget? _hint;
+  Widget? get hint => _hint;
+  DateTime? _hintTime;
   void autoHideHint() {
     _hintTime = DateTime.now();
     const _hintDelay = Duration(seconds: 2);
     Future.delayed(_hintDelay, () {
-      if (DateTime.now().difference(_hintTime).compareTo(_hintDelay) >= 0) {
+      if (DateTime.now().difference(_hintTime!).compareTo(_hintDelay) >= 0) {
         _hint = null;
         notifyListeners();
       }
@@ -727,21 +729,21 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
 
   void _pause() async {
     DeviceDisplayBrightness.keepOn(enabled: false);
-    await controller.pause();
+    await controller!.pause();
     setHintText("已暂停");
   }
 
   double _currentSpeed = 1.0;
   double get currentSpeed => _currentSpeed;
 
-  void changeSpeed(double speed) async {
+  void changeSpeed(double? speed) async {
     if (speed == null) return;
     if (controller == null) {
       setHintText("请先播放视频");
       return;
     }
     if ((currentSpeed - speed).abs() > 0.1) {
-      await controller.setPlaybackSpeed(speed);
+      await controller!.setPlaybackSpeed(speed);
       _currentSpeed = speed;
       setHintText("播放速度 $speed");
       notifyListeners();
@@ -751,7 +753,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   void _play() async {
     setHintText("播放");
     DeviceDisplayBrightness.keepOn(enabled: true);
-    await controller.play();
+    await controller!.play();
   }
 
   void playOrPause() {
@@ -767,11 +769,11 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     }
   }
 
-  bool _showController;
+  bool? _showController;
   bool get showController => _showController != false;
-  bool _showChapter;
+  bool? _showChapter;
   bool get showChapter => _showChapter ?? false;
-  DateTime _controllerTime;
+  DateTime? _controllerTime;
   final _controllerDelay = Duration(seconds: 4);
 
   void toggleControllerBar() {
@@ -810,8 +812,8 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
-  VideoAspectRatio _aspectRatio;
-  VideoAspectRatio get aspectRatio => _aspectRatio;
+  VideoAspectRatio? _aspectRatio;
+  VideoAspectRatio? get aspectRatio => _aspectRatio;
   double getAspectRatio() {
     switch (_aspectRatio) {
       case VideoAspectRatio.auto:
@@ -860,7 +862,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
     parseContent(index);
   }
 
-  Axis _screenAxis;
+  late Axis _screenAxis;
   Axis get screenAxis => _screenAxis;
   void screenRotation() {
     _controllerTime = DateTime.now();
@@ -876,11 +878,11 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   }
 
   /// 手势处理
-  double _dragStartPosition;
-  Duration _gesturePosition;
-  bool _draging;
+  double? _dragStartPosition;
+  Duration? _gesturePosition;
+  bool? _draging;
 
-  void setHintTextWithIcon(num value, IconData icon) {
+  void setHintTextWithIcon(double value, IconData icon) {
     _hint = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -922,16 +924,16 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
       _dragStartPosition = details.globalPosition.dx;
 
   void onHorizontalDragEnd(DragEndDetails details) {
-    _controller.seekTo(_gesturePosition);
+    _controller!.seekTo(_gesturePosition!);
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
     final d = Duration(
-        seconds: (details.globalPosition.dx - _dragStartPosition) ~/ 10);
+        seconds: (details.globalPosition.dx - _dragStartPosition!) ~/ 10);
     _gesturePosition = position + d;
     final prefix = d.compareTo(Duration.zero) < 0 ? "-" : "+";
     setHintText(
-        "${Utils.formatDuration(_gesturePosition)} / $positionString\n[ $prefix ${Utils.formatDuration(d)} ]");
+        "${Utils.formatDuration(_gesturePosition!)} / $positionString\n[ $prefix ${Utils.formatDuration(d)} ]");
   }
 
   void onVerticalDragStart(DragStartDetails details) =>
@@ -940,7 +942,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
   void onVerticalDragUpdate(DragUpdateDetails details) async {
     if (_draging == true) return;
     _draging = true;
-    double number = (_dragStartPosition - details.globalPosition.dy) / 200;
+    double number = (_dragStartPosition! - details.globalPosition.dy) / 200;
     if (details.globalPosition.dx <
         (_screenAxis == Axis.horizontal ? 400 : 200)) {
       IconData icon = OMIcons.brightnessLow;
@@ -965,7 +967,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
       await DeviceDisplayBrightness.setBrightness(brightness);
     } else {
       IconData icon = OMIcons.volumeMute;
-      var vol = _controller.value.volume + number;
+      var vol = _controller!.value.volume + number;
       if (vol <= 0) {
         icon = OMIcons.volumeOff;
         vol = 0.0;
@@ -980,7 +982,7 @@ class VideoPageProvider with ChangeNotifier, WidgetsBindingObserver {
         vol = 1;
       }
       setHintTextWithIcon(vol, icon);
-      await _controller.setVolume(vol);
+      await _controller!.setVolume(vol);
     }
 
     /// 手势调节正常运作核心代码就是这句了

@@ -403,7 +403,6 @@ class UIMangaMenu extends StatelessWidget {
                     tooltip: FlutterSliderTooltip(
                       alwaysShowTooltip: true,
                       disableAnimation: true,
-                      absolutePosition: true,
                       positionOffset: FlutterSliderTooltipPositionOffset(
                         left: -20,
                         top: -12,
@@ -484,7 +483,7 @@ class UIMangaMenu extends StatelessWidget {
                         Text("目录", style: TextStyle(color: color))
                       ],
                     ),
-                    onTap: () => provider.showChapter = !provider.showChapter,
+                    onTap: () => provider.showChapter = !provider.showChapter!,
                   ),
                   InkWell(
                     child: Column(

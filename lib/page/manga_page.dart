@@ -24,7 +24,7 @@ class MangaPage extends StatefulWidget {
   final SearchItem searchItem;
 
   const MangaPage({
-    this.searchItem,
+    required this.searchItem,
     super.key,
   });
 
@@ -33,9 +33,9 @@ class MangaPage extends StatefulWidget {
 }
 
 class _MangaPageState extends State<MangaPage> {
-  Widget page;
-  Widget pageMangaContent;
-  MangaPageProvider __provider;
+  Widget? page;
+  Widget? pageMangaContent;
+  MangaPageProvider? __provider;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,13 @@ class _MangaPageState extends State<MangaPage> {
         provider.mangaDirection,
       );
     }
-    return page;
+    return page!;
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     __provider?.dispose();
     super.dispose();
   }
@@ -85,20 +86,20 @@ class _MangaPageState extends State<MangaPage> {
                 _buildMangaContent(provider, profile),
                 if (profile.showMangaInfo)
                   UISystemInfo(
-                    mangaInfo: provider.searchItem.durChapter,
-                    mangaCount: provider.content.length,
-                    mangeCurrent: provider.searchItem.durContentIndex,
+                    mangaInfo: provider.searchItem?.durChapter,
+                    mangaCount: provider.content!.length,
+                    mangeCurrent: provider.searchItem?.durContentIndex,
                   ),
                 if (provider.showMenu)
                   UIMangaMenu(
                     searchItem: widget.searchItem,
                   ),
-                if (provider.showChapter)
+                if (provider.showChapter == true)
                   UIChapterSelect(
                     searchItem: widget.searchItem,
                     loadChapter: provider.loadChapter,
                   ),
-                if (provider.isLoading) UIChapterLoding(),
+                if (provider.isLoading == true) UIChapterLoding(),
               ],
             );
           },
@@ -108,8 +109,8 @@ class _MangaPageState extends State<MangaPage> {
   }
 
   Widget _buildMangaContent(MangaPageProvider provider, ESOTheme profile) {
-    if (pageMangaContent != null && !provider.shouldUpdateManga)
-      return pageMangaContent;
+    if (pageMangaContent != null && !provider.shouldUpdateManga!)
+      return pageMangaContent!;
     Axis direction;
     bool reverse;
     switch (profile.mangaDirection) {
@@ -132,7 +133,7 @@ class _MangaPageState extends State<MangaPage> {
     provider.shouldUpdateManga = false;
     pageMangaContent = ListView.builder(
       key: Key(
-          "pageMangaContent" + provider.searchItem.durChapterIndex.toString()),
+          "pageMangaContent" + provider.searchItem!.durChapterIndex.toString()),
       padding: EdgeInsets.all(0),
       physics: BouncingScrollPhysics(),
       scrollDirection: direction,
@@ -140,7 +141,7 @@ class _MangaPageState extends State<MangaPage> {
       // initialScrollIndex: provider.searchItem.durContentIndex,
       // itemPositionsListener: provider.mangaPositionsListener,
       // itemScrollController: provider.mangaScroller,
-      itemCount: provider.content.length + 2,
+      itemCount: provider.content!.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {
           return TextButton(
@@ -154,19 +155,19 @@ class _MangaPageState extends State<MangaPage> {
                 bottom: 20,
               ),
               child: Text(
-                "点击加载上一章\n--- 章节结束 ---\n${provider.searchItem.durChapter}",
+                "点击加载上一章\n--- 章节结束 ---\n${provider.searchItem!.durChapter}",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: ESOTheme.staticFontFamily,
                   height: 2,
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),
           );
         }
-        if (index == provider.content.length + 1) {
+        if (index == provider.content!.length + 1) {
           return TextButton(
             onPressed: () => provider.loadNextChapter(true),
             child: Container(
@@ -178,13 +179,13 @@ class _MangaPageState extends State<MangaPage> {
                 bottom: 20,
               ),
               child: Text(
-                "${provider.searchItem.durChapter}\n--- 章节结束 ---\n点击加载下一章",
+                "${provider.searchItem!.durChapter}\n--- 章节结束 ---\n点击加载下一章",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: ESOTheme.staticFontFamily,
                   height: 2,
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),
@@ -207,53 +208,54 @@ class _MangaPageState extends State<MangaPage> {
             Utils.startPageWait(
                 context,
                 PhotoViewPage(
-                  items: provider.content,
+                  items: provider.content!,
                   index: index,
                 ));
           },
           child: UIFadeInImage(
-            item: provider.content[index - 1],
+            item: provider.content![index - 1],
             placeHolderHeight: 200,
           ),
         );
       },
     );
-    return pageMangaContent;
+    return pageMangaContent!;
   }
 
-  bool lastShowMenu;
+  late bool lastShowMenu;
 
   updateSystemChrome(bool showMenu, ESOTheme profile) {
     if (showMenu == lastShowMenu) return;
     lastShowMenu = showMenu;
     if (showMenu) {
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: SystemUiOverlay.values);
     } else if (!profile.showMangaStatus) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     }
   }
 }
 
 class MangaPageProvider with ChangeNotifier {
-  final SearchItem searchItem;
-  List<PhotoItem> _content;
-  List<PhotoItem> get content => _content;
-  bool _isLoading;
+  final SearchItem? searchItem;
+  List<PhotoItem>? _content;
+  List<PhotoItem>? get content => _content;
+  late bool _isLoading;
   bool get isLoading => _isLoading;
-  Map<String, String> _headers;
-  Map<String, String> get headers => _headers;
-  bool _showChapter;
-  bool get showChapter => _showChapter;
-  final ContentProvider contentProvider;
-  bool shouldUpdateManga;
-  set showChapter(bool value) {
+  Map<String, String>? _headers;
+  Map<String, String>? get headers => _headers;
+  bool? _showChapter;
+  bool? get showChapter => _showChapter;
+  final ContentProvider? contentProvider;
+  bool? shouldUpdateManga;
+  set showChapter(bool? value) {
     if (_showChapter != value) {
       _showChapter = value;
       notifyListeners();
     }
   }
 
-  bool _showMenu;
+  late bool _showMenu;
   bool get showMenu => _showMenu;
   set showMenu(bool value) {
     if (_showMenu != value) {
@@ -262,7 +264,7 @@ class MangaPageProvider with ChangeNotifier {
     }
   }
 
-  bool _showSetting;
+  late bool _showSetting;
   bool get showSetting => _showSetting;
   set showSetting(bool value) {
     if (_showSetting != value) {
@@ -271,16 +273,16 @@ class MangaPageProvider with ChangeNotifier {
     }
   }
 
-  double _brightness;
+  late double _brightness;
   double get brightness => _brightness;
   set brightness(double value) {
     if ((value - _brightness).abs() > 0.005) {
       _brightness = value;
-      DeviceDisplayBrightness.setBrightness(brightness);
+      DeviceDisplayBrightness.setBrightness(brightness!);
     }
   }
 
-  bool keepOn;
+  late bool keepOn;
   void setKeepOn(bool value) {
     if (value != keepOn) {
       keepOn = value;
@@ -288,11 +290,11 @@ class MangaPageProvider with ChangeNotifier {
     }
   }
 
-  bool landscape;
+  late bool landscape;
   void setLandscape(bool value) {
     if (value != landscape) {
       landscape = value;
-      if (landscape) {
+      if (landscape!) {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeRight,
           DeviceOrientation.landscapeLeft,
@@ -306,8 +308,8 @@ class MangaPageProvider with ChangeNotifier {
     }
   }
 
-  int direction;
-  void setDirection(int value) {
+  int? direction;
+  void setDirection(int? value) {
     if (value != direction) {
       direction = value;
       notifyListeners();
@@ -359,28 +361,28 @@ class MangaPageProvider with ChangeNotifier {
 
   void share() {
     Share.share(
-        '${searchItem.name.trim()}\n${searchItem.author.trim()}\n\n${searchItem.description.trim()}\n\n${searchItem.chapterUrl}');
+        '${searchItem!.name!.trim()}\n${searchItem!.author!.trim()}\n\n${searchItem!.description!.trim()}\n\n${searchItem!.chapterUrl}');
   }
 
   Future<void> loadChapter([
-    int chapterIndex,
+    int? chapterIndex,
     bool useCache = true,
     bool loadNext = true,
     bool shouldChangeIndex = true,
   ]) async {
     if (chapterIndex == null) {
-      chapterIndex = searchItem.durChapterIndex;
+      chapterIndex = searchItem!.durChapterIndex;
     }
 
     if (isLoading ||
-        chapterIndex < 0 ||
-        chapterIndex >= searchItem.chapters.length) return;
+        chapterIndex! < 0 ||
+        chapterIndex >= searchItem!.chapters!.length) return;
 
     _isLoading = true;
     notifyListeners();
-    final c = await contentProvider.loadChapter(
-        chapterIndex, useCache, loadNext, shouldChangeIndex);
-    Map<String, String> headers = null;
+    final c = await contentProvider!
+        .loadChapter(chapterIndex, useCache, loadNext, shouldChangeIndex);
+    Map<String, String>? headers = null;
     _content = List.generate(c.length, (i) {
       final index = c[i].indexOf("@headers");
       if (index == -1) return PhotoItem(c[i], headers);
@@ -395,23 +397,23 @@ class MangaPageProvider with ChangeNotifier {
   }
 
   bool get isFavorite =>
-      SearchItemManager.isFavorite(searchItem.originTag, searchItem.url);
+      SearchItemManager.isFavorite(searchItem!.originTag, searchItem!.url);
 
-  Future<bool> addToFavorite() async {
+  Future<bool?> addToFavorite() async {
     if (isFavorite) return null;
-    return await SearchItemManager.addSearchItem(searchItem);
+    return await SearchItemManager.addSearchItem(searchItem!);
   }
 
   Future<bool> removeFormFavorite() async {
     if (!isFavorite) return true;
-    return await SearchItemManager.removeSearchItem(searchItem.id);
+    return await SearchItemManager.removeSearchItem(searchItem!.id);
   }
 
   void loadNextChapter(bool next) {
-    final index = searchItem.durChapterIndex;
-    if (next && index < (searchItem.chaptersCount - 1))
+    final index = searchItem!.durChapterIndex;
+    if (next && index! < (searchItem!.chaptersCount! - 1))
       loadChapter(index + 1);
-    else if (index > 0) loadChapter(index - 1);
+    else if (index! > 0) loadChapter(index - 1);
   }
 
   void refreshCurrent() => loadChapter(null, false, false, false);
@@ -429,7 +431,7 @@ class MangaPageProvider with ChangeNotifier {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    content.clear();
+    content?.clear();
     super.dispose();
   }
 }

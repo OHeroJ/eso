@@ -59,12 +59,12 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
     final contentProvider = Provider.of<ContentProvider>(context);
     return ChangeNotifierProvider<VPDProvider>(
       create: (context) => VPDProvider(
-          searchItem: widget.searchItem,
+          searchItem: widget.searchItem!,
           profile: profile,
-          webcontroller: webviewController,
+          webcontroller: webviewController!,
           contentProvider: contentProvider),
       builder: (BuildContext context, child) {
-        final searchItem = widget.searchItem;
+        final searchItem = widget.searchItem!;
         final provider = Provider.of<VPDProvider>(context, listen: true);
         return Scaffold(
             appBar: provider.systemFullScreen
@@ -78,7 +78,7 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                         tooltip: "编辑规则",
                         onPressed: () async {
                           final rule = await Global.ruleDao
-                              .findRuleById(searchItem.originTag);
+                              .findRuleById(searchItem.originTag!);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => EditRulePage(rule: rule)));
                         },
@@ -104,25 +104,25 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
               alignment: Alignment.bottomRight,
               children: [
                 provider.windowFullScreen
-                    ? !webviewController.value.isInitialized
+                    ? !webviewController!.value.isInitialized
                         ? Center(
                             child: const Text(
                               '\n\n正在初始化播放器。。。\n\n如果没反应请尝试滑动到页面底部下载微软的运行时\n\n已增加剧集 预解析 缓存\n\n',
                               style: TextStyle(fontSize: 30.0),
                             ),
                           )
-                        : Center(child: Webview(webviewController))
+                        : Center(child: Webview(webviewController!))
                     : ListView(
                         children: [
-                          !webviewController.value.isInitialized
+                          !webviewController!.value.isInitialized
                               ? const Text(
                                   '\n\n正在初始化播放器。。。\n\n如果没反应请尝试滑动到页面底部下载微软的运行时\n\n已增加剧集 预解析 缓存\n\n',
                                   style: TextStyle(fontSize: 30.0),
                                 )
                               : Container(
                                   height: 500,
-                                  child:
-                                      Center(child: Webview(webviewController)),
+                                  child: Center(
+                                      child: Webview(webviewController!)),
                                 ),
                           Card(
                             child: Padding(
@@ -147,7 +147,7 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                         height: 200,
                                         child: TextButton(
                                           onPressed: () => provider.playChapter(
-                                              searchItem.durChapterIndex,
+                                              searchItem.durChapterIndex!,
                                               false),
                                           child: Text("解析"),
                                         ),
@@ -157,7 +157,7 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                   ListTile(
                                     title: Text('浏览器播放'),
                                     subtitle: Text(provider.url ?? "请先解析"),
-                                    onTap: () => launch(provider.url),
+                                    onTap: () => launch(provider.url!),
                                   ),
                                   ListTile(
                                     title: Text('查看目录原网页'),
@@ -235,9 +235,9 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                           Expanded(
                             child: ListView.separated(
                               separatorBuilder: (context, index) => Divider(),
-                              itemCount: searchItem.chapters.length,
+                              itemCount: searchItem.chapters!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                final chapter = searchItem.chapters[index];
+                                final chapter = searchItem.chapters![index];
                                 return ListTile(
                                   leading: index == searchItem.durChapterIndex
                                       ? Icon(Icons.check, color: Colors.white70)
@@ -249,9 +249,9 @@ class _VideoPageDesktopState extends State<VideoPageDesktop> {
                                   ),
                                   onTap: () => provider.playChapter(index),
                                   subtitle: chapter.time != null &&
-                                          chapter.time.isNotEmpty
+                                          chapter.time!.isNotEmpty
                                       ? Text(
-                                          chapter.time,
+                                          chapter.time!,
                                           style:
                                               TextStyle(color: Colors.white70),
                                           maxLines: 1,
@@ -323,15 +323,15 @@ class VPDProvider extends ChangeNotifier {
     required this.webcontroller,
     required this.contentProvider,
   }) {
-    playChapter(searchItem.durChapterIndex, false);
+    playChapter(searchItem.durChapterIndex!, false);
   }
-  String _url;
-  String get url => _url;
-  Process _process;
-  bool _isLoading;
+  String? _url;
+  String? get url => _url;
+  Process? _process;
+  late bool _isLoading;
   bool get isLoading => _isLoading == true;
 
-  bool _systemFullScreen;
+  late bool _systemFullScreen;
   bool get systemFullScreen => _systemFullScreen == true;
 
   void toggleSystemFullScreen() async {
@@ -345,7 +345,7 @@ class VPDProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _windowFullScreen;
+  late bool _windowFullScreen;
   bool get windowFullScreen => _windowFullScreen == true;
 
   void toggleWindowFullScreen() {
@@ -357,7 +357,7 @@ class VPDProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _showList;
+  late bool _showList;
   bool get showList => _showList == true;
 
   void toggleshowList() {
@@ -389,13 +389,13 @@ class VPDProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    if (index >= searchItem.chapters.length || index < 0) {
+    if (index >= searchItem.chapters!.length || index < 0) {
       log("错误 不存在选中章节");
       notifyListeners();
       return;
     }
     _isLoading = true;
-    final chapter = searchItem.chapters[index];
+    final chapter = searchItem.chapters![index];
     searchItem.durChapterIndex = index;
     searchItem.durChapter = chapter.name;
     log("正在解析 请等待...");
@@ -428,7 +428,7 @@ class VPDProvider extends ChangeNotifier {
         dir = Uri.encodeFull(dir).replaceAll("%5C", "\\");
         _url = "file:///$dir#$_url";
         // }
-        await webcontroller.loadUrl(_url);
+        await webcontroller.loadUrl(_url!);
         _windowFullScreen = true;
         // if (autoPlay == true) {
         //   log("播放地址 $_url\n自动开始本地播放");
@@ -445,7 +445,7 @@ class VPDProvider extends ChangeNotifier {
   }
 
   play() async {
-    if (_url == null || _url.isEmpty) {
+    if (_url == null || _url!.isEmpty) {
       log("请先解析");
       return;
     }
@@ -456,7 +456,7 @@ class VPDProvider extends ChangeNotifier {
     _process?.kill();
     _process = await Process.start(
       profile.desktopPlayer,
-      <String>[_url],
+      <String>[_url!],
     );
   }
 

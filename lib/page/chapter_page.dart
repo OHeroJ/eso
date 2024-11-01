@@ -234,7 +234,7 @@ class _ChapterPageState extends State<ChapterPage> {
                                 Utils.startPageWait(
                                     context,
                                     PhotoViewPage(items: [
-                                      PhotoItem.parse(searchItem.cover!)
+                                      PhotoItem.parse(searchItem.cover!)!
                                     ], heroTag: _hero!));
                               },
                             ),

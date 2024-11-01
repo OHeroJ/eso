@@ -146,7 +146,7 @@ class _AudioViewState extends State<AudioView> {
           ),
           onTap: () {
             Utils.startPageWait(
-                context, AudioPage(searchItem: audioHandler!.searchItem));
+                context, AudioPage(searchItem: audioHandler!.searchItem!));
           },
         );
       },

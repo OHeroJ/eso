@@ -34,15 +34,15 @@ import 'setting/about_page.dart';
 
 class NovelPage extends StatefulWidget {
   final SearchItem searchItem;
-  const NovelPage({super.key, this.searchItem});
+  const NovelPage({super.key, required this.searchItem});
 
   @override
   State<NovelPage> createState() => _NovelPageState();
 }
 
 class _NovelPageState extends State<NovelPage> {
-  SearchItem searchItem;
-  TextCompositionConfig _config;
+  late SearchItem searchItem;
+  late TextCompositionConfig _config;
 
   @override
   void initState() {
@@ -56,8 +56,8 @@ class _NovelPageState extends State<NovelPage> {
   void dispose() {
     DeviceDisplayBrightness.keepOn(enabled: false);
     DeviceDisplayBrightness.resetBrightness();
-    TextConfigManager.config = _config;
-    HistoryItemManager.insertOrUpdateHistoryItem(searchItem);
+    TextConfigManager.config = _config!;
+    HistoryItemManager.insertOrUpdateHistoryItem(searchItem!);
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _NovelPageState extends State<NovelPage> {
     final novelKeepOn = hiveESOBoolConfig.get(HiveBool.novelKeepOn,
         defaultValue: HiveBool.novelKeepOnDefault);
     if (novelKeepOn == true)
-      DeviceDisplayBrightness.keepOn(enabled: novelKeepOn);
+      DeviceDisplayBrightness.keepOn(enabled: novelKeepOn!);
   }
 
   @override
@@ -78,24 +78,24 @@ class _NovelPageState extends State<NovelPage> {
       final controller = TextComposition(
         config: _config,
         loadChapter: provider.loadChapter,
-        chapters: searchItem.chapters.map((e) => e.name).toList(),
+        chapters: searchItem.chapters!.map((e) => e.name).toList(),
         percent: () {
-          final p = searchItem.durContentIndex / NovelContentTotal;
-          final ch = (p * searchItem.chapters.length).floor();
+          final p = searchItem.durContentIndex! / NovelContentTotal;
+          final ch = (p * searchItem.chapters!.length).floor();
           if (ch == searchItem.durChapterIndex) return p;
-          return searchItem.durChapterIndex / searchItem.chapters.length;
+          return searchItem.durChapterIndex! / searchItem.chapters!.length;
         }(),
         onSave: (TextCompositionConfig config, double percent) async {
           if (percent > 0.0000001) {
             percent -= 0.0000001;
           }
           _config = config;
-          searchItem.durContentIndex = (percent * NovelContentTotal).floor();
-          final index = (percent * searchItem.chapters.length).floor();
+          searchItem!.durContentIndex = (percent * NovelContentTotal).floor();
+          final index = (percent * searchItem.chapters!.length).floor();
           // HistoryItemManager.insertOrUpdateHistoryItem(searchItem);
           if (searchItem.durChapterIndex != index) {
             searchItem.durChapterIndex = index;
-            searchItem.durChapter = searchItem.chapters[index].name;
+            searchItem.durChapter = searchItem.chapters![index].name;
             // searchItem.durContentIndex = 1;
             // await SearchItemManager.saveSearchItem();
             await searchItem.save();
@@ -115,7 +115,7 @@ const TextConfigKey = "TextCompositionConfig";
 int speakingCheck = -1;
 
 class SpeakService {
-  static SpeakService _;
+  static late SpeakService _;
   static SpeakService get instance => SpeakService.createInstance();
   factory SpeakService.createInstance() => _ ??= SpeakService.__();
   SpeakService.__() {
@@ -130,9 +130,9 @@ class SpeakService {
     }();
   }
 
-  FlutterTts tts;
-  SpVoice spVoice;
-  int _rate;
+  late FlutterTts tts;
+  SpVoice? spVoice;
+  late int _rate;
   int get rate => _rate;
   SpeechRateValidRange range =
       SpeechRateValidRange(0, 0.5, 1, TextToSpeechPlatform.android);
@@ -155,8 +155,8 @@ class SpeakService {
     if (!Platform.isWindows) return tts.speak(text);
     freeSpVoice();
     spVoice = SpVoice.createInstance();
-    spVoice.SetRate(rate);
-    return 0 == await compute(speakStatic, [spVoice.ptr.address, text]);
+    spVoice?.SetRate(rate);
+    return 0 == await compute(speakStatic, [spVoice!.ptr.address, text]);
   }
 
   stop() async {
@@ -197,8 +197,8 @@ class SpeakService {
 
   freeSpVoice() {
     if (spVoice != null) {
-      spVoice.Pause();
-      free(spVoice.ptr);
+      spVoice!.Pause();
+      free(spVoice!.ptr);
       CoUninitialize();
       spVoice = null;
     }
@@ -208,13 +208,13 @@ class SpeakService {
 class NovelMenu extends StatelessWidget {
   final SearchItem searchItem;
   final TextComposition composition;
-  NovelMenu({super.key, this.composition, this.searchItem});
+  NovelMenu({super.key, required this.composition, required this.searchItem});
 
   @override
   Widget build(BuildContext context) {
     // final brightness = Theme.of(context).brightness;
     final bgColor = Theme.of(context).canvasColor.withOpacity(0.97);
-    final color = Theme.of(context).textTheme.bodyText1.color;
+    final color = Theme.of(context).textTheme.bodyLarge?.color;
     return Column(
       children: <Widget>[
         // AppBar(
@@ -283,7 +283,7 @@ class NovelMenu extends StatelessWidget {
           children: [],
         ),
         SizedBox(height: 60),
-        _buildBottomRow(context, bgColor, color),
+        _buildBottomRow(context, bgColor, color!),
       ],
     );
   }
@@ -292,8 +292,8 @@ class NovelMenu extends StatelessWidget {
     // if (!Global.isDesktop) await FlutterTts().awaitSpeakCompletion(true);
     while (speakingCheck > 0 && speakingCheck == check) {
       final s = composition.textPages[composition.currentIndex]?.lines
-          ?.map((e) => e.text)
-          ?.join();
+          .map((e) => e.text)
+          .join();
       if (s != null && s.isNotEmpty) {
         await SpeakService.instance.speak(s);
       } else {
@@ -355,7 +355,7 @@ class NovelMenu extends StatelessWidget {
                   final controllerChaptersNum =
                       TextEditingController(text: "0");
                   final TextEditingController controllerPagesNum =
-                      TextEditingController(text: page.number.toString());
+                      TextEditingController(text: page!.number.toString());
                   return AlertDialog(
                     title: Text("快速跳转"),
                     content: Column(
@@ -363,7 +363,7 @@ class NovelMenu extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            "章节（当前${page.chIndex + 1} / ${searchItem.chaptersCount}）："),
+                            "章节（当前${page!.chIndex + 1} / ${searchItem.chaptersCount}）："),
                         Row(
                           children: [
                             Container(
@@ -382,7 +382,7 @@ class NovelMenu extends StatelessWidget {
                                         "请输入1到${searchItem.chaptersCount}以内的整数");
                                     return;
                                   }
-                                  if (n < 0 || n >= searchItem.chaptersCount) {
+                                  if (n < 0 || n >= searchItem.chaptersCount!) {
                                     Utils.toast(
                                         "请输入1到${searchItem.chaptersCount}以内的整数");
                                     return;
@@ -441,10 +441,10 @@ class NovelMenu extends StatelessWidget {
             break;
           case TO_CLICPBOARD:
             final rule =
-                await Global.ruleDao.findRuleById(searchItem.originTag);
-            final chapter = searchItem.chapters[searchItem.durChapterIndex];
+                await Global.ruleDao.findRuleById(searchItem.originTag!);
+            final chapter = searchItem.chapters![searchItem.durChapterIndex!];
             final url =
-                chapter.contentUrl ?? Utils.getUrl(rule.host, chapter.url);
+                chapter.contentUrl ?? Utils.getUrl(rule!.host, chapter.url!);
             if (url != null) {
               Clipboard.setData(ClipboardData(text: url));
               Utils.toast("已复制地址\n" + url);
@@ -454,10 +454,10 @@ class NovelMenu extends StatelessWidget {
             break;
           case LAUCH:
             final rule =
-                await Global.ruleDao.findRuleById(searchItem.originTag);
-            final chapter = searchItem.chapters[searchItem.durChapterIndex];
+                await Global.ruleDao.findRuleById(searchItem.originTag!);
+            final chapter = searchItem.chapters![searchItem.durChapterIndex!];
             final url =
-                chapter.contentUrl ?? Utils.getUrl(rule.host, chapter.url);
+                chapter.contentUrl ?? Utils.getUrl(rule!.host, chapter.url!);
             if (url != null) {
               launch(url);
             } else {
@@ -488,10 +488,10 @@ class NovelMenu extends StatelessWidget {
             final _fileCache = CacheUtil(
                 basePath: "cache${Platform.pathSeparator}${searchItem.id}");
             await CacheUtil.requestPermission();
-            await File(await _fileCache.cacheDir() + '$cIndex.txt').delete();
+            await File((await _fileCache.cacheDir())! + '$cIndex.txt').delete();
             Utils.toast("已删除当前章节缓存");
             // 加载当前章节
-            composition.gotoChapter(cIndex);
+            composition.gotoChapter(cIndex!);
             break;
           case CLEARCACHE:
             final _fileCache = CacheUtil(
@@ -504,9 +504,9 @@ class NovelMenu extends StatelessWidget {
             final cIndex =
                 composition.textPages[composition.currentIndex]?.chIndex ??
                     searchItem.durChapterIndex;
-            final p =
-                "    " + (await composition.loadChapter(cIndex)).join("\n    ");
-            final title = searchItem.name + "    " + searchItem.durChapter;
+            final p = "    " +
+                (await composition.loadChapter(cIndex!)).join("\n    ");
+            final title = searchItem.name! + "    " + searchItem.durChapter!;
             final config = composition.config;
             TextEditingController controller = TextEditingController(text: p);
             showDialog(
@@ -699,9 +699,9 @@ class NovelMenu extends StatelessWidget {
                       1.0 +
                           (composition.textPages[composition.currentIndex]
                                   ?.chIndex ??
-                              searchItem.durChapterIndex)
+                              searchItem.durChapterIndex!)
                     ],
-                    max: searchItem.chaptersCount * 1.0,
+                    max: searchItem.chaptersCount! * 1.0,
                     min: 1,
                     step: FlutterSliderStep(step: 1),
                     onDragCompleted: (handlerIndex, lowerValue, upperValue) {
@@ -737,7 +737,6 @@ class NovelMenu extends StatelessWidget {
                     tooltip: FlutterSliderTooltip(
                       alwaysShowTooltip: true,
                       disableAnimation: true,
-                      absolutePosition: true,
                       positionOffset: FlutterSliderTooltipPositionOffset(
                         left: -20,
                         top: -12,
@@ -754,7 +753,7 @@ class NovelMenu extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  searchItem.chapters[index - 1].name,
+                                  searchItem.chapters![index - 1].name,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -910,7 +909,7 @@ class BrightnessSettings extends StatefulWidget {
 class _BrightnessSettingsState extends State<BrightnessSettings> {
   double brightness = 0.5;
   bool keepOn = false;
-  Box<bool> hiveESOBoolConfig;
+  late Box<bool> hiveESOBoolConfig;
 
   @override
   void initState() {
@@ -921,7 +920,7 @@ class _BrightnessSettingsState extends State<BrightnessSettings> {
   init() async {
     hiveESOBoolConfig = await Hive.openBox<bool>(HiveBool.boxKey);
     keepOn = hiveESOBoolConfig.get(HiveBool.novelKeepOn,
-        defaultValue: HiveBool.novelKeepOnDefault);
+        defaultValue: HiveBool.novelKeepOnDefault)!;
     try {
       brightness = await DeviceDisplayBrightness.getBrightness();
     } catch (e) {}
@@ -934,7 +933,8 @@ class _BrightnessSettingsState extends State<BrightnessSettings> {
   @override
   Widget build(BuildContext context) {
     final bgColor = Theme.of(context).canvasColor.withOpacity(0.96);
-    final color = Theme.of(context).textTheme.bodyText1.color.withOpacity(0.96);
+    final color =
+        Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.96);
     return Container(
       width: 520,
       child: Column(
@@ -973,7 +973,7 @@ class _BrightnessSettingsState extends State<BrightnessSettings> {
                     borderRadius: BorderRadius.circular(3),
                     color: bgColor,
                     border:
-                        Border.all(color: color.withOpacity(0.65), width: 1),
+                        Border.all(color: color!.withOpacity(0.65), width: 1),
                   ),
                 ),
               ),

@@ -13,23 +13,24 @@ class RSSPage extends StatefulWidget {
   final SearchItem searchItem;
 
   const RSSPage({
-    this.searchItem,
+    required this.searchItem,
     super.key,
   });
 
   @override
-  _RSSPageState createState() => _RSSPageState();
+  State<RSSPage> createState() => _RSSPageState();
 }
 
 class _RSSPageState extends State<RSSPage> {
-  Widget page;
-  RSSPageProvider __provider;
+  Widget? page;
+  RSSPageProvider? __provider;
+
   @override
   Widget build(BuildContext context) {
     if (page == null) {
       page = buildPage();
     }
-    return page;
+    return page!;
   }
 
   @override
@@ -40,7 +41,7 @@ class _RSSPageState extends State<RSSPage> {
 
   Widget buildPage() {
     return ChangeNotifierProvider<RSSPageProvider>.value(
-      value: RSSPageProvider(searchItem: widget.searchItem),
+      value: RSSPageProvider(searchItem: widget.searchItem!),
       child: Consumer<RSSPageProvider>(
         builder: (BuildContext context, RSSPageProvider provider, _) {
           __provider = provider;
@@ -49,7 +50,7 @@ class _RSSPageState extends State<RSSPage> {
           }
           return Scaffold(
             appBar: AppBar(
-              title: Text(widget.searchItem.durChapter),
+              title: Text(widget.searchItem.durChapter!),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.list),
@@ -83,8 +84,8 @@ class _RSSContentPage extends StatefulWidget {
   final List<String> content;
 
   _RSSContentPage({
-    this.searchItem,
-    this.content,
+    required this.searchItem,
+    required this.content,
     super.key,
   });
 
@@ -93,8 +94,8 @@ class _RSSContentPage extends StatefulWidget {
 }
 
 class __RSSContentPageState extends State<_RSSContentPage> {
-  WebViewController _controller;
-  Widget _webView;
+  WebViewController? _controller;
+  Widget? _webView;
   int _durChapterIndex = -1;
 
   @override
@@ -106,17 +107,15 @@ class __RSSContentPageState extends State<_RSSContentPage> {
     ).toString();
     if (_controller != null &&
         _durChapterIndex != widget.searchItem.durChapterIndex) {
-      _durChapterIndex = widget.searchItem.durChapterIndex;
-      _controller.loadUrl(content);
+      _durChapterIndex = widget.searchItem.durChapterIndex!;
+      _controller!.loadRequest(Uri.parse(content));
     }
     if (_webView == null) {
-      _webView = WebView(
-        onWebViewCreated: (WebViewController controller) =>
-            _controller = controller,
-        initialUrl: content,
+      _webView = WebViewWidget(
+        controller: _controller!,
       );
-      _durChapterIndex = widget.searchItem.durChapterIndex;
+      _durChapterIndex = widget.searchItem.durChapterIndex!;
     }
-    return _webView;
+    return _webView!;
   }
 }

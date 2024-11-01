@@ -27,7 +27,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   var isLargeScreen = false;
-  Widget detailPage;
+  Widget? detailPage;
 
   void invokeTap(Widget detailPage) {
     if (isLargeScreen) {
@@ -76,15 +76,15 @@ class _SearchPageState extends State<SearchPage> {
                           fontFamily: ESOTheme.staticFontFamily,
                           color: Theme.of(context)
                               .textTheme
-                              .bodyText1
-                              .color
-                              .withOpacity(0.5)),
+                              .bodyLarge
+                              ?.color
+                              ?.withOpacity(0.5)),
                       isExpanded: true,
                       isDense: true,
                       underline: SizedBox(),
                       onChanged: (v) =>
                           Provider.of<SearchProvider>(context, listen: false)
-                              .sourceType = v,
+                              .sourceType = v!,
                       items: <DropdownMenuItem<int>>[
                         DropdownMenuItem<int>(child: Text('全部'), value: -1),
                         DropdownMenuItem<int>(
@@ -122,9 +122,9 @@ class _SearchPageState extends State<SearchPage> {
                   final count = searchList.length;
                   final progress = provider.rulesCount == 0.0
                       ? 0.0
-                      : (provider.successCount + provider.failureCount) /
-                          provider.rulesCount;
-                  if (provider.showHistory && provider.history.length > 0) {
+                      : (provider.successCount! + provider.failureCount!) /
+                          provider.rulesCount!;
+                  if (provider.showHistory && provider.history!.length > 0) {
                     return Column(
                       children: [
                         FittedBox(
@@ -182,7 +182,7 @@ class _SearchPageState extends State<SearchPage> {
                                     onChanged: (value) {
                                       Provider.of<SearchProvider>(context,
                                               listen: false)
-                                          .threadCount = value;
+                                          .threadCount = value!;
                                       profile.searchCount = value;
                                     },
                                   ),
@@ -197,14 +197,14 @@ class _SearchPageState extends State<SearchPage> {
                           runSpacing: 10,
                           alignment: WrapAlignment.center,
                           children: List.generate(
-                            provider.history.length,
+                            provider.history!.length,
                             (int index) {
-                              final String text = provider.history[index];
+                              final String text = provider.history![index];
                               return Chip(
                                 label: InkWell(
                                   child: Text(text),
                                   onTap: () {
-                                    provider.searchController.text = text;
+                                    provider.searchController!.text = text;
                                     provider.search(text);
                                   },
                                 ),
@@ -277,7 +277,7 @@ class _SearchPageState extends State<SearchPage> {
                                   onChanged: (value) {
                                     Provider.of<SearchProvider>(context,
                                             listen: false)
-                                        .threadCount = value;
+                                        .threadCount = value!;
                                     profile.searchCount = value;
                                   },
                                 ),
@@ -330,8 +330,8 @@ class _SearchPageState extends State<SearchPage> {
                                     fontFamily: ESOTheme.staticFontFamily,
                                     color: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
-                                        .color,
+                                        .bodyLarge
+                                        ?.color,
                                     height: 1.55),
                               ),
                             ),
@@ -437,7 +437,7 @@ class _SearchPageState extends State<SearchPage> {
 
 class SimpleChangeRule extends StatelessWidget {
   final SearchItem searchItem;
-  const SimpleChangeRule({this.searchItem, Key key});
+  const SimpleChangeRule({required this.searchItem, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -451,8 +451,8 @@ class SimpleChangeRule extends StatelessWidget {
           threadCount: profile.searchCount,
           searchOption: SearchOption.Accurate,
           profile: profile,
-          ruleContentType: searchItem.ruleContentType,
-          searchKey: searchItem.name,
+          ruleContentType: searchItem.ruleContentType!,
+          searchKey: searchItem.name!,
         ),
         builder: (context, child) {
           return Consumer<SearchProvider>(
@@ -461,8 +461,8 @@ class SimpleChangeRule extends StatelessWidget {
               final count = searchList.length;
               final progress = provider.rulesCount == 0.0
                   ? 0.0
-                  : (provider.successCount + provider.failureCount) /
-                      provider.rulesCount;
+                  : (provider.successCount! + provider.failureCount!) /
+                      provider.rulesCount!;
               return Column(
                 children: [
                   SizedBox(
@@ -494,7 +494,7 @@ class SimpleChangeRule extends StatelessWidget {
                         ],
                         style: TextStyle(
                             fontFamily: ESOTheme.staticFontFamily,
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             height: 1.55),
                       ),
                     ),
@@ -531,60 +531,60 @@ class SimpleChangeRule extends StatelessWidget {
 }
 
 class SearchProvider with ChangeNotifier {
-  int _threadCount;
-  int get threadCount => _threadCount;
-  set threadCount(int value) {
+  int? _threadCount;
+  int? get threadCount => _threadCount;
+  set threadCount(int? value) {
     if (threadCount != value) {
       _threadCount = value;
       notifyListeners();
     }
   }
 
-  SearchOption _searchOption;
-  SearchOption get searchOption => _searchOption;
-  set searchOption(SearchOption value) {
+  SearchOption? _searchOption;
+  SearchOption? get searchOption => _searchOption;
+  set searchOption(SearchOption? value) {
     if (_searchOption != value) {
       _searchOption = value;
       notifyListeners();
     }
   }
 
-  int _rulesCount;
-  int get rulesCount => _rulesCount;
-  int _successCount;
-  int get successCount => _successCount;
-  int _failureCount;
-  int get failureCount => _failureCount;
-  List<Rule> _rules;
-  List<Rule> _novelRules;
-  List<Rule> _mangaRules;
-  List<Rule> _audioRules;
-  List<Rule> _videoRules;
+  int? _rulesCount;
+  int? get rulesCount => _rulesCount;
+  int? _successCount;
+  int? get successCount => _successCount;
+  int? _failureCount;
+  int? get failureCount => _failureCount;
+  List<Rule>? _rules;
+  List<Rule>? _novelRules;
+  List<Rule>? _mangaRules;
+  List<Rule>? _audioRules;
+  List<Rule>? _videoRules;
 
   final List<SearchItem> searchListNone = <SearchItem>[];
   final List<SearchItem> searchListNormal = <SearchItem>[];
   final List<SearchItem> searchListAccurate = <SearchItem>[];
 
-  int _searchId;
+  int? _searchId;
   int _sourceType = -1;
-  ESOTheme _profile;
-  FocusNode _focusNode;
-  FocusNode get focusNode => _focusNode;
-  TextEditingController _searchController;
-  TextEditingController get searchController => _searchController;
-  List<String> _history;
-  List<String> get history => _history;
-  bool _showHistory;
+  ESOTheme? _profile;
+  FocusNode? _focusNode;
+  FocusNode? get focusNode => _focusNode;
+  TextEditingController? _searchController;
+  TextEditingController? get searchController => _searchController;
+  List<String>? _history;
+  List<String>? get history => _history;
+  bool? _showHistory;
   bool get showHistory => false; //_showHistory;
   SearchProvider({
-    int threadCount,
-    SearchOption searchOption,
-    ESOTheme profile,
-    String searchKey,
-    int ruleContentType,
+    int? threadCount,
+    SearchOption? searchOption,
+    ESOTheme? profile,
+    String? searchKey,
+    int? ruleContentType,
   }) {
     _profile = profile;
-    _threadCount = threadCount ?? profile.searchCount ?? 10;
+    _threadCount = threadCount ?? profile?.searchCount ?? 10;
     _searchOption = searchOption ?? SearchOption.Normal;
     _rulesCount = 0;
     _successCount = 0;
@@ -601,7 +601,7 @@ class SearchProvider with ChangeNotifier {
   }
 
   void _handleSearchChange() {
-    final text = _searchController.text.trim();
+    final text = _searchController!.text.trim();
     _history = HistoryManager.searchHistory
         .where((element) => element.contains(text))
         .toList();
@@ -609,9 +609,9 @@ class SearchProvider with ChangeNotifier {
   }
 
   void _handleFocusChange() {
-    if (_focusNode.hasFocus) {
-      _history.clear();
-      final text = _searchController.text.trim();
+    if (_focusNode!.hasFocus) {
+      _history!.clear();
+      final text = _searchController!.text.trim();
       _history = HistoryManager.searchHistory
           .where((element) => element.contains(text))
           .toList();
@@ -624,13 +624,13 @@ class SearchProvider with ChangeNotifier {
 
   void closeHistory() {
     _showHistory = false;
-    _focusNode.unfocus();
+    _focusNode!.unfocus();
     notifyListeners();
   }
 
   void upHistory(String keyword) {
-    _searchController.text = keyword;
-    _searchController.selection =
+    _searchController!.text = keyword;
+    _searchController!.selection =
         TextSelection(baseOffset: keyword.length, extentOffset: keyword.length);
   }
 
@@ -641,16 +641,16 @@ class SearchProvider with ChangeNotifier {
 
   int get sourceType => _sourceType;
   set sourceType(int value) => setSourceType(value);
-  bool get novelEnableSearch => _profile.novelEnableSearch;
-  bool get mangaEnableSearch => _profile.mangaEnableSearch;
-  bool get audioEnableSearch => _profile.audioEnableSearch;
-  bool get videoEnableSearch => _profile.videoEnableSearch;
+  bool get novelEnableSearch => _profile!.novelEnableSearch;
+  bool get mangaEnableSearch => _profile!.mangaEnableSearch;
+  bool get audioEnableSearch => _profile!.audioEnableSearch;
+  bool get videoEnableSearch => _profile!.videoEnableSearch;
 
   void updateAllSourceType(bool val) {
-    _profile.novelEnableSearch = val;
-    _profile.mangaEnableSearch = val;
-    _profile.audioEnableSearch = val;
-    _profile.videoEnableSearch = val;
+    _profile!.novelEnableSearch = val;
+    _profile!.mangaEnableSearch = val;
+    _profile!.audioEnableSearch = val;
+    _profile!.videoEnableSearch = val;
   }
 
   void setSourceType(int type) {
@@ -660,16 +660,16 @@ class SearchProvider with ChangeNotifier {
 
     switch (type) {
       case API.NOVEL:
-        _profile.novelEnableSearch = true;
+        _profile?.novelEnableSearch = true;
         break;
       case API.MANGA:
-        _profile.mangaEnableSearch = true;
+        _profile?.mangaEnableSearch = true;
         break;
       case API.AUDIO:
-        _profile.audioEnableSearch = true;
+        _profile?.audioEnableSearch = true;
         break;
       case API.VIDEO:
-        _profile.videoEnableSearch = true;
+        _profile?.videoEnableSearch = true;
         break;
       default:
         updateAllSourceType(true);
@@ -680,39 +680,39 @@ class SearchProvider with ChangeNotifier {
 
   void updateRules() {
     if (null != _rules) {
-      _rules.clear();
+      _rules!.clear();
     } else {
       _rules = <Rule>[];
     }
     var enableCount = 0;
-    if (_profile.novelEnableSearch) {
+    if (_profile!.novelEnableSearch) {
       enableCount++;
       _sourceType = API.NOVEL;
-      _rules.addAll(_novelRules);
+      _rules!.addAll(_novelRules!);
     }
-    if (_profile.mangaEnableSearch) {
+    if (_profile!.mangaEnableSearch) {
       enableCount++;
       _sourceType = API.MANGA;
-      _rules.addAll(_mangaRules);
+      _rules?.addAll(_mangaRules!);
     }
-    if (_profile.audioEnableSearch) {
+    if (_profile!.audioEnableSearch) {
       enableCount++;
       _sourceType = API.AUDIO;
-      _rules.addAll(_audioRules);
+      _rules!.addAll(_audioRules!);
     }
-    if (_profile.videoEnableSearch) {
+    if (_profile!.videoEnableSearch) {
       enableCount++;
       _sourceType = API.VIDEO;
-      _rules.addAll(_videoRules);
+      _rules!.addAll(_videoRules!);
     }
     if (enableCount > 1) {
       _sourceType = -1;
     }
-    _rulesCount = _rules.length;
+    _rulesCount = _rules!.length;
     notifyListeners();
   }
 
-  void init(int ruleContentType, String searchKey) async {
+  void init(int? ruleContentType, String? searchKey) async {
     await RuleDao.gaixieguizheng();
     final rules = (await Global.ruleDao.findAllRules())
         .where((e) => e.enableSearch)
@@ -725,7 +725,7 @@ class SearchProvider with ChangeNotifier {
 
     if (ruleContentType != null) {
       _rules = rules.where((r) => r.contentType == ruleContentType).toList();
-      _rulesCount = _rules.length;
+      _rulesCount = _rules!.length;
       _sourceType = ruleContentType;
       notifyListeners();
     } else {
@@ -737,10 +737,10 @@ class SearchProvider with ChangeNotifier {
   }
 
   void search(String keyword) async {
-    focusNode.unfocus();
-    _searchController.text = keyword;
+    focusNode!.unfocus();
+    _searchController!.text = keyword;
     HistoryManager.newSearch(keyword);
-    _searchId++;
+    _searchId = (_searchId ?? 0) + 1;
     await Future.delayed(Duration(milliseconds: 300));
     searchListNone.clear();
     searchListNormal.clear();
@@ -748,16 +748,16 @@ class SearchProvider with ChangeNotifier {
     _successCount = 0;
     _failureCount = 0;
     notifyListeners();
-    for (var i = 0; i < threadCount; i++) {
-      final count = _rules.length - 1 - i;
-      final realCount = count < 0 ? 0 : count ~/ threadCount + 1;
+    for (var i = 0; i < threadCount!; i++) {
+      final count = _rules!.length - 1 - i;
+      final realCount = count < 0 ? 0 : count ~/ threadCount! + 1;
       ((int searchId) async {
         for (var j = 0; j < realCount; j++) {
-          final engineId = j * threadCount + i;
+          final engineId = j * threadCount! + i;
           if (_searchId == searchId) {
             try {
-              print(j * threadCount + i);
-              (await APIFromRUle(_rules[engineId], searchId * 10000 + engineId)
+              print(j * threadCount! + i);
+              (await APIFromRUle(_rules![engineId], searchId * 10000 + engineId)
                       .search(keyword, 1, 20))
                   .forEach((item) {
                 if (_searchId == searchId) {
@@ -772,20 +772,20 @@ class SearchProvider with ChangeNotifier {
                 }
               });
               if (_searchId == searchId) {
-                _successCount++;
+                _successCount = (_successCount ?? 0) + 1;
                 notifyListeners();
               }
             } catch (e) {
               if (_searchId == searchId) {
-                _failureCount++;
+                _failureCount = (_failureCount ?? 0) + 1;
                 print("error   !!!       " * 10);
-                print(_rules[j * threadCount + i].name);
+                print(_rules![j * threadCount! + i].name);
                 notifyListeners();
               }
             }
           }
         }
-      })(_searchId);
+      })(_searchId!);
     }
   }
 
@@ -795,10 +795,10 @@ class SearchProvider with ChangeNotifier {
     searchListNone.clear();
     searchListNormal.clear();
     searchListAccurate.clear();
-    _focusNode.removeListener(_handleSearchChange);
-    _searchController.dispose();
-    _focusNode.removeListener(_handleFocusChange);
-    _focusNode.dispose();
+    _focusNode?.removeListener(_handleSearchChange);
+    _searchController?.dispose();
+    _focusNode?.removeListener(_handleFocusChange);
+    _focusNode?.dispose();
     APIFromRUle.clearNextUrl();
     super.dispose();
   }
