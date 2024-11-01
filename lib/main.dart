@@ -1,28 +1,25 @@
 import 'dart:io';
+
 import 'package:eso/hive/theme_box.dart';
 import 'package:eso/page/add_local_item_page.dart';
+import 'package:eso/page/first_page.dart';
 import 'package:eso/utils.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:eso/page/first_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hetu_script/hetu_script.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:uni_links/uni_links.dart';
-// import 'package:video_player_win/video_player_win.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:uni_links3/uni_links.dart';
+
 import 'eso_theme.dart';
 import 'global.dart';
 import 'hive/theme_mode_box.dart';
-import 'model/audio_service_handler.dart';
-import 'page/audio_page_refactor.dart';
 import 'page/discover_page.dart';
 import 'page/home_page.dart';
-import 'package:hetu_script/hetu_script.dart';
-import 'package:flutter/gestures.dart';
-
 import 'ui/ui_add_rule_dialog.dart';
 import 'utils/auto_decode_cli.dart';
 import 'utils/rule_comparess.dart';

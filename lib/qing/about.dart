@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'const.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'const.dart';
 
 class About extends StatelessWidget {
   const About({super.key});

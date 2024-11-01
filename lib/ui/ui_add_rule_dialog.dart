@@ -1,16 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:eso/database/rule.dart';
 import 'package:eso/utils.dart';
-import 'package:eso/utils/cache_util.dart';
 import 'package:eso/utils/rule_comparess.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../global.dart';
 import '../utils/auto_decode_cli.dart';

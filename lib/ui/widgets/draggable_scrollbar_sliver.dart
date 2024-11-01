@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 /// Build the Scroll Thumb and label using the current configuration
 typedef Widget ScrollThumbBuilder(

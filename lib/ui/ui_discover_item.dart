@@ -1,8 +1,8 @@
 import 'package:eso/utils.dart';
-
-import 'ui_image_item.dart';
-import '../database/search_item.dart';
 import 'package:flutter/material.dart';
+
+import '../database/search_item.dart';
+import 'ui_image_item.dart';
 
 class UIDiscoverItem extends StatelessWidget {
   final SearchItem searchItem;

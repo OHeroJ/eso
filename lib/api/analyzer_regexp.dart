@@ -1,5 +1,6 @@
-import 'analyzer.dart';
 import 'package:html/dom.dart';
+
+import 'analyzer.dart';
 
 class AnalyzerRegExp implements Analyzer {
   String _string = '';

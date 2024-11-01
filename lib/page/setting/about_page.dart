@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+
+import 'package:about/about.dart';
 import 'package:eso/main.dart';
 import 'package:eso/page/add_local_item_page.dart';
 import 'package:eso/page/history_page.dart';
@@ -10,7 +12,6 @@ import 'package:eso/page/source/edit_source_page.dart';
 import 'package:eso/qing/const.dart' as qing;
 import 'package:eso/utils.dart';
 import 'package:eso/utils/cache_util.dart';
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:text_composition/text_composition_config.dart';
@@ -18,12 +19,10 @@ import 'package:text_composition/text_composition_const.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../database/text_config_manager.dart';
-import '../../global.dart';
 import '../../eso_theme.dart';
+import '../../global.dart';
 import '../../qing/main.dart';
 import 'auto_backup_page.dart';
-import 'package:about/about.dart';
-
 import 'display_high_rate.dart';
 import 'theme_page.dart';
 

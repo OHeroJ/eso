@@ -1,4 +1,6 @@
 /// A material design slider and range slider with horizontal and vertical axis, rtl support and lots of options and customizations for flutter
+import 'dart:math';
+
 /*
 * *
 * * Written by Ali Azmoude <ali.azmoude@gmail.com>
@@ -10,7 +12,6 @@
 * */
 
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class FlutterSlider extends StatefulWidget {
   final Axis axis;

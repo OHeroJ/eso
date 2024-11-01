@@ -1,7 +1,7 @@
+import 'package:dlna/dlna.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:dlna/dlna.dart';
 
 /// 视频投屏
 class DLNAUtil {

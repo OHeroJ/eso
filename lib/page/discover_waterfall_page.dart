@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:eso/api/api_js_engine.dart';
 import 'package:eso/database/search_item.dart';
 import 'package:eso/main.dart';

@@ -1,5 +1,5 @@
-import 'package:eso/fonticons_icons.dart';
 import 'package:eso/eso_theme.dart';
+import 'package:eso/fonticons_icons.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
 

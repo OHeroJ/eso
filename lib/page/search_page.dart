@@ -1,15 +1,13 @@
-import 'dart:ui';
-
 import 'package:eso/api/api.dart';
 import 'package:eso/api/api_from_rule.dart';
+import 'package:eso/database/history_manager.dart';
 import 'package:eso/database/rule.dart';
 import 'package:eso/database/rule_dao.dart';
 import 'package:eso/database/search_item.dart';
-import 'package:eso/global.dart';
-import 'package:eso/database/history_manager.dart';
 import 'package:eso/eso_theme.dart';
-import 'package:eso/ui/ui_text_field.dart';
+import 'package:eso/global.dart';
 import 'package:eso/ui/ui_search_item.dart';
+import 'package:eso/ui/ui_text_field.dart';
 import 'package:eso/ui/widgets/empty_list_msg_view.dart';
 import 'package:eso/ui/widgets/keyboard_dismiss_behavior_view.dart';
 import 'package:flutter/material.dart';

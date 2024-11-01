@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui';
-import 'package:eso/database/chapter_item.dart';
-import 'package:eso/database/history_manager.dart';
+
 import 'package:eso/database/search_item_manager.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/model/edit_source_provider.dart';
@@ -12,16 +10,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/src/factory_mixin.dart' as impl;
-import 'package:text_composition/text_composition.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 import 'database/database.dart';
-import 'database/history_item_manager.dart';
-import 'hive/chapter_item_adapter.dart';
-import 'hive/search_item_adapter.dart';
 import 'database/rule_dao.dart';
 import 'database/search_item.dart';
-import 'page/novel_page_refactor.dart';
+import 'hive/chapter_item_adapter.dart';
+import 'hive/search_item_adapter.dart';
 import 'utils/cache_util.dart';
 
 class Global with ChangeNotifier {

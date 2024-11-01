@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:audio_service/audio_service.dart';
-import 'package:eso/model/audio_service.dart';
 import 'package:eso/ui/widgets/animation_rotate_view.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 
 import '../page/audio_page_refactor.dart';
 

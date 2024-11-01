@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'search_item.dart';
 import '../global.dart';
+import 'search_item.dart';
 
 class HistoryItemManager {
   static List<SearchItem> get historyItem => _box.values.toList();

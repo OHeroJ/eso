@@ -1,28 +1,25 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
-import 'package:ffi/ffi.dart';
 import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:eso/database/history_item_manager.dart';
 import 'package:eso/database/search_item.dart';
 import 'package:eso/database/search_item_manager.dart';
 import 'package:eso/global.dart';
 import 'package:eso/page/content_page_manager.dart';
-import 'package:eso/eso_theme.dart';
 import 'package:eso/ui/ui_chapter_select.dart';
 import 'package:eso/utils/cache_util.dart';
 import 'package:eso/utils/flutter_slider.dart';
+import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 // import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 import 'package:text_composition/text_composition.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:win32/win32.dart';
 

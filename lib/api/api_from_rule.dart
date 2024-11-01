@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:eso/api/analyzer_manager.dart';
 import 'package:eso/database/rule.dart';
 import 'package:eso/utils.dart';
-import '../global.dart';
-import 'analyze_url.dart';
 import 'package:eso/utils/decode_body.dart';
 
 import '../database/chapter_item.dart';
 import '../database/search_item.dart';
+import '../global.dart';
+import 'analyze_url.dart';
 import 'api.dart';
 import 'api_js_engine.dart';
 

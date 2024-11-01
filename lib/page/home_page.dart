@@ -1,20 +1,14 @@
-import 'package:eso/api/api.dart';
-import 'package:eso/database/search_item.dart';
-import 'package:eso/database/search_item_manager.dart';
 import 'package:eso/page/history_page.dart';
 import 'package:eso/page/search_page.dart';
 import 'package:eso/page/setting/about_page.dart';
 import 'package:eso/ui/ui_audio_view.dart';
-import 'package:eso/ui/widgets/animation_rotate_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../eso_theme.dart';
 import '../fonticons_icons.dart';
 import '../global.dart';
-import '../main.dart';
 import '../model/page_switch.dart';
-import '../eso_theme.dart';
 import '../utils.dart';
 import 'discover_page.dart';
 import 'favorite_page.dart';

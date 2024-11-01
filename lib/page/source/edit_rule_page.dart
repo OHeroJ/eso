@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:eso/api/api_js_engine.dart';
 import 'package:eso/database/rule.dart';
+import 'package:eso/eso_theme.dart';
 import 'package:eso/global.dart';
 import 'package:eso/main.dart';
 import 'package:eso/menu/menu.dart';
 import 'package:eso/menu/menu_edit_rule.dart';
-import 'package:eso/eso_theme.dart';
 import 'package:eso/page/share_page.dart';
 import 'package:eso/page/source/debug_rule_page.dart';
 import 'package:eso/ui/widgets/draggable_scrollbar_sliver.dart';
@@ -14,13 +14,13 @@ import 'package:eso/utils.dart';
 import 'package:eso/utils/rule_comparess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../api/api.dart';
 import '../../fonticons_icons.dart';
 import '../discover_page.dart';
-import 'login_rule_page.dart';
 import 'editor/highlight_code_editor.dart';
+import 'login_rule_page.dart';
 
 class EditRulePage extends StatefulWidget {
   final Rule? rule;

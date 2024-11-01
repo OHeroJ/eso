@@ -2,14 +2,12 @@ import 'package:eso/api/api.dart';
 import 'package:eso/database/history_item_manager.dart';
 import 'package:eso/database/search_item.dart';
 import 'package:eso/hive/theme_box.dart';
-import 'package:eso/ui/ui_text_field.dart';
 import 'package:eso/ui/ui_image_item.dart';
+import 'package:eso/ui/ui_text_field.dart';
 import 'package:eso/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../fonticons_icons.dart';
 import '../global.dart';
 import '../main.dart';
 import 'chapter_page.dart';

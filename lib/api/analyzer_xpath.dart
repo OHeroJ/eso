@@ -1,6 +1,7 @@
-import 'analyzer.dart';
 import 'package:html/dom.dart';
 import 'package:xpath_selector/xpath_selector.dart';
+
+import 'analyzer.dart';
 
 class AnalyzerXPath implements Analyzer {
   late XPath<Node> _xpath;

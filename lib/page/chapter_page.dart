@@ -1,23 +1,22 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:eso/database/chapter_item.dart';
+import 'package:eso/eso_theme.dart';
 import 'package:eso/main.dart';
 import 'package:eso/menu/menu.dart';
 import 'package:eso/menu/menu_chapter.dart';
-import 'package:eso/eso_theme.dart';
 import 'package:eso/page/photo_view_page.dart';
-import 'package:flutter/foundation.dart';
-import 'package:text_composition/text_composition.dart';
 import 'package:eso/ui/ui_image_item.dart';
-import 'package:eso/utils.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:eso/ui/widgets/draggable_scrollbar_sliver.dart';
-import '../database/search_item_manager.dart';
+import 'package:eso/utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:text_composition/text_composition.dart';
+
 import '../database/search_item.dart';
+import '../database/search_item_manager.dart';
 import '../model/chapter_page_provider.dart';
 import 'content_page_manager.dart';
 import 'langding_page.dart';

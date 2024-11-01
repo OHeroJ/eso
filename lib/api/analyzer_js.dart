@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eso/api/api_js_engine.dart';
 import 'package:html/dom.dart';
+
 import 'analyzer.dart';
 
 class AnalyzerJS implements Analyzer {

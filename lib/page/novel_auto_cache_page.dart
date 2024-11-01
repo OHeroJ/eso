@@ -6,14 +6,12 @@ import 'package:eso/database/search_item.dart';
 import 'package:eso/main.dart';
 import 'package:eso/ui/widgets/draggable_scrollbar_sliver.dart';
 import 'package:eso/utils/cache_util.dart';
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../global.dart';
 import '../utils.dart';
-import 'package:path_provider/path_provider.dart' as path;
 
 class NovelCacheService {
   NovelCacheService._privateConstructor()

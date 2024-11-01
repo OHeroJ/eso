@@ -6,10 +6,10 @@ import 'package:eso/page/hidden/linyuan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 
 import '../api/analyzer_html.dart';
 import '../main.dart';

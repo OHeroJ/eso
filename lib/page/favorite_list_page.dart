@@ -1,14 +1,13 @@
-import 'package:eso/api/api.dart';
 import 'package:eso/database/search_item_manager.dart';
-import 'package:eso/ui/ui_favorite_item.dart';
-import 'package:eso/page/content_page_manager.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/model/favorite_list_provider.dart';
+import 'package:eso/page/content_page_manager.dart';
+import 'package:eso/ui/ui_favorite_item.dart';
 import 'package:eso/ui/widgets/empty_list_msg_view.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+
 import '../global.dart';
 import 'chapter_page.dart';
 

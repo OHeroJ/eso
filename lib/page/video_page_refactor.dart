@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:dlna/dlna.dart';
 import 'package:eso/database/history_item_manager.dart';
 import 'package:eso/menu/menu.dart';
@@ -13,14 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../database/search_item.dart';
-import '../database/search_item_manager.dart';
 import '../global.dart';
-import '../model/audio_service.dart';
 import '../utils.dart';
 import '../utils/dlna_util.dart';
 import 'audio_page_refactor.dart';

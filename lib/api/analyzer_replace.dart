@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:html/dom.dart';
 
 import 'analyzer.dart';

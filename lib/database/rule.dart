@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:eso/api/api.dart';
 import 'package:eso/database/rule_dao.dart';
+import 'package:floor/floor.dart';
 import 'package:text_composition/text_composition.dart';
 import 'package:uuid/uuid.dart';
-import 'package:floor/floor.dart';
 
 import '../global.dart';
 import '../utils/rule_comparess.dart';

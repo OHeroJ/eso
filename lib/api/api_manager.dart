@@ -1,4 +1,5 @@
 import 'package:eso/api/api_from_rule.dart';
+
 import '../database/chapter_item.dart';
 import '../database/search_item.dart';
 import '../global.dart';

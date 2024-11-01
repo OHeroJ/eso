@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'lyric.dart';
 import 'lyric_controller.dart';
 import 'lyric_painter.dart';

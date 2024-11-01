@@ -1,6 +1,6 @@
 import 'package:eso/api/api.dart';
-import 'package:eso/hive/chapter_item_adapter.dart';
 import 'package:eso/database/search_item.dart';
+import 'package:eso/hive/chapter_item_adapter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/chapter_page_provider.dart';

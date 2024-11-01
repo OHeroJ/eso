@@ -1,12 +1,12 @@
 import 'package:eso/api/api.dart';
-import 'package:eso/page/setting/auto_backup_page.dart';
 import 'package:eso/eso_theme.dart';
+import 'package:eso/page/favorite_list_page.dart';
 import 'package:eso/page/setting/about_page.dart';
+import 'package:eso/page/setting/auto_backup_page.dart';
+import 'package:eso/ui/round_indicator.dart';
 import 'package:eso/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:eso/ui/round_indicator.dart';
-import 'package:eso/page/favorite_list_page.dart';
-import '../fonticons_icons.dart';
+
 import '../global.dart';
 import '../main.dart';
 import '../menu/menu.dart';

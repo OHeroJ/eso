@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:fast_gbk/fast_gbk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fast_gbk/fast_gbk.dart';
 import 'package:http/http.dart';
 
+import '../api/analyze_url_client.dart' as http;
 import '../utils/decode_body.dart';
 import 'const.dart';
-import '../api/analyze_url_client.dart' as http;
 
 class Request extends StatelessWidget {
   const Request({super.key});

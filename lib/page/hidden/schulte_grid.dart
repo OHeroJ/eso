@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:eso/main.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class SchulteGrid extends StatefulWidget {
   @override

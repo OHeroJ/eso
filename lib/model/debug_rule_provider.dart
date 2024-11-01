@@ -6,17 +6,16 @@ import 'package:eso/database/rule.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/ui/ui_image_item.dart';
 import 'package:eso/utils.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_qjs/flutter_qjs.dart';
-import 'package:oktoast/oktoast.dart';
-import '../api/analyze_url.dart';
-import '../api/analyzer_manager.dart';
 import 'package:eso/utils/decode_body.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_qjs/flutter_qjs.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../database/chapter_item.dart';
+import '../api/analyze_url.dart';
+import '../api/analyzer_manager.dart';
 
 class DebugRuleProvider with ChangeNotifier {
   DateTime? _startTime;

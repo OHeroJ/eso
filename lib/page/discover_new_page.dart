@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
+
 import 'package:eso/api/api_js_engine.dart';
 import 'package:eso/database/search_item.dart';
 import 'package:eso/main.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 import '../api/api_manager.dart';
 import '../database/rule.dart';
-import 'langding_page.dart';
 
 class DiscoverNewPage extends StatefulWidget {
   final Rule rule;

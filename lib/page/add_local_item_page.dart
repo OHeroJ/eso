@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:eso/main.dart';
-import 'package:path/path.dart' as path;
+
 import 'package:epubx/epubx.dart';
 import 'package:eso/api/api.dart';
 import 'package:eso/database/chapter_item.dart';
 import 'package:eso/database/search_item_manager.dart';
+import 'package:eso/main.dart';
 import 'package:eso/ui/ui_search_item.dart';
 import 'package:eso/utils.dart';
 import 'package:eso/utils/auto_decode_cli.dart';
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 
 import '../api/analyzer_html.dart';
 import '../database/search_item.dart';

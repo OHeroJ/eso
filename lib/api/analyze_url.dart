@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:eso/database/rule.dart';
 import 'package:fast_gbk/fast_gbk.dart';
 import 'package:http/http.dart' as originalHttp;
-import 'analyze_url_client.dart' as http;
 
+import 'analyze_url_client.dart' as http;
 import 'api_js_engine.dart';
 
 class AnalyzeUrl {

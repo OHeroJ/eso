@@ -1,6 +1,7 @@
-import 'analyzer.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parser;
+
+import 'analyzer.dart';
 
 class AnalyzerHtml implements Analyzer {
   Element? _element;

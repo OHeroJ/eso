@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'analyzer.dart';
 // import 'package:jsonpath/json_path.dart';
 import 'package:json_path/json_path.dart';
+
+import 'analyzer.dart';
 
 class AnalyzerJSonPath implements Analyzer {
   final _jsonRulePattern = RegExp(r"\{(\$\.[^\}]+)\}");

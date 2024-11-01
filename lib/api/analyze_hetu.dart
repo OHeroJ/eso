@@ -1,9 +1,8 @@
-import 'package:hetu_script/hetu_script.dart';
-
 import 'dart:convert';
 
 import 'package:eso/api/api_js_engine.dart';
 import 'package:html/dom.dart';
+
 import '../main.dart';
 import 'analyzer.dart';
 

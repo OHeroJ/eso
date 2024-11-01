@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+
 import '../database/chapter_item.dart';
 
 class UIBigListChapterItem extends StatelessWidget {

@@ -4,19 +4,18 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:eso/database/history_item_manager.dart';
+import 'package:eso/database/history_manager.dart';
 import 'package:eso/database/rule.dart';
 import 'package:eso/database/search_item_manager.dart';
-import 'package:eso/database/history_manager.dart';
 import 'package:eso/eso_theme.dart';
 import 'package:eso/main.dart';
 import 'package:eso/utils.dart';
 import 'package:eso/utils/cache_util.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:intl/intl.dart' as intl;
 import 'package:path/path.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webdav/webdav.dart';
 
 import '../../global.dart';

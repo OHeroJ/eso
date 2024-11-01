@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:eso/api/api_manager.dart';
 import 'package:eso/utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../global.dart';
 import 'chapter_item.dart';
 import 'search_item.dart';
-import '../global.dart';
 
 class SearchItemManager {
   static List<SearchItem> _searchItem = [];

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
@@ -15,18 +16,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:share_plus/share_plus.dart';
-import '../lyric/lyric.dart';
-import '../lyric/lyric_widget.dart';
-import '../lyric/lyric_controller.dart';
-import 'dart:math';
 
 import '../fonticons_icons.dart';
 import '../global.dart';
+import '../lyric/lyric.dart';
+import '../lyric/lyric_controller.dart';
+import '../lyric/lyric_widget.dart';
 import 'content_page_manager.dart';
 import 'hidden/linyuan_page.dart';
 import 'langding_page.dart';
-import 'package:rxdart/rxdart.dart';
 
 AudioHandler? _audioHandler;
 AudioHandler? get audioHandler => _audioHandler;

@@ -1,8 +1,8 @@
 import 'package:eso/api/api_manager.dart';
 import 'package:eso/database/history_item_manager.dart';
-import 'package:eso/database/search_item_manager.dart';
-import '../database/search_item.dart';
 import 'package:flutter/material.dart';
+
+import '../database/search_item.dart';
 
 class RSSPageProvider with ChangeNotifier {
   final SearchItem searchItem;

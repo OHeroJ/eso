@@ -1,19 +1,14 @@
-import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:eso/database/search_item.dart';
 import 'package:eso/page/langding_page.dart';
-import 'package:eso/page/source/editor/highlight.dart';
-import 'package:eso/eso_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../global.dart';
-import '../ui/ui_fade_in_image.dart';
 import '../ui/ui_image_item.dart';
 import 'content_page_manager.dart';
-import 'photo_view_page.dart';
-import 'dart:ui' as ui;
 
 class NovelMorePage extends StatelessWidget {
   final SearchItem searchItem;

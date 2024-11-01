@@ -17,11 +17,9 @@ import 'package:eso/utils.dart';
 import 'package:eso/utils/decode_body.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_qjs/flutter_qjs.dart';
-// import 'package:xpath_parse/xpath_selector.dart';
-import 'package:xpath_selector/xpath_selector.dart';
 import 'package:http/http.dart' as http;
+
 import '../global.dart';
-import '../main.dart';
 import 'analyze_url.dart';
 
 class APIConst {
