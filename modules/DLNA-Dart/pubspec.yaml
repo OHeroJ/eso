@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  connectivity: 
+  connectivity_plus:
   xml2json: 
   shared_preferences: 
 

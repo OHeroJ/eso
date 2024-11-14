@@ -6,7 +6,7 @@ import 'package:eso/utils/cache_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -305,7 +305,7 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
       result = Platform.isWindows || Platform.isLinux
           ? await CacheUtil(basePath: "download")
               .putFile(Utils.getFileNameAndExt(file.path), file)
-          : await ImageGallerySaver.saveImage(file.readAsBytesSync());
+          : await ImageGallerySaverPlus.saveImage(file.readAsBytesSync());
     } else {
       if (Platform.isWindows || Platform.isLinux) {
         final cache = await CacheUtil(basePath: "download");
@@ -315,7 +315,7 @@ class _PhotoViewPageState extends State<PhotoViewPage> {
         file.writeAsBytesSync(base64Decode(item.url.substring(startIndex + 8)));
         result = await CacheUtil(basePath: "download").putFile(name, file);
       } else {
-        result = await ImageGallerySaver.saveImage(
+        result = await ImageGallerySaverPlus.saveImage(
             base64Decode(item.url.substring(startIndex + 8)));
       }
     }

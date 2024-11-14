@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   battery_plus
+  connectivity_plus
   flutter_inappwebview_windows
   flutter_qjs
   flutter_tts

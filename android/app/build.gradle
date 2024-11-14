@@ -1,49 +1,21 @@
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    signingConfigs {
-        myConfig {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-    }
+    namespace 'com.mabdc.eso'
+    compileSdkVersion flutter.compileSdkVersion
+    ndkVersion '25.1.8937393'
 
-    ndkVersion '21.4.7075529'
-
-    compileSdkVersion 34
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
 
     lintOptions {
         disable 'InvalidPackage'
@@ -52,11 +24,20 @@ android {
     defaultConfig {
         applicationId "com.mabdc.eso"
         minSdkVersion 22
-        targetSdkVersion 31
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        targetSdk flutter.targetSdkVersion
+        versionCode flutter.versionCode
+        versionName flutter.versionName
         archivesBaseName = "ESO-$versionName-$versionCode"
         multiDexEnabled true
+    }
+
+    signingConfigs {
+        myConfig {
+            storeFile keystoreProperties['RELEASE_STORE_FILE'] ? file(keystoreProperties['RELEASE_STORE_FILE']) : null
+            storePassword keystoreProperties['RELEASE_STORE_PASSWORD']
+            keyAlias keystoreProperties['RELEASE_KEY_ALIAS']
+            keyPassword keystoreProperties['RELEASE_KEY_PASSWORD']
+        }
     }
 
     buildTypes {
@@ -65,8 +46,6 @@ android {
             applicationIdSuffix ".debug"
         }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.myConfig
         }
     }
@@ -74,10 +53,5 @@ android {
 
 flutter {
     source '../..'
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:multidex:1.0.3'
 }
 

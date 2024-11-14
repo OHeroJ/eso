@@ -1,16 +1,19 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class DLNAConnectivity {
   final connectivity = Connectivity();
 
-  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
   void init(Function(bool available) callback) {
-    _connectivitySubscription =
-        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.wifi) {
+    _connectivitySubscription = connectivity.onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      final wifi = result
+          .where((element) => element == ConnectivityResult.wifi)
+          .toList();
+      if (wifi.isNotEmpty) {
         callback(true);
       } else {
         callback(false);
