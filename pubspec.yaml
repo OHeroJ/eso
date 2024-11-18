@@ -7,7 +7,6 @@ author: mabdc
 
 environment:
   sdk: ">=3.5.2 <4.0.0"
-  flutter: ">=3.12.0"
 
 dependencies:
   about: ^2.0.0
@@ -33,9 +32,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_qjs:
-    git:
-      url: https://github.com/s200801005/flutter_qjs.git
-      ref: master
+    path: modules/flutter_qjs
 
   flutter_tts: ^4.0.2
   #flutter_webview_pro: 3.0.1+4
